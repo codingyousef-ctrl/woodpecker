@@ -3,476 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استمارة تسجيل الحضانة | حضانة نقار الخشب</title>
+    <title>حضانة نقار الخشب</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg: #121418; 
-            --card: #1e2025; 
-            --text: #ffffff; 
-            --muted: #94a3b8; 
-            --primary: #d4537e; 
-            --primary-hover: #b8436b;
-            --border: #2a2d35; 
-            --input-bg: #121418;
-        }
+        :root { --bg: #121418; --card: #1e2025; --text: #ffffff; --primary: #d4537e; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding: 30px 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
-        .form-card { background: var(--card); padding: 40px 30px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 900px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        
-        .header { text-align: center; margin-bottom: 35px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-        .header img { height: 120px; width: auto; object-fit: contain; margin-bottom: 15px; border-radius: 12px; }
-        .header h2 { color: var(--primary); font-size: 24px; margin-bottom: 5px; }
-        .header p { color: var(--muted); font-size: 14px; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
 
-        .section-title { color: var(--primary); font-size: 18px; font-weight: 700; margin: 25px 0 15px 0; padding-bottom: 5px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 8px; }
-        
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        
-        @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .form-grid-3 { grid-template-columns: 1fr; }
+        /* شاشة التحميل (الترحيب) */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+            transition: opacity 0.8s ease;
         }
+        #loader img { width: 200px; height: auto; margin-bottom: 20px; animation: pulse 2s infinite; }
+        #loader h1 { color: var(--primary); font-size: 24px; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        .form-group { display: flex; flex-direction: column; gap: 6px; text-align: right; }
-        .full-width { grid-column: 1 / -1; }
+        /* إخفاء الاستمارة في البداية */
+        #main-content { display: none; padding: 20px; }
         
-        label { color: var(--muted); font-size: 14px; font-weight: 600; }
-        input, select, textarea { width: 100%; padding: 12px 15px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; outline: none; font-size: 14px; transition: 0.2s; }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
-        
-        .radio-group, .checkbox-group { display: flex; gap: 20px; background: var(--input-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border); align-items: center; }
-        .radio-option, .checkbox-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
-        .radio-option input, .checkbox-option input { width: auto; cursor: pointer; }
-
-        .pledge-box { background: rgba(212, 83, 126, 0.05); border: 1px dashed var(--primary); padding: 20px; border-radius: 8px; margin-top: 30px; text-align: right; }
-        .pledge-box p { font-size: 15px; line-height: 1.8; margin-bottom: 15px; }
-
-        .btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 16px; margin-top: 25px; }
-        .btn:hover { background: var(--primary-hover); }
-        .btn:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
-        
-        .success { color: #10b981; margin-top: 20px; display: none; font-weight: bold; font-size: 16px; text-align: center; background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 8px; border: 1px solid #10b981; }
+        /* باقي التنسيقات كما هي */
+        .form-card { background: var(--card); padding: 30px; border-radius: 12px; margin: 20px auto; max-width: 500px; }
     </style>
 </head>
 <body>
 
-<div class="form-card">
-    <div id="form-body">
-        <div class="header">
-            <!-- استخدام الشعار المرفق مباشرة -->
-            <img src="https://images.gemini.googleusercontent.com/v1/images/r/3588f2195f00e932" alt="حضانة نقار الخشب" onerror="this.src='logo.png';">
-            <h2>استمارة تسجيل حضانة نقار الخشب</h2>
-            <p>يرجى إدخال كافة البيانات المطلوبة بدقة لإتمام ملف التسجيل الإلكتروني</p>
-        </div>
-
-        <form id="regForm">
-            
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>تاريخ تعبئة الاستمارة</label>
-                    <input type="date" id="form_date" required>
-                </div>
-            </div>
-
-            <!-- معلومات الطفل -->
-            <div class="section-title">👶 معلومات الطفل</div>
-            <div class="form-grid">
-                <div class="form-group full-width">
-                    <label>الاسم الرباعي للطفل *</label>
-                    <input type="text" id="childName" required placeholder="أدخل اسم الطفل الرباعي">
-                </div>
-                <div class="form-group">
-                    <label>تاريخ الميلاد *</label>
-                    <input type="date" id="dob" required>
-                </div>
-                <div class="form-group">
-                    <label>العمر الحالي</label>
-                    <input type="text" id="age" placeholder="مثال: سنتين و3 أشهر">
-                </div>
-                <div class="form-group">
-                    <label>الجنس *</label>
-                    <select id="gender" required>
-                        <option value="" disabled selected>اختر الجنس</option>
-                        <option value="ذكر">ذكر</option>
-                        <option value="أنثى">أنثى</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>الديانة *</label>
-                    <input type="text" id="religion" required value="الإسلام">
-                </div>
-                <div class="form-group">
-                    <label>رقم شهادة الميلاد</label>
-                    <input type="text" id="birth_certificate_no" placeholder="أدخل رقم شهادة الميلاد">
-                </div>
-            </div>
-
-            <!-- معلومات الوالدين -->
-            <div class="section-title">👨‍👩‍👦 معلومات الوالدين</div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>اسم الأب الكامل *</label>
-                    <input type="text" id="father_name" required>
-                </div>
-                <div class="form-group">
-                    <label>جنسية الأب *</label>
-                    <input type="text" id="father_nationality" required placeholder="مثال: أردني">
-                </div>
-                <div class="form-group">
-                    <label>عمل الأب (الوظيفة)</label>
-                    <input type="text" id="father_job">
-                </div>
-                <div class="form-group">
-                    <label>رقم هوية الأب</label>
-                    <input type="text" id="father_id">
-                </div>
-                
-                <div class="form-group">
-                    <label>اسم الأم الكامل *</label>
-                    <input type="text" id="motherName" required>
-                </div>
-                <div class="form-group">
-                    <label>جنسية الأم *</label>
-                    <input type="text" id="mother_nationality" required placeholder="مثال: أردنية">
-                </div>
-                <div class="form-group">
-                    <label>عمل الأم</label>
-                    <input type="text" id="mother_job">
-                </div>
-                <div class="form-group">
-                    <label>رقم هوية الأم</label>
-                    <input type="text" id="mother_id">
-                </div>
-                
-                <div class="form-group">
-                    <label>رقم قيد دفتر العائلة</label>
-                    <input type="text" id="family_book_no">
-                </div>
-                <div class="form-group">
-                    <label>الحالة الاجتماعية للوالدين *</label>
-                    <select id="marital_status" required>
-                        <option value="" disabled selected>اختر الحالة</option>
-                        <option value="متزوجين">متزوجين</option>
-                        <option value="منفصلين">منفصلين</option>
-                        <option value="أخرى">أخرى</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- معلومات الاتصال -->
-            <div class="section-title">📞 معلومات الاتصال والعنوان</div>
-            <div class="form-grid">
-                <div class="form-group full-width">
-                    <label>عنوان السكن بالتفصيل *</label>
-                    <input type="text" id="address" required placeholder="المدينة، المنطقة، الشارع، معلم بارز">
-                </div>
-                <div class="form-group">
-                    <label>رقم هاتف الأب المباشر *</label>
-                    <input type="tel" id="father_phone" required placeholder="07xxxxxxx">
-                </div>
-                <div class="form-group">
-                    <label>رقم هاتف الأم المباشر *</label>
-                    <input type="tel" id="motherPhone" required placeholder="07xxxxxxx">
-                </div>
-                <div class="form-group">
-                    <label>رقم هاتف إضافي (أرضي / عمل)</label>
-                    <input type="tel" id="work_phone">
-                </div>
-                <div class="form-group">
-                    <label>رقم آخر للطوارئ</label>
-                    <input type="tel" id="emergency_phone">
-                </div>
-            </div>
-
-            <!-- معلومات الطفل الصحية -->
-            <div class="section-title">🏥 معلومات الطفل الصحية</div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>هل يعاني الطفل من أي مرض مزمن؟</label>
-                    <select id="has_chronic_disease">
-                        <option value="لا">لا</option>
-                        <option value="نعم">نعم</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>توضيح المرض المزمن (إن وجد)</label>
-                    <input type="text" id="chronic_disease_details" placeholder="اضغط لكتابة التوضيح">
-                </div>
-                
-                <div class="form-group">
-                    <label>هل يعاني الطفل من أي حساسية؟</label>
-                    <select id="has_allergy">
-                        <option value="لا">لا</option>
-                        <option value="نعم">نعم</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>توضيح نوع الحساسية (إن وجد)</label>
-                    <input type="text" id="allergy_details" placeholder="أدوية، أطعمة معينة...">
-                </div>
-
-                <div class="form-group">
-                    <label>هل يتطلب نظام غذائي خاص؟</label>
-                    <select id="special_diet">
-                        <option value="لا">لا</option>
-                        <option value="نعم">نعم</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>توضيح النظام الغذائي الخاص</label>
-                    <input type="text" id="diet_details" placeholder="الممنوعات أو الأطعمة المحددة">
-                </div>
-                
-                <div class="form-group full-width">
-                    <label>التصرف المفضل لديكم في حالة الارتفاع المفاجئ بالحرارة؟ *</label>
-                    <select id="fever_action" required>
-                        <option value="إعطاء الطفل خافض حرارة">إعطاء الطفل خافض حرارة فوراً</option>
-                        <option value="الاتصال بالأهل أولاً">الاتصال بالأهل أولاً قبل أي إجراء</option>
-                        <option value="كلاهما معاً">إعطاء خافض والاتصال بالأهل</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- معلومات شخصية عن الطفل -->
-            <div class="section-title">🎨 معلومات شخصية عن الطفل</div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>ما هو طعام الطفل المفضل؟</label>
-                    <input type="text" id="favorite_food">
-                </div>
-                <div class="form-group">
-                    <label>علاقة الطفل بالأغراب</label>
-                    <select id="strangers_relation">
-                        <option value="اجتماعي">اجتماعي ومتقبل</option>
-                        <option value="مستنكر">مستنكر</option>
-                        <option value="خوف">يخاف وينطوي</option>
-                    </select>
-                </div>
-                <div class="form-group full-width">
-                    <label>علاقة الطفل بالأطفال الآخرين</label>
-                    <select id="children_relation">
-                        <option value="يلعب معهم">يلعب معهم ويتفاعل</option>
-                        <option value="مستنكر">مستنكر ومراقب</option>
-                        <option value="ينفر منهم">ينفر منهم ويفضل العزلة</option>
-                    </select>
-                </div>
-                
-                <!-- استخدام دورة المياه -->
-                <div class="form-group">
-                    <label>هل يعتمد على نفسه في دورة المياه؟</label>
-                    <select id="toilet_independent">
-                        <option value="نعم">نعم، بالكامل</option>
-                        <option value="لا">لا، يحتاج مساعدة</option>
-                        <option value="بامبرز">ما زال يستخدم الحفاض (بامبرز)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>كيف يعبر عن حاجته لدورة المياه؟</label>
-                    <input type="text" id="toilet_expression" placeholder="الكلام، الإشارة، البكاء...">
-                </div>
-                <div class="form-group full-width">
-                    <label>هل يحتاج الطفل للتذكير المستمر بدخول الحمام؟</label>
-                    <select id="toilet_remind">
-                        <option value="لا">لا يحتاج</option>
-                        <option value="نعم">نعم، يحتاج تذكير دوري</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- تسجيل الطالب ونظام الدوام -->
-            <div class="section-title">📅 خيارات دوام وحضور الطالب</div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>تاريخ بداية الحضور الفعلي *</label>
-                    <input type="date" id="start_date" required>
-                </div>
-                <div class="form-group">
-                    <label>نظام الاشتراك والتسجيل *</label>
-                    <select id="subscription_type" required>
-                        <option value="شهري">شهري</option>
-                        <option value="اسبوعي">أسبوعي</option>
-                        <option value="يومي">يومي</option>
-                    </select>
-                </div>
-                
-                <div class="form-group full-width">
-                    <label>أيام الحضور الأسبوعية المقررة (اختر المتاح)</label>
-                    <div class="checkbox-group" style="flex-wrap: wrap;">
-                        <label class="checkbox-option"><input type="checkbox" name="days" value="السبت"> السبت</label>
-                        <label class="checkbox-option"><input type="checkbox" name="days" value="الأحد" checked> الأحد</label>
-                        <label class="checkbox-option"><input type="checkbox" name="days" value="الاثنين" checked> الاثنين</label>
-                        <label class="checkbox-option"><input type="checkbox" name="days" value="الثلاثاء" checked> الثلاثاء</label>
-                        <label class="checkbox-option"><input type="checkbox" name="days" value="الأربعاء" checked> الأربعاء</label>
-                        <label class="checkbox-option"><input type="checkbox" name="days" value="الخميس" checked> الخميس</label>
-                    </div>
-                </div>
-
-                <div class="form-group full-width">
-                    <label>الفترة الزمنية المفضلة للدوام *</label>
-                    <select id="time_slot" required>
-                        <option value="8:00 صباحا - 1:00 ظهرا">8:00 صباحاً - 1:00 ظهراً</option>
-                        <option value="8:00 صباحا - 3:00 ظهرا">8:00 صباحاً - 3:00 ظهراً</option>
-                        <option value="8:00 صباحا - 5:00 ظهرا">8:00 صباحاً - 5:00 ظهراً</option>
-                        <option value="الطيور المبكرة 7:00 صباحا - 5:00 عصرا">الطيور المبكرة (7:00 صباحاً - 5:00 عصراً)</option>
-                        <option value="وقت محدد آخر">وقت محدد آخر (يرجى كتابته بالأسفل)</option>
-                    </select>
-                </div>
-                
-                <div class="form-group full-width">
-                    <label>إذا اخترت (وقت محدد آخر) يرجى تحديده هنا:</label>
-                    <input type="text" id="custom_time_slot" placeholder="مثال: من 9:00 صباحاً إلى 2:00 ظهراً">
-                </div>
-            </div>
-
-            <!-- الأشخاص المسموح لهم باصطحاب الطفل -->
-            <div class="section-title">👥 الأشخاص المسموح لهم باصطحاب واستلام الطفل</div>
-            <div class="form-grid-3">
-                <div class="form-group">
-                    <label>الاسم (الشخص الأول)</label>
-                    <input type="text" id="pickup_name_1">
-                </div>
-                <div class="form-group">
-                    <label>صلة القرابة</label>
-                    <input type="text" id="pickup_relation_1">
-                </div>
-                <div class="form-group">
-                    <label>رقم هاتف المستلم</label>
-                    <input type="tel" id="pickup_phone_1">
-                </div>
-            </div>
-            <div class="form-grid-3" style="margin-top: 10px;">
-                <div class="form-group">
-                    <label>الاسم (الشخص الثاني)</label>
-                    <input type="text" id="pickup_name_2">
-                </div>
-                <div class="form-group">
-                    <label>صلة القرابة</label>
-                    <input type="text" id="pickup_relation_2">
-                </div>
-                <div class="form-group">
-                    <label>رقم هاتف المستلم</label>
-                    <input type="tel" id="pickup_phone_2">
-                </div>
-            </div>
-
-            <!-- إقرار ولي الأمر -->
-            <div class="pledge-box">
-                <p><strong>📝 إقرار وتعهد ولي الأمر:</strong><br>
-                أقر أنا ولي أمر الطفل المذكور أعلاه بصحة كافة البيانات والمعلومات الشاملة والواردة في هذه الاستمارة الإلكترونية، وأتعهد تماماً بسداد كافة الرسوم والمستحقات الخاصة بالحضانة في مواعيدها المحددة دون تأخير.</p>
-                <div class="form-group">
-                    <label>اسم ولي الأمر المقر بالتوقيع الرقمي الإلكتروني *</label>
-                    <input type="text" id="parent_signature" required placeholder="اكتب اسمك الكامل هنا كإقرار">
-                </div>
-            </div>
-
-            <button type="submit" class="btn" id="subBtn">إرسال وتوثيق الاستمارة الرسمية</button>
-        </form>
-    </div>
-    
-    <div id="msg" class="success">🎉 تم إرسال استمارة التسجيل الشاملة لطفلكم بنجاح إلى نظام الإدارة! شكراً لكم.</div>
+<!-- شاشة الترحيب -->
+<div id="loader">
+    <img src="Wood.png" alt="شعار الحضانة">
+    <h1>حضانة نقار الخشب ترحب بكم</h1>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+<!-- محتوى الاستمارة -->
+<div id="main-content">
+    <div class="form-card">
+        <!-- بقية كود الاستمارة يوضع هنا -->
+        <h2>استمارة التسجيل</h2>
+        <p>أهلاً بك، يرجى تعبئة البيانات...</p>
+    </div>
+</div>
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-        authDomain: "woodpecker-508d8.firebaseapp.com",
-        projectId: "woodpecker-508d8",
-        storageBucket: "woodpecker-508d8.firebasestorage.app",
-        messagingSenderId: "434327620481",
-        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // تعيين تاريخ اليوم تلقائياً بداخل خانة التاريخ
-    document.getElementById('form_date').valueAsDate = new Date();
-
-    document.getElementById('regForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('subBtn');
-        btn.disabled = true;
-        btn.innerText = "جاري تجميع وتأمين بيانات الملف...";
-
-        // جمع تجميعة الأيام المختارة
-        const selectedDays = [];
-        document.querySelectorAll('input[name="days"]:checked').forEach(cb => {
-            selectedDays.push(cb.value);
-        });
-
-        // تشكيل الكائن السلس لإرساله لفايربيس متطابق مع القاموس المترجم بالكامل للوحة الإدارة
-        const studentPayload = {
-            // المدخلات الأساسية المترابطة باللوحة
-            fullname: document.getElementById('childName').value,
-            mother_name: document.getElementById('motherName').value,
-            mother_phone: document.getElementById('motherPhone').value,
-            
-            // معلومات الطفل والوالدين التكميلية المدققة
-            form_date: document.getElementById('form_date').value,
-            dob: document.getElementById('dob').value,
-            age: document.getElementById('age').value || 'غير محدد',
-            gender: document.getElementById('gender').value,
-            religion: document.getElementById('religion').value,
-            birth_certificate_no: document.getElementById('birth_certificate_no').value || 'غير مدرج',
-            
-            father_name: document.getElementById('father_name').value,
-            father_nationality: document.getElementById('father_nationality').value,
-            father_job: document.getElementById('father_job').value || 'غير محدد',
-            father_id: document.getElementById('father_id').value || 'غير مدرج',
-            
-            mother_nationality: document.getElementById('mother_nationality').value,
-            mother_job: document.getElementById('mother_job').value || 'غير محدد',
-            mother_id: document.getElementById('mother_id').value || 'غير مدرج',
-            family_book_no: document.getElementById('family_book_no').value || 'غير مدرج',
-            marital_status: document.getElementById('marital_status').value,
-            
-            // الاتصال
-            address: document.getElementById('address').value,
-            phone: document.getElementById('father_phone').value, // هاتف الأب كرئيسي
-            work_phone: document.getElementById('work_phone').value || 'لا يوجد',
-            emergency_phone: document.getElementById('emergency_phone').value || 'لا يوجد',
-            
-            // الصحة
-            notes: `مرض مزمن: ${document.getElementById('has_chronic_disease').value} (${document.getElementById('chronic_disease_details').value || 'لا توضيحات'}) | حساسية: ${document.getElementById('has_allergy').value} (${document.getElementById('allergy_details').value || 'لا توضيحات'}) | نظام غذائي: ${document.getElementById('special_diet').value} (${document.getElementById('diet_details').value || 'لا توضيحات'})`,
-            fever_action: document.getElementById('fever_action').value,
-            
-            // الشخصية وعادات المياه
-            favorite_food: document.getElementById('favorite_food').value || 'غير محدد',
-            strangers_relation: document.getElementById('strangers_relation').value,
-            children_relation: document.getElementById('children_relation').value,
-            toilet_status: `اعتمادية: ${document.getElementById('toilet_independent').value} | تعبيره: ${document.getElementById('toilet_expression').value || '-'} | تذكير: ${document.getElementById('toilet_remind').value}`,
-            
-            // الدوام والاستلام والاقرار
-            start_date: document.getElementById('start_date').value,
-            subscription_type: document.getElementById('subscription_type').value,
-            selected_days: selectedDays.join(' - '),
-            time_slot: document.getElementById('time_slot').value === 'وقت محدد آخر' ? document.getElementById('custom_time_slot').value : document.getElementById('time_slot').value,
-            
-            pickup_persons: `1: ${document.getElementById('pickup_name_1').value || 'لا أحد'} (${document.getElementById('pickup_relation_1').value || '-'}) ت: ${document.getElementById('pickup_phone_1').value || '-'} / 2: ${document.getElementById('pickup_name_2').value || 'لا أحد'} (${document.getElementById('pickup_relation_2').value || '-'}) ت: ${document.getElementById('pickup_phone_2').value || '-'}`,
-            parent_signature: document.getElementById('parent_signature').value,
-            timestamp: new Date()
-        };
-
-     try {
-            console.log("جاري محاولة الإرسال...");
-            await addDoc(collection(db, "registrations"), studentPayload);
-            console.log("تم الإرسال بنجاح!");
-            document.getElementById('msg').style.display = 'block';
-            document.getElementById('form-body').style.display = 'none';
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        } catch (error) {
-            console.error("خطأ مفصل:", error);
-            alert("حدث خطأ: " + error.message); // هذا سيخبرنا بالضبط لماذا يعلق!
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "إرسال وتوثيق الاستمارة الرسمية";
-        }
+<script>
+    // إخفاء شاشة الترحيب بعد 4 ثوانٍ
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            }, 800);
+        }, 4000);
+    });
 </script>
 
 </body>
