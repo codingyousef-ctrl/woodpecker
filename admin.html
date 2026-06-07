@@ -33,11 +33,31 @@
         
         body { background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; }
 
+        /* حركة الارتجاج */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: var(--danger) !important;
+        }
+
+        .error-text {
+            color: var(--danger);
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: bold;
+        }
+
         /* شاشة تسجيل الدخول */
         #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-color); }
-        .login-card { background: var(--card-bg); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border-color); text-align: center; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .login-card { background: var(--card-bg); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border-color); text-align: center; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: border-color 0.3s; }
         .login-card h2 { margin-bottom: 20px; color: var(--primary); }
-        .login-card input { width: 100%; padding: 12px; margin-bottom: 20px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; outline: none; }
+        .login-card input { width: 100%; padding: 12px; margin-bottom: 15px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; outline: none; }
         .login-card button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .login-card button:hover { background: var(--primary-hover); }
 
@@ -46,9 +66,9 @@
         
         /* الشريط العلوي */
         .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
-        .nav-title { font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .nav-title { font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; gap: 10px; color: var(--primary); }
         .nav-actions { display: flex; gap: 10px; }
-        .btn-icon { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+        .btn-icon { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; font-weight: 600;}
         .btn-icon:hover { border-color: var(--primary); }
 
         /* الإحصائيات */
@@ -74,41 +94,47 @@
         body.light-mode tr:hover { background: rgba(0,0,0,0.02); }
         
         .action-btns { display: flex; gap: 8px; }
-        .btn-view { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-        .btn-delete { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .btn-view { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .btn-delete { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
 
         /* النوافذ المنبثقة (Modals) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-content { background: var(--card-bg); width: 90%; max-width: 500px; border-radius: var(--radius); border: 1px solid var(--border-color); padding: 25px; max-height: 90vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
         .modal-header h3 { color: var(--primary); }
-        .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s;}
+        .close-btn:hover { color: var(--danger); }
         
         /* حقول إدخال النافذة المنبثقة */
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 13px; }
-        .form-group input { width: 100%; padding: 10px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 13px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 10px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; outline: none; }
+        .form-group input:focus { border-color: var(--primary); }
 
         .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .detail-item { background: var(--bg-color); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
-        .detail-item span { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
+        .detail-item span { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 3px; font-weight: 600; }
         .detail-item strong { color: var(--text-main); font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
-    <div class="login-card">
+    <div class="login-card" id="login-box">
         <h2>🔒 نظام الإدارة</h2>
         <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">أدخل كلمة المرور للوصول للبيانات</p>
-        <input type="password" id="pass" placeholder="كلمة المرور...">
+        
+        <input type="password" id="pass" placeholder="كلمة المرور..." onkeypress="handleEnter(event)">
+        
+        <div id="error-msg" class="error-text">❌ كلمة المرور غير صحيحة!</div>
+        
         <button onclick="checkPass()">تسجيل الدخول</button>
     </div>
 </div>
 
 <div id="dashboard">
     <div class="navbar">
-        <div class="nav-title">🌸 مركز الحضانة</div>
+        <div class="nav-title">🌸 حضانة نقار الخشب</div>
         <div class="nav-actions">
             <button class="btn-icon" onclick="toggleTheme()">☀️/🌙 المظهر</button>
             <button class="btn-icon" onclick="lockSystem()" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.3);">🔒 قفل</button>
@@ -188,7 +214,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    // 1. إعدادات Firebase الخاصة بك
+    // إعدادات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
         authDomain: "woodpecker-508d8.firebaseapp.com",
@@ -199,4 +225,8 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = get
+    const db = getFirestore(app);
+
+    let studentsData = [];
+
+    // دعم زر
