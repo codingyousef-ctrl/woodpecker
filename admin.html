@@ -6,138 +6,76 @@
     <title>لوحة الإدارة | حضانة نقار الخشب</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #121418;
-            --card-bg: #1e2025;
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --primary: #d4537e;
+        :root { 
+            --bg: #121418; 
+            --card: #1e2025; 
+            --text: #ffffff; 
+            --muted: #94a3b8; 
+            --primary: #d4537e; 
             --primary-hover: #b8436b;
-            --border-color: #2a2d35;
-            --success: #10b981;
+            --border: #2a2d35;
             --danger: #ef4444;
-            --radius: 12px;
         }
-
-        body.light-mode {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #1a202c;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-        }
-
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
         
-        body { background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding: 0; margin: 0; }
+        /* Login Card */
+        #login-screen { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+        .login-card { background: var(--card); padding: 40px; border-radius: 16px; border: 1px solid var(--border); text-align: center; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .login-card input { width: 100%; padding: 12px; margin: 15px 0; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; outline: none; }
+        .login-card button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-10px); }
-            40%, 80% { transform: translateX(10px); }
-        }
-
-        .error-shake { animation: shake 0.4s ease-in-out; border-color: var(--danger) !important; }
-        .error-text { color: var(--danger); font-size: 13px; margin-bottom: 15px; display: none; font-weight: bold; }
+        /* Dashboard */
+        #dashboard { display: none; max-width: 1000px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header img { height: 100px; width: auto; margin-bottom: 10px; border-radius: 12px; }
+        .header h2 { color: var(--primary); }
         
-        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-color); }
-        .login-card { background: var(--card-bg); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border-color); text-align: center; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .login-card h2 { margin-bottom: 20px; color: var(--primary); }
-        .login-card input { width: 100%; padding: 12px; margin-bottom: 15px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; outline: none; }
-        .login-card button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .login-card button:hover { background: var(--primary-hover); }
+        .stat-card { background: var(--card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center; margin-bottom: 20px; }
+        .stat-value { font-size: 32px; font-weight: bold; color: var(--primary); }
         
-        #dashboard { display: none; padding: 20px 40px; width: 100%; max-width: 100%; margin: 0; }
-        
-        /* شريط علوي يحتوي على الشعار المنسق */
-        .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); width: 100%; }
-        .nav-title { font-size: 1.5rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 12px; }
-        .nav-title img { height: 45px; width: auto; object-fit: contain; }
-        .nav-actions { display: flex; gap: 10px; }
-        .btn-icon { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: 600; }
-        .btn-icon:hover { border-color: var(--primary); }
-        
-        .stats-grid { display: grid; grid-template-columns: 1fr; margin-bottom: 30px; width: 100%; }
-        .stat-card { background: var(--card-bg); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; border-top: 3px solid var(--primary); }
-        .stat-title { color: var(--text-muted); font-size: 15px; font-weight: 600; }
-        .stat-value { font-size: 2.5rem; font-weight: bold; color: var(--text-main); }
-        
-        .toolbar { display: flex; width: 100%; margin-bottom: 20px; }
-        .search-box { flex: 1; width: 100%; }
-        .search-box input { width: 100%; padding: 15px 20px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; outline: none; font-size: 16px; }
-        .search-box input:focus { border-color: var(--primary); }
-        
-        .table-container { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border-color); overflow-x: auto; width: 100%; }
+        .table-container { background: var(--card); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; text-align: right; }
-        th { padding: 18px; background: rgba(0,0,0,0.1); color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border-color); font-size: 15px; }
-        td { padding: 18px; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-size: 15px; }
-        tr:hover { background: rgba(255,255,255,0.02); }
-        body.light-mode tr:hover { background: rgba(0,0,0,0.02); }
+        th { padding: 15px; background: rgba(0,0,0,0.2); color: var(--muted); border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); }
         
-        .action-btns { display: flex; gap: 8px; }
-        .btn-view { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
-        .btn-delete { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
+        .btn-view { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-left: 5px; }
+        .btn-delete { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
         
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal-content { background: var(--card-bg); width: 95%; max-width: 1100px; border-radius: var(--radius); border: 1px solid var(--border-color); padding: 35px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
-        .modal-header h3 { color: var(--primary); font-size: 20px; }
-        .close-btn { background: none; border: none; color: var(--text-muted); font-size: 26px; cursor: pointer; transition: 0.2s;}
-        .close-btn:hover { color: var(--danger); }
-        
-        .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .detail-item { background: var(--bg-color); padding: 15px 20px; border-radius: 8px; border: 1px solid var(--border-color); transition: 0.2s; }
-        .detail-item:hover { border-color: var(--primary); }
-        .detail-item span { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
-        .detail-item strong { color: var(--text-main); font-size: 16px; display: block; word-break: break-all; }
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
-    <div class="login-card" id="login-box">
-        <h2>🔒 نظام الإدارة</h2>
-        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">أدخل كلمة المرور للوصول للبيانات</p>
-        <input type="password" id="pass" placeholder="كلمة المرور..." onkeypress="handleEnter(event)">
-        <div id="error-msg" class="error-text">❌ كلمة المرور غير صحيحة!</div>
-        <button onclick="checkPass()">تسجيل الدخول</button>
+    <div class="login-card">
+        <h2>🔒 لوحة إدارة الحضانة</h2>
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button onclick="checkPass()">دخول</button>
     </div>
 </div>
 
 <div id="dashboard">
-    <!-- تم دمج مسار الشعار تلقائياً في الشريط العلوي -->
-    <div class="navbar">
-        <div class="nav-title">
-            <img src="Wood.png" alt="الشعار" onerror="this.style.display='none';">
-            <span>حضانة نقار الخشب</span>
-        </div>
-        <div class="nav-actions">
-            <button class="btn-icon" onclick="toggleTheme()">☀️/🌙 المظهر</button>
-            <button class="btn-icon" onclick="lockSystem()" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.3);">🔒 قفل</button>
-        </div>
+    <div class="header">
+        <img src="https://images.gemini.googleusercontent.com/v1/images/r/3588f2195f00e932" alt="الشعار">
+        <h2>لوحة التحكم</h2>
     </div>
-
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-title">إجمالي الطلاب المسجلين بالاستمارة</div>
-            <div class="stat-value" id="total-students">0</div>
-        </div>
-    </div>
-
-    <div class="toolbar">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="بحث سريع باسم الطفل واضغط لتصفية الجدول الفوري..." onkeyup="filterTable()">
-        </div>
+    
+    <div class="stat-card">
+        <p>إجمالي الطلاب المسجلين</p>
+        <div class="stat-value" id="total-students">0</div>
     </div>
 
     <div class="table-container">
-        <table id="dataTable">
+        <table>
             <thead>
                 <tr>
-                    <th>اسم الطفل</th>
-                    <th>اسم الأم</th>
-                    <th>رقم هاتف الأم</th>
-                    <th>إجراءات الإدارة</th>
+                    <th>الاسم</th>
+                    <th>الأم</th>
+                    <th>الهاتف</th>
+                    <th>تحكم</th>
                 </tr>
             </thead>
             <tbody id="data-body"></tbody>
@@ -145,59 +83,13 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="detailsModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>الملف الشامل لبيانات استمارة الطالب</h3>
-            <button class="close-btn" onclick="closeModal('detailsModal')">&times;</button>
-        </div>
-        <div class="details-grid" id="student-details-content"></div>
-    </div>
-</div>
-
 <script>
-    function handleEnter(e) { if (e.key === 'Enter') checkPass(); }
-    
     function checkPass() {
-        const passInput = document.getElementById('pass');
-        const loginBox = document.getElementById('login-box');
-        const errorMsg = document.getElementById('error-msg');
-
-        if(passInput.value === "123456") {
+        if(document.getElementById('pass').value === "123456") {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            passInput.value = ''; 
-            errorMsg.style.display = 'none'; 
-            loginBox.classList.remove('error-shake');
-            if(window.loadFirebaseData) window.loadFirebaseData(); 
-        } else {
-            errorMsg.style.display = 'block'; 
-            loginBox.classList.remove('error-shake');
-            setTimeout(() => { loginBox.classList.add('error-shake'); }, 10);
-            passInput.value = '';
-            passInput.focus();
-        }
-    }
-
-    function lockSystem() {
-        document.getElementById('pass').value = '';
-        document.getElementById('error-msg').style.display = 'none';
-        document.getElementById('login-box').classList.remove('error-shake');
-        document.getElementById('dashboard').style.display = 'none';
-        document.getElementById('login-screen').style.display = 'flex';
-    }
-
-    function toggleTheme() { document.body.classList.toggle('light-mode'); }
-    function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
-    function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
-    
-    function filterTable() {
-        let input = document.getElementById('searchInput').value.toLowerCase();
-        let rows = document.getElementById('dataTable').getElementsByTagName('tr');
-        for (let i = 1; i < rows.length; i++) {
-            let nameCol = rows[i].cells[0].textContent.toLowerCase();
-            rows[i].style.display = nameCol.includes(input) ? "" : "none";
-        }
+            if(window.loadFirebaseData) window.loadFirebaseData();
+        } else { alert("كلمة المرور خاطئة"); }
     }
 </script>
 
@@ -216,91 +108,27 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    let studentsData = [];
 
     window.loadFirebaseData = function() {
         onSnapshot(collection(db, "registrations"), (snapshot) => {
             const tableBody = document.getElementById("data-body");
             tableBody.innerHTML = "";
-            studentsData = []; 
             document.getElementById("total-students").innerText = snapshot.size;
 
             snapshot.forEach((docSnap) => {
                 const data = docSnap.data();
-                data.id = docSnap.id; 
-                studentsData.push(data); 
-
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="font-weight: bold; color: var(--primary);">${data.fullname || data.child_name || 'غير محدد'}</td>
-                    <td>${data.mother_name || 'غير محدد'}</td>
-                    <td dir="ltr" style="text-align: right;">${data.mother_phone || data.phone || 'غير محدد'}</td>
-                    <td class="action-btns">
-                        <button class="btn-view" onclick="viewDetails('${data.id}')">👁️ عرض التفاصيل كاملة</button>
-                        <button class="btn-delete" onclick="deleteStudent('${data.id}')">🗑️ حذف</button>
+                    <td>${data.fullname || '---'}</td>
+                    <td>${data.mother_name || '---'}</td>
+                    <td>${data.mother_phone || '---'}</td>
+                    <td>
+                        <button class="btn-delete" onclick="deleteDoc(doc(db, 'registrations', '${docSnap.id}'))">حذف</button>
                     </td>
                 `;
                 tableBody.appendChild(tr);
             });
         });
-    };
-
-    window.viewDetails = function(studentId) {
-        const student = studentsData.find(s => s.id === studentId);
-        if(!student) return;
-        const content = document.getElementById('student-details-content');
-        
-        const translationMap = {
-            fullname: 'اسم الطفل الرباعي',
-            child_name: 'اسم الطفل المكتوب',
-            father_name: 'اسم الأب والشهرة',
-            phone: 'رقم هاتف الأب / التواصل رئيسي',
-            mother_name: 'اسم الأم الكامل',
-            mother_phone: 'رقم هاتف الأم المباشر',
-            address: 'عنوان السكن بالتفصيل',
-            start_date: 'تاريخ بدء الالتحاق الفعلي',
-            dob: 'تاريخ ميلاد الطفل',
-            gender: 'الجنس',
-            notes: 'حالة صحية أو ملاحظات خاصة',
-            timestamp: 'تاريخ تقديم الطلب على الموقع'
-        };
-
-        let finalHtml = '';
-
-        for (let key in translationMap) {
-            if (student[key] !== undefined && student[key] !== null) {
-                let displayVal = student[key];
-                if (key === 'timestamp' && displayVal.seconds) {
-                    displayVal = new Date(displayVal.seconds * 1000).toLocaleString('ar-EG');
-                }
-                finalHtml += `
-                    <div class="detail-item">
-                        <span>${translationMap[key]}</span>
-                        <strong>${displayVal || '-'}</strong>
-                    </div>
-                `;
-            }
-        }
-
-        for (let key in student) {
-            if (!translationMap[key] && key !== 'id' && key !== 'added_from_admin') {
-                finalHtml += `
-                    <div class="detail-item">
-                        <span>حقل إضافي (${key})</span>
-                        <strong>${student[key] || '-'}</strong>
-                    </div>
-                `;
-            }
-        }
-
-        content.innerHTML = finalHtml;
-        openModal('detailsModal');
-    };
-
-    window.deleteStudent = async function(id) {
-        if(confirm("هل أنت متأكد تماماً من حذف هذا الطفل من سجلات الحضانة نهائياً؟")) {
-            await deleteDoc(doc(db, "registrations", id));
-        }
     };
 </script>
 </body>
