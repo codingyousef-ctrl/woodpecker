@@ -459,19 +459,20 @@
             timestamp: new Date()
         };
 
-        try {
+     try {
+            console.log("جاري محاولة الإرسال...");
             await addDoc(collection(db, "registrations"), studentPayload);
+            console.log("تم الإرسال بنجاح!");
             document.getElementById('msg').style.display = 'block';
             document.getElementById('form-body').style.display = 'none';
             window.scrollTo({top: 0, behavior: 'smooth'});
         } catch (error) {
-            console.error(error);
-            alert("حدث خطأ أثناء رفع الاستمارة، يرجى مراجعة الحقول أو الاتصال بالإنترنت.");
+            console.error("خطأ مفصل:", error);
+            alert("حدث خطأ: " + error.message); // هذا سيخبرنا بالضبط لماذا يعلق!
         } finally {
             btn.disabled = false;
             btn.innerText = "إرسال وتوثيق الاستمارة الرسمية";
         }
-    });
 </script>
 
 </body>
