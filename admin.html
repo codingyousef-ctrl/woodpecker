@@ -6,7 +6,6 @@
     <title>لوحة الإدارة | حضانة نقار الخشب</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* المتغيرات الأساسية للوضع الليلي (الافتراضي) */
         :root {
             --bg-color: #121418;
             --card-bg: #1e2025;
@@ -20,7 +19,6 @@
             --radius: 12px;
         }
 
-        /* متغيرات الوضع النهاري */
         body.light-mode {
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
@@ -33,7 +31,6 @@
         
         body { background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; padding: 0; margin: 0; }
         
-        /* حركة الارتجاج للشاشة الفاشلة */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-10px); }
@@ -43,7 +40,6 @@
         .error-shake { animation: shake 0.4s ease-in-out; border-color: var(--danger) !important; }
         .error-text { color: var(--danger); font-size: 13px; margin-bottom: 15px; display: none; font-weight: bold; }
         
-        /* شاشة تسجيل الدخول */
         #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-color); }
         .login-card { background: var(--card-bg); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border-color); text-align: center; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .login-card h2 { margin-bottom: 20px; color: var(--primary); }
@@ -51,29 +47,26 @@
         .login-card button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .login-card button:hover { background: var(--primary-hover); }
         
-        /* الهيكل الأساسي ممتد بالكامل لأطراف الشاشة */
         #dashboard { display: none; padding: 20px 40px; width: 100%; max-width: 100%; margin: 0; }
         
-        /* الشريط العلوي */
+        /* شريط علوي يحتوي على الشعار المنسق */
         .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); width: 100%; }
-        .nav-title { font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+        .nav-title { font-size: 1.5rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 12px; }
+        .nav-title img { height: 45px; width: auto; object-fit: contain; }
         .nav-actions { display: flex; gap: 10px; }
         .btn-icon { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: 600; }
         .btn-icon:hover { border-color: var(--primary); }
         
-        /* الإحصائيات ممتدة */
         .stats-grid { display: grid; grid-template-columns: 1fr; margin-bottom: 30px; width: 100%; }
         .stat-card { background: var(--card-bg); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; border-top: 3px solid var(--primary); }
         .stat-title { color: var(--text-muted); font-size: 15px; font-weight: 600; }
         .stat-value { font-size: 2.5rem; font-weight: bold; color: var(--text-main); }
         
-        /* شريط البحث ممتد لآخر الصفحة من اليمين لليسار */
         .toolbar { display: flex; width: 100%; margin-bottom: 20px; }
         .search-box { flex: 1; width: 100%; }
         .search-box input { width: 100%; padding: 15px 20px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; outline: none; font-size: 16px; }
         .search-box input:focus { border-color: var(--primary); }
         
-        /* الجدول ممتد بكامل المساحة */
         .table-container { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border-color); overflow-x: auto; width: 100%; }
         table { width: 100%; border-collapse: collapse; text-align: right; }
         th { padding: 18px; background: rgba(0,0,0,0.1); color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border-color); font-size: 15px; }
@@ -85,7 +78,6 @@
         .btn-view { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
         .btn-delete { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
         
-        /* نافذة المعلومات ممتدة وعريضة لأطراف الصفحة */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-content { background: var(--card-bg); width: 95%; max-width: 1100px; border-radius: var(--radius); border: 1px solid var(--border-color); padding: 35px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
@@ -93,7 +85,6 @@
         .close-btn { background: none; border: none; color: var(--text-muted); font-size: 26px; cursor: pointer; transition: 0.2s;}
         .close-btn:hover { color: var(--danger); }
         
-        /* شبكة عرض كل بيانات الاستمارة بالتفصيل */
         .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .detail-item { background: var(--bg-color); padding: 15px 20px; border-radius: 8px; border: 1px solid var(--border-color); transition: 0.2s; }
         .detail-item:hover { border-color: var(--primary); }
@@ -103,7 +94,6 @@
 </head>
 <body>
 
-<!-- شاشة القفل -->
 <div id="login-screen">
     <div class="login-card" id="login-box">
         <h2>🔒 نظام الإدارة</h2>
@@ -114,10 +104,13 @@
     </div>
 </div>
 
-<!-- لوحة التحكم الكاملة -->
 <div id="dashboard">
+    <!-- تم دمج مسار الشعار تلقائياً في الشريط العلوي -->
     <div class="navbar">
-        <div class="nav-title">🌸 حضانة نقار الخشب</div>
+        <div class="nav-title">
+            <img src="logo.png" alt="الشعار" onerror="this.style.display='none';">
+            <span>حضانة نقار الخشب</span>
+        </div>
         <div class="nav-actions">
             <button class="btn-icon" onclick="toggleTheme()">☀️/🌙 المظهر</button>
             <button class="btn-icon" onclick="lockSystem()" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.3);">🔒 قفل</button>
@@ -152,7 +145,6 @@
     </div>
 </div>
 
-<!-- نافذة عرض كافة معلومات الاستمارة كاملة (موسعة) -->
 <div class="modal-overlay" id="detailsModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -209,7 +201,6 @@
     }
 </script>
 
-<!-- معالجة بيانات الـ Firebase بشكل ديناميكي كامل -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
@@ -254,13 +245,11 @@
         });
     };
 
-    // نظام ذكي يعرض كافة الحقول المدخلة أياً كانت مسمياتها في الـ index.html
     window.viewDetails = function(studentId) {
         const student = studentsData.find(s => s.id === studentId);
         if(!student) return;
         const content = document.getElementById('student-details-content');
         
-        // قاموس ترجمة الحقول الشائعة لتظهر باللغة العربية بجمالية واحترافية
         const translationMap = {
             fullname: 'اسم الطفل الرباعي',
             child_name: 'اسم الطفل المكتوب',
@@ -278,7 +267,6 @@
 
         let finalHtml = '';
 
-        // 1. استخراج وعرض الحقول الأساسية المترجمة أولاً
         for (let key in translationMap) {
             if (student[key] !== undefined && student[key] !== null) {
                 let displayVal = student[key];
@@ -294,7 +282,6 @@
             }
         }
 
-        // 2. استخراج الحقول الإضافية الأخرى (إن وجدت في استمارة index.html ولم تذكر أعلاه) لضمان عرض 100% من البيانات
         for (let key in student) {
             if (!translationMap[key] && key !== 'id' && key !== 'added_from_admin') {
                 finalHtml += `
