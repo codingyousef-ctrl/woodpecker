@@ -2,60 +2,61 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة تحكم الإدارة</title>
+    <title>لوحة إدارة حضانة نقار الخشب</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; text-align: center; }
-        .login-box { max-width: 300px; margin: 100px auto; background: white; padding: 20px; border-radius: 10px; }
-        #dashboard { display: none; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { padding: 10px; border: 1px solid #ddd; }
+        body { font-family: sans-serif; background: #fdf6f0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: center; }
+        .clickable { color: #d4537e; cursor: pointer; font-weight: bold; }
+        /* تصميم النافذة المنبثقة */
+        #modal { display: none; position: fixed; top: 20%; left: 30%; width: 40%; background: white; padding: 20px; border: 2px solid #ffcc80; border-radius: 15px; }
     </style>
 </head>
 <body>
 
-<div id="login-screen" class="login-box">
-    <h3>دخول الإدارة</h3>
-    <input type="password" id="pass" placeholder="كلمة المرور">
-    <button onclick="checkPass()">دخول</button>
+<div class="container">
+    <div id="login-screen">
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button onclick="checkPass()">دخول</button>
+    </div>
+
+    <div id="dashboard" style="display:none;">
+        <table>
+            <thead><tr><th>اسم الطفل</th><th>اسم الأم</th><th>هاتف الأم</th></tr></thead>
+            <tbody id="data-body"></tbody>
+        </table>
+    </div>
 </div>
 
-<div id="dashboard">
-    <h1>قائمة الأطفال المسجلين</h1>
-    <table>
-        <thead><tr><th>الاسم</th><th>اسم الأب</th><th>الهاتف</th></tr></thead>
-        <tbody id="data-body"></tbody>
-    </table>
+<!-- النافذة المنبثقة للتفاصيل -->
+<div id="modal">
+    <h3>تفاصيل الطفل</h3>
+    <div id="modal-content"></div>
+    <button onclick="document.getElementById('modal').style.display='none'">إغلاق</button>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-        authDomain: "woodpecker-508d8.firebaseapp.com",
-        projectId: "woodpecker-508d8",
-        storageBucket: "woodpecker-508d8.firebasestorage.app",
-        messagingSenderId: "434327620481",
-        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680"
-    };
-
-    const db = getFirestore(initializeApp(firebaseConfig));
-
-    window.checkPass = function() {
-        if(document.getElementById('pass').value === "123456") {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            onSnapshot(collection(db, "registrations"), (snapshot) => {
-                const body = document.getElementById("data-body");
-                body.innerHTML = "";
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    body.innerHTML += `<tr><td>${data.fullname}</td><td>${data.father_name}</td><td>${data.phone}</td></tr>`;
-                });
-            });
-        } else { alert("كلمة المرور خاطئة!"); }
-    }
+    // ... (كود Firebase كما هو في المرات السابقة) ...
+    
+    // عند بناء الجدول:
+    snapshot.forEach((doc) => {
+        const data = doc.data();
+        const row = document.createElement("tr");
+        row.innerHTML = `<td class="clickable">${data.fullname}</td><td>${data.mother_name}</td><td>${data.mother_phone}</td>`;
+        
+        // إضافة حدث الضغط لعرض التفاصيل
+        row.querySelector('.clickable').onclick = () => {
+            document.getElementById('modal-content').innerHTML = `
+                <p>الاسم الكامل: ${data.fullname}</p>
+                <p>اسم الأم: ${data.mother_name}</p>
+                <p>هاتف الأم: ${data.mother_phone}</p>
+                <p>العنوان: ${data.address || 'غير محدد'}</p>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        };
+        document.getElementById("data-body").appendChild(row);
+    });
 </script>
 </body>
 </html>
