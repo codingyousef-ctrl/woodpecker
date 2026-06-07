@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم إدارة الحضانة</title>
+    <!-- استيراد مكتبة Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // ضع هنا كود الـ firebaseConfig الخاص بك
+        const firebaseConfig = { /* ... */ };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // جلب البيانات لحظياً
+        onSnapshot(collection(db, "registrations"), (snapshot) => {
+            const tableBody = document.getElementById("data-body");
+            tableBody.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                tableBody.innerHTML += `<tr>
+                    <td>${data.fullname}</td>
+                    <td>${data.father_name}</td>
+                    <td>${data.phone}</td>
+                </tr>`;
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>قائمة الأطفال المسجلين</h1>
+    <table border="1">
+        <thead>
+            <tr><th>اسم الطفل</th><th>اسم الأب</th><th>رقم الهاتف</th></tr>
+        </thead>
+        <tbody id="data-body"></tbody>
+    </table>
+</body>
+</html>
