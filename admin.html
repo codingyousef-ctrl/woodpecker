@@ -409,10 +409,82 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            width: min(480px, 100%);
-            padding: 28px;
+            width: min(860px, 96vw);
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
             box-shadow: var(--shadow);
             animation: slideUp 0.25s ease;
+        }
+
+        .modal-header {
+            padding: 22px 28px 16px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+            margin: 0 0 4px;
+            font-size: 1.25rem;
+            padding: 0;
+            border: none;
+        }
+
+        .modal-header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        #modal-body {
+            padding: 8px 28px 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .detail-section {
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .detail-section-title {
+            background: rgba(212, 83, 126, 0.1);
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(42, 49, 64, 0.45);
+            font-size: 0.9rem;
+        }
+
+        .detail-row:last-child { border-bottom: none; }
+        .detail-row .label { color: var(--muted); flex-shrink: 0; min-width: 130px; }
+        .detail-row .value { font-weight: 600; text-align: left; word-break: break-word; }
+
+        .detail-img {
+            max-height: 120px;
+            max-width: 200px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            padding: 16px 28px 22px;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
         }
 
         @keyframes slideUp {
@@ -420,29 +492,8 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .modal h3 {
-            margin: 0 0 18px;
-            font-size: 1.2rem;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .modal-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(42, 49, 64, 0.5);
-            font-size: 0.92rem;
-        }
-
-        .modal-row:last-of-type { border-bottom: none; }
-        .modal-row .label { color: var(--muted); }
-        .modal-row .value { font-weight: 600; text-align: left; }
-
         .modal-close {
             width: 100%;
-            margin-top: 20px;
             padding: 12px;
             border: none;
             border-radius: 10px;
@@ -534,7 +585,8 @@
                 <tr>
                     <th>الاسم</th>
                     <th>الجنس</th>
-                    <th>هاتف الأم</th>
+                    <th>هاتف الأب</th>
+                    <th>تاريخ التسجيل</th>
                     <th>إجراءات</th>
                 </tr>
             </thead>
@@ -549,9 +601,14 @@
 
 <div class="modal-overlay" id="modal">
     <div class="modal">
-        <h3>👁️ تفاصيل الطالب</h3>
+        <div class="modal-header">
+            <h3 id="modal-title">👁️ ملف الطالب</h3>
+            <p id="modal-subtitle"></p>
+        </div>
         <div id="modal-body"></div>
-        <button class="modal-close" id="modal-close">إغلاق</button>
+        <div class="modal-footer">
+            <button class="modal-close" id="modal-close">إغلاق</button>
+        </div>
     </div>
 </div>
 
@@ -562,17 +619,27 @@
     import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-        authDomain: "woodpecker-508d8.firebaseapp.com",
-        projectId: "woodpecker-508d8",
-        storageBucket: "woodpecker-508d8.firebasestorage.app",
-        messagingSenderId: "434327620481",
-        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
+        apiKey: "AIzaSyBcPAPg14MC8RJLWuhEjazM-6TzyfgjceE",
+        authDomain: "woodpecker-53ebe.firebaseapp.com",
+        projectId: "woodpecker-53ebe",
+        storageBucket: "woodpecker-53ebe.firebasestorage.app",
+        messagingSenderId: "1031341169216",
+        appId: "1:1031341169216:web:3d2fa07bd7b2a7a68f9da5",
     };
 
-    // ── الشعار: ضع مسار صورتك هنا (مثال: "./logo.png") ──
-    const LOGO_PATH = "./logo.png";
+    const LOGO_PATH = "./wood.png";
     const LOGO_STORAGE_KEY = "naqqar_admin_logo";
+    const COLLECTION = "students";
+
+    const RELATION = { father: "الأب", mother: "الأم", grandfather: "الجد", grandmother: "الجدة", uncle: "العم/الخال", aunt: "العمة/الخالة", sibling: "الأخ/الأخت", driver: "السائق", other: "أخرى" };
+    const RELIGION = { muslim: "مسلم", christian: "مسيحي", other: "أخرى" };
+    const MARITAL = { married: "متزوجان", divorced: "مطلقان", widowed: "أرمل/أرملة", other: "أخرى" };
+    const FEVER = { medicine: "إعطاء خافض حرارة", contact: "الاتصال بالأهل", both: "كلاهما" };
+    const STRANGER = { social: "اجتماعي", reserved: "مستنكر", scared: "خوف" };
+    const KIDS = { plays: "يلعب معهم", reserved: "مستنكر", avoids: "ينفر منهم" };
+    const BATHROOM = { yes: "مستقل", no: "يحتاج مساعدة", sometimes: "أحياناً" };
+    const FREQ = { daily: "يومي", weekly: "أسبوعي", monthly: "شهري" };
+    const TIME = { "8-1": "8:00 ص – 1:00 ظ", "8-3": "8:00 ص – 3:00 ظ", "8-5": "8:00 ص – 5:00 ظ", early: "الطيور المبكرة 7:00–5:00" };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -580,7 +647,132 @@
     let allRecords = [];
     let searchQuery = "";
 
-    // ── Logo handling ──
+    // ── Helpers ──
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const dash = (v) => (v === null || v === undefined || v === "" ? "—" : v);
+    const yesNo = (v, detail) => v === "yes" ? `نعم${detail ? " – " + detail : ""}` : v === "no" ? "لا" : dash(v);
+    const genderLabel = (g) => ({ male: "ذكر", female: "أنثى", ذكر: "ذكر", أنثى: "أنثى" }[g] || dash(g));
+    const isMale = (g) => g === "male" || g === "ذكر";
+    const getName = (d) => d.childName || d.fullname || "—";
+    const getPhone = (d) => d.fatherPhone || d.motherPhone || d.mother_phone || "—";
+
+    function renderValue(val) {
+        if (!val || val === "—") return `<span class="value">—</span>`;
+        if (typeof val === "string" && val.startsWith("data:image"))
+            return `<img class="detail-img" src="${val}" alt="مرفق" onclick="window.open(this.src,'_blank')">`;
+        return `<span class="value">${esc(val)}</span>`;
+    }
+
+    function buildSections(d) {
+        const pickup = (n) => {
+            const name = d[`pickup${n}Name`];
+            const rel = d[`pickup${n}Relation`];
+            return name ? `${name} (${RELATION[rel] || rel || ""})` : "";
+        };
+        const attTime = TIME[d.attendanceTime] || (d.attendanceTime === "custom" ? d.attendanceTimeCustom : "");
+
+        return [
+            {
+                title: "👶 معلومات الطفل",
+                rows: [
+                    ["الاسم الرباعي", getName(d)],
+                    ["تاريخ الميلاد", d.birthDate],
+                    ["العمر", d.age],
+                    ["الجنس", genderLabel(d.gender)],
+                    ["الديانة", RELIGION[d.religion] || d.religion],
+                    ["شهادة الميلاد", d.birthCertImage],
+                ],
+            },
+            {
+                title: "👔 معلومات الأب",
+                rows: [
+                    ["الاسم", d.fatherName],
+                    ["الجنسية", d.fatherNationality],
+                    ["رقم الوطني", d.fatherNationalId],
+                    ["الهاتف", d.fatherPhone],
+                    ["العمل", d.fatherJob],
+                    ["صورة الهوية", d.fatherIdImage],
+                ],
+            },
+            {
+                title: "👩 معلومات الأم",
+                rows: [
+                    ["الاسم", d.motherName],
+                    ["الجنسية", d.motherNationality],
+                    ["رقم الوطني", d.motherNationalId],
+                    ["الهاتف", d.motherPhone || d.mother_phone],
+                    ["العمل", d.motherJob],
+                    ["صورة الهوية", d.motherIdImage],
+                ],
+            },
+            {
+                title: "📁 وثائق العائلة والاتصال",
+                rows: [
+                    ["رقم دفتر العائلة", d.familyBook],
+                    ["صورة دفتر العائلة", d.familyBookImage],
+                    ["الحالة الاجتماعية", MARITAL[d.maritalStatus] || d.maritalStatus],
+                    ["عنوان السكن", d.address],
+                    ["هاتف التواصل", d.contactPhone],
+                    ["هاتف آخر", d.contactPhone2],
+                ],
+            },
+            {
+                title: "💊 المعلومات الصحية",
+                rows: [
+                    ["مرض مزمن", yesNo(d.chronicDisease, d.chronicDiseaseDetail)],
+                    ["حساسية", yesNo(d.allergy, d.allergyDetail)],
+                    ["نظام غذائي خاص", yesNo(d.specialDiet, d.specialDietDetail)],
+                    ["عند ارتفاع الحرارة", FEVER[d.feverAction] || d.feverAction],
+                ],
+            },
+            {
+                title: "🌟 معلومات شخصية",
+                rows: [
+                    ["الطعام المفضل", d.favFood],
+                    ["علاقة بالغرباء", STRANGER[d.strangerRelation] || d.strangerRelation],
+                    ["علاقة بالأطفال", KIDS[d.kidsRelation] || d.kidsRelation],
+                    ["دورة المياه – الاستقلالية", BATHROOM[d.bathroomSelf] || d.bathroomSelf],
+                    ["التعبير عن الحاجة", d.bathroomExpression],
+                    ["يحتاج تذكير", d.bathroomReminder === "yes" ? "نعم" : d.bathroomReminder === "no" ? "لا" : d.bathroomReminder],
+                ],
+            },
+            {
+                title: "📅 التسجيل والحضور",
+                rows: [
+                    ["بداية الحضور", d.attendanceStart],
+                    ["أيام الحضور", Array.isArray(d.attendanceDays) ? d.attendanceDays.join("، ") : d.attendanceDays],
+                    ["نوع الاشتراك", FREQ[d.attendanceFreq] || d.attendanceFreq],
+                    ["وقت الحضور", attTime],
+                    ["تاريخ التسجيل", d.registrationDate],
+                ],
+            },
+            {
+                title: "🚗 الأشخاص المسموح لهم بالاصطحاب",
+                rows: [
+                    ["الشخص 1", pickup(1)],
+                    ["الشخص 2", pickup(2)],
+                    ["الشخص 3", pickup(3)],
+                ],
+            },
+        ];
+    }
+
+    function renderSection(section) {
+        const rows = section.rows.filter(([, v]) => v && v !== "—" && v !== "");
+        if (!rows.length) return "";
+        return `
+            <div class="detail-section">
+                <div class="detail-section-title">${section.title}</div>
+                ${rows.map(([label, val]) => `
+                    <div class="detail-row">
+                        <span class="label">${label}</span>
+                        ${renderValue(val)}
+                    </div>
+                `).join("")}
+            </div>`;
+    }
+
+    // ── Logo ──
     const logoArea = document.getElementById("logo-area");
     const logoImg = document.getElementById("logo-img");
     const logoFallback = document.getElementById("logo-fallback");
@@ -594,10 +786,7 @@
 
     function initLogo() {
         const saved = localStorage.getItem(LOGO_STORAGE_KEY);
-        if (saved) {
-            showLogo(saved);
-            return;
-        }
+        if (saved) { showLogo(saved); return; }
         if (LOGO_PATH) {
             const img = new Image();
             img.onload = () => showLogo(LOGO_PATH);
@@ -610,31 +799,23 @@
     logoInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        if (file.size > 2 * 1024 * 1024) {
-            alert("حجم الشعار يجب أن يكون أقل من 2MB");
-            return;
-        }
+        if (file.size > 2 * 1024 * 1024) { alert("حجم الشعار يجب أن يكون أقل من 2MB"); return; }
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            localStorage.setItem(LOGO_STORAGE_KEY, ev.target.result);
-            showLogo(ev.target.result);
-        };
+        reader.onload = (ev) => { localStorage.setItem(LOGO_STORAGE_KEY, ev.target.result); showLogo(ev.target.result); };
         reader.readAsDataURL(file);
     });
-
     initLogo();
 
     // ── Modal ──
     const modal = document.getElementById("modal");
     const modalBody = document.getElementById("modal-body");
 
-    function openModal(data) {
-        modalBody.innerHTML = `
-            <div class="modal-row"><span class="label">الاسم</span><span class="value">${data.fullname || "—"}</span></div>
-            <div class="modal-row"><span class="label">الجنس</span><span class="value">${data.gender || "—"}</span></div>
-            <div class="modal-row"><span class="label">العمر</span><span class="value">${data.age || "—"}</span></div>
-            <div class="modal-row"><span class="label">هاتف الأم</span><span class="value">${data.mother_phone || "—"}</span></div>
-        `;
+    function openModal(id) {
+        const d = allRecords.find((r) => r.id === id);
+        if (!d) return;
+        document.getElementById("modal-title").textContent = `🧒 ${getName(d)}`;
+        document.getElementById("modal-subtitle").textContent = d.registrationDate ? `تاريخ التسجيل: ${d.registrationDate}` : "";
+        modalBody.innerHTML = buildSections(d).map(renderSection).join("") || `<p style="color:var(--muted);text-align:center;padding:24px">لا توجد بيانات تفصيلية</p>`;
         modal.classList.add("open");
     }
 
@@ -642,17 +823,15 @@
     modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
 
     // ── Delete ──
-    window.handleDelete = async (id, name) => {
+    async function handleDelete(id, name) {
         if (!confirm(`هل تريد حذف تسجيل "${name}"؟`)) return;
         try {
-            await deleteDoc(doc(db, "registrations", id));
+            await deleteDoc(doc(db, COLLECTION, id));
         } catch (err) {
             alert("حدث خطأ أثناء الحذف");
             console.error(err);
         }
-    };
-
-    window.handleView = (data) => openModal(data);
+    }
 
     // ── Search ──
     document.getElementById("search-input").addEventListener("input", (e) => {
@@ -663,15 +842,16 @@
     function renderTable(records) {
         const filtered = records.filter((d) => {
             if (!searchQuery) return true;
-            const name = (d.fullname || "").toLowerCase();
-            const phone = (d.mother_phone || "").toLowerCase();
-            return name.includes(searchQuery) || phone.includes(searchQuery);
+            const haystack = [
+                getName(d), d.fatherName, d.motherName,
+                d.fatherPhone, d.motherPhone, d.mother_phone, d.contactPhone,
+            ].filter(Boolean).join(" ").toLowerCase();
+            return haystack.includes(searchQuery);
         });
 
         const tbody = document.getElementById("data-body");
         const empty = document.getElementById("empty-state");
         tbody.innerHTML = "";
-
         document.getElementById("results-count").textContent = `${filtered.length} نتيجة`;
 
         if (filtered.length === 0) {
@@ -680,27 +860,27 @@
         }
         empty.hidden = true;
 
-        filtered.forEach(({ id, ...d }) => {
-            const isMale = d.gender === "ذكر";
+        filtered.forEach((d) => {
+            const male = isMale(d.gender);
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td><strong>${d.fullname || "—"}</strong></td>
-                <td><span class="gender-tag ${isMale ? "male" : "female"}">${d.gender || "—"}</span></td>
-                <td dir="ltr" style="text-align:right">${d.mother_phone || "—"}</td>
+                <td><strong>${esc(getName(d))}</strong></td>
+                <td><span class="gender-tag ${male ? "male" : "female"}">${genderLabel(d.gender)}</span></td>
+                <td dir="ltr" style="text-align:right">${esc(d.fatherPhone || "—")}</td>
+                <td>${esc(d.registrationDate || "—")}</td>
                 <td>
                     <div class="actions">
-                        <button class="btn btn-view" data-view='${JSON.stringify(d).replace(/'/g, "&#39;")}'>👁️ عرض</button>
-                        <button class="btn btn-delete" data-id="${id}" data-name="${(d.fullname || "").replace(/"/g, "&quot;")}">🗑️ حذف</button>
+                        <button class="btn btn-view" data-id="${d.id}">👁️ عرض</button>
+                        <button class="btn btn-delete" data-id="${d.id}" data-name="${esc(getName(d))}">🗑️ حذف</button>
                     </div>
-                </td>
-            `;
+                </td>`;
             tbody.appendChild(tr);
         });
 
-        tbody.querySelectorAll("[data-view]").forEach((btn) => {
-            btn.addEventListener("click", () => openModal(JSON.parse(btn.dataset.view)));
+        tbody.querySelectorAll(".btn-view").forEach((btn) => {
+            btn.addEventListener("click", () => openModal(btn.dataset.id));
         });
-        tbody.querySelectorAll("[data-id]").forEach((btn) => {
+        tbody.querySelectorAll(".btn-delete").forEach((btn) => {
             btn.addEventListener("click", () => handleDelete(btn.dataset.id, btn.dataset.name));
         });
     }
@@ -708,9 +888,9 @@
     function updateStats(records) {
         let males = 0, females = 0, babies = 0;
         records.forEach((d) => {
-            if (d.gender === "ذكر") males++;
-            if (d.gender === "أنثى") females++;
-            if (d.age === "أقل من سنة") babies++;
+            if (isMale(d.gender)) males++;
+            else if (d.gender === "female" || d.gender === "أنثى") females++;
+            if (d.age === "أقل من سنة" || (d.age && String(d.age).includes("أقل"))) babies++;
         });
         document.getElementById("total-count").textContent = records.length;
         document.getElementById("male-count").textContent = males;
@@ -718,7 +898,7 @@
         document.getElementById("baby-count").textContent = babies;
     }
 
-    onSnapshot(collection(db, "registrations"), (snapshot) => {
+    onSnapshot(collection(db, COLLECTION), (snapshot) => {
         allRecords = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
         updateStats(allRecords);
         renderTable(allRecords);
