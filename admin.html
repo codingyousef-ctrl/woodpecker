@@ -6,86 +6,39 @@
     <title>لوحة الإدارة | حضانة نقار الخشب</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* المتغيرات الأساسية للوضع الليلي (الافتراضي) */
-        :root {
-            --bg-color: #121418;
-            --card-bg: #1e2025;
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --primary: #d4537e;
-            --primary-hover: #b8436b;
-            --border-color: #2a2d35;
-            --success: #10b981;
-            --danger: #ef4444;
-            --radius: 12px;
-        }
-
-        /* متغيرات الوضع النهاري */
-        body.light-mode {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #1a202c;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-        }
-
+        :root { --bg-color: #121418; --card-bg: #1e2025; --text-main: #ffffff; --text-muted: #94a3b8; --primary: #d4537e; --primary-hover: #b8436b; --border-color: #2a2d35; --success: #10b981; --danger: #ef4444; --radius: 12px; }
+        body.light-mode { --bg-color: #f4f7f6; --card-bg: #ffffff; --text-main: #1a202c; --text-muted: #64748b; --border-color: #e2e8f0; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        
         body { background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.3s, color 0.3s; }
-
-        /* حركة الارتجاج */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-10px); }
-            40%, 80% { transform: translateX(10px); }
-        }
-
-        .error-shake {
-            animation: shake 0.4s ease-in-out;
-            border-color: var(--danger) !important;
-        }
-
-        .error-text {
-            color: var(--danger);
-            font-size: 13px;
-            margin-bottom: 15px;
-            display: none;
-            font-weight: bold;
-        }
-
-        /* شاشة تسجيل الدخول */
+        
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+        .error-shake { animation: shake 0.4s ease-in-out; border-color: var(--danger) !important; }
+        .error-text { color: var(--danger); font-size: 13px; margin-bottom: 15px; display: none; font-weight: bold; }
+        
         #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-color); }
         .login-card { background: var(--card-bg); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border-color); text-align: center; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: border-color 0.3s; }
         .login-card h2 { margin-bottom: 20px; color: var(--primary); }
         .login-card input { width: 100%; padding: 12px; margin-bottom: 15px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; outline: none; }
         .login-card button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .login-card button:hover { background: var(--primary-hover); }
-
-        /* الهيكل الأساسي للوحة التحكم */
-        #dashboard { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
         
-        /* الشريط العلوي */
+        #dashboard { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
         .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
         .nav-title { font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; gap: 10px; color: var(--primary); }
         .nav-actions { display: flex; gap: 10px; }
-        .btn-icon { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; font-weight: 600;}
+        .btn-icon { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: 600;}
         .btn-icon:hover { border-color: var(--primary); }
-
-        /* الإحصائيات */
+        
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: var(--card-bg); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; border-top: 3px solid var(--primary); }
         .stat-title { color: var(--text-muted); font-size: 14px; font-weight: 600; }
         .stat-value { font-size: 2rem; font-weight: bold; color: var(--text-main); }
-
-        /* التحكم والبحث */
+        
         .toolbar { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 15px; flex-wrap: wrap; }
         .search-box { flex: 1; min-width: 250px; position: relative; }
         .search-box input { width: 100%; padding: 12px 15px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; outline: none; }
-        .search-box input:focus { border-color: var(--primary); }
         .btn-primary { background: var(--primary); color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-primary:hover { background: var(--primary-hover); }
-
-        /* الجدول */
+        
         .table-container { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border-color); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: right; }
         th { padding: 15px; background: rgba(0,0,0,0.1); color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border-color); }
@@ -96,21 +49,15 @@
         .action-btns { display: flex; gap: 8px; }
         .btn-view { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .btn-delete { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
-
-        /* النوافذ المنبثقة (Modals) */
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-content { background: var(--card-bg); width: 90%; max-width: 500px; border-radius: var(--radius); border: 1px solid var(--border-color); padding: 25px; max-height: 90vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .modal-header h3 { color: var(--primary); }
         .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s;}
         .close-btn:hover { color: var(--danger); }
-        
-        /* حقول إدخال النافذة المنبثقة */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 13px; font-weight: 600; }
         .form-group input { width: 100%; padding: 10px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; outline: none; }
-        .form-group input:focus { border-color: var(--primary); }
-
         .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .detail-item { background: var(--bg-color); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
         .detail-item span { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 3px; font-weight: 600; }
@@ -123,11 +70,8 @@
     <div class="login-card" id="login-box">
         <h2>🔒 نظام الإدارة</h2>
         <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">أدخل كلمة المرور للوصول للبيانات</p>
-        
         <input type="password" id="pass" placeholder="كلمة المرور..." onkeypress="handleEnter(event)">
-        
         <div id="error-msg" class="error-text">❌ كلمة المرور غير صحيحة!</div>
-        
         <button onclick="checkPass()">تسجيل الدخول</button>
     </div>
 </div>
@@ -140,21 +84,18 @@
             <button class="btn-icon" onclick="lockSystem()" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.3);">🔒 قفل</button>
         </div>
     </div>
-
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-title">إجمالي الطلاب المسجلين</div>
             <div class="stat-value" id="total-students">0</div>
         </div>
     </div>
-
     <div class="toolbar">
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="بحث باسم الطفل..." onkeyup="filterTable()">
         </div>
         <button class="btn-primary" onclick="openModal('addModal')">+ تسجيل طالب جديد</button>
     </div>
-
     <div class="table-container">
         <table id="dataTable">
             <thead>
@@ -165,8 +106,7 @@
                     <th>إجراءات</th>
                 </tr>
             </thead>
-            <tbody id="data-body">
-                </tbody>
+            <tbody id="data-body"></tbody>
         </table>
     </div>
 </div>
@@ -177,23 +117,11 @@
             <h3>تسجيل طالب جديد</h3>
             <button class="close-btn" onclick="closeModal('addModal')">&times;</button>
         </div>
-        <form id="addStudentForm" onsubmit="addStudentFromAdmin(event)">
-            <div class="form-group">
-                <label>اسم الطفل الرباعي</label>
-                <input type="text" id="add-fullname" required>
-            </div>
-            <div class="form-group">
-                <label>اسم الأم</label>
-                <input type="text" id="add-mothername" required>
-            </div>
-            <div class="form-group">
-                <label>رقم هاتف الأم</label>
-                <input type="tel" id="add-motherphone" required>
-            </div>
-            <div class="form-group">
-                <label>تاريخ الالتحاق</label>
-                <input type="date" id="add-date">
-            </div>
+        <form id="addStudentForm" onsubmit="if(window.addStudentFromAdmin) window.addStudentFromAdmin(event); return false;">
+            <div class="form-group"><label>اسم الطفل الرباعي</label><input type="text" id="add-fullname" required></div>
+            <div class="form-group"><label>اسم الأم</label><input type="text" id="add-mothername" required></div>
+            <div class="form-group"><label>رقم هاتف الأم</label><input type="tel" id="add-motherphone" required></div>
+            <div class="form-group"><label>تاريخ الالتحاق</label><input type="date" id="add-date"></div>
             <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">حفظ بيانات الطالب</button>
         </form>
     </div>
@@ -205,16 +133,63 @@
             <h3>تفاصيل ملف الطالب</h3>
             <button class="close-btn" onclick="closeModal('detailsModal')">&times;</button>
         </div>
-        <div class="details-grid" id="student-details-content">
-            </div>
+        <div class="details-grid" id="student-details-content"></div>
     </div>
 </div>
+
+<script>
+    function handleEnter(e) { if (e.key === 'Enter') checkPass(); }
+    
+    function checkPass() {
+        const passInput = document.getElementById('pass');
+        const loginBox = document.getElementById('login-box');
+        const errorMsg = document.getElementById('error-msg');
+
+        if(passInput.value === "123456") {
+            // دخول ناجح
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            passInput.value = ''; 
+            errorMsg.style.display = 'none'; 
+            loginBox.classList.remove('error-shake');
+            // استدعاء جلب البيانات إذا كانت Firebase جاهزة
+            if(window.loadFirebaseData) window.loadFirebaseData(); 
+        } else {
+            // خطأ
+            errorMsg.style.display = 'block'; 
+            loginBox.classList.remove('error-shake');
+            setTimeout(() => { loginBox.classList.add('error-shake'); }, 10);
+            passInput.value = '';
+            passInput.focus();
+        }
+    }
+
+    function lockSystem() {
+        document.getElementById('pass').value = '';
+        document.getElementById('error-msg').style.display = 'none';
+        document.getElementById('login-box').classList.remove('error-shake');
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+    }
+
+    function toggleTheme() { document.body.classList.toggle('light-mode'); }
+    function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
+    function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+    
+    function filterTable() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let rows = document.getElementById('dataTable').getElementsByTagName('tr');
+        for (let i = 1; i < rows.length; i++) {
+            let nameCol = rows[i].cells[0].textContent.toLowerCase();
+            rows[i].style.display = nameCol.includes(input) ? "" : "none";
+        }
+    }
+</script>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    // إعدادات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
         authDomain: "woodpecker-508d8.firebaseapp.com",
@@ -226,7 +201,21 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
     let studentsData = [];
 
-    // دعم زر
+    // ربط الدالة مع الواجهة
+    window.loadFirebaseData = function() {
+        onSnapshot(collection(db, "registrations"), (snapshot) => {
+            const tableBody = document.getElementById("data-body");
+            tableBody.innerHTML = "";
+            studentsData = []; 
+            document.getElementById("total-students").innerText = snapshot.size;
+
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                data.id = docSnap.id; 
+                studentsData.push(data); 
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: bold
