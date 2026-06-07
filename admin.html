@@ -2,16 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة تحكم الإدارة - حضانة نقار الخشب</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>لوحة تحكم الإدارة</title>
     <style>
-        body { font-family: 'Cairo', sans-serif; background: #f4f4f9; padding: 20px; }
-        .login-box { max-width: 300px; margin: 100px auto; background: white; padding: 20px; border-radius: 10px; text-align: center; }
-        .dashboard { display: none; }
-        table { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: right; }
-        th { background: #d4537e; color: white; }
-        button { cursor: pointer; padding: 5px 10px; background: #d4537e; color: white; border: none; border-radius: 4px; }
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; text-align: center; }
+        .login-box { max-width: 300px; margin: 100px auto; background: white; padding: 20px; border-radius: 10px; }
+        #dashboard { display: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 10px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
@@ -22,68 +19,42 @@
     <button onclick="checkPass()">دخول</button>
 </div>
 
-<div id="dashboard" class="dashboard">
+<div id="dashboard">
     <h1>قائمة الأطفال المسجلين</h1>
-    <table id="regTable">
-        <thead>
-            <tr>
-                <th>اسم الطفل</th>
-                <th>اسم الأب</th>
-                <th>الهاتف</th>
-                <th>تحكم</th>
-            </tr>
-        </thead>
+    <table>
+        <thead><tr><th>الاسم</th><th>اسم الأب</th><th>الهاتف</th></tr></thead>
         <tbody id="data-body"></tbody>
     </table>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
-     // استبدل الجزء القديم بهذا الكود الصحيح:
-const firebaseConfig = {
-  apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-  authDomain: "woodpecker-508d8.firebaseapp.com",
-  projectId: "woodpecker-508d8",
-  storageBucket: "woodpecker-508d8.firebasestorage.app",
-  messagingSenderId: "434327620481",
-  appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680"
-};
+        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
+        authDomain: "woodpecker-508d8.firebaseapp.com",
+        projectId: "woodpecker-508d8",
+        storageBucket: "woodpecker-508d8.firebasestorage.app",
+        messagingSenderId: "434327620481",
+        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680"
     };
 
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // نظام كلمة السر
     window.checkPass = function() {
-        if(document.getElementById('pass').value === "123456") { // غيّر كلمة السر هنا
+        if(document.getElementById('pass').value === "123456") {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            loadData();
-        } else { alert("كلمة المرور خاطئة!"); }
-    }
-
-    function loadData() {
-        onSnapshot(collection(db, "registrations"), (snapshot) => {
-            const body = document.getElementById("data-body");
-            body.innerHTML = "";
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                body.innerHTML += `<tr>
-                    <td>${data.fullname || ''}</td>
-                    <td>${data.father_name || ''}</td>
-                    <td>${data.phone || ''}</td>
-                    <td><button onclick="deleteEntry('${docSnap.id}')">حذف</button></td>
-                </tr>`;
+            onSnapshot(collection(db, "registrations"), (snapshot) => {
+                const body = document.getElementById("data-body");
+                body.innerHTML = "";
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    body.innerHTML += `<tr><td>${data.fullname}</td><td>${data.father_name}</td><td>${data.phone}</td></tr>`;
+                });
             });
-        });
-    }
-
-    window.deleteEntry = async function(id) {
-        if(confirm("هل أنت متأكد من الحذف؟")) {
-            await deleteDoc(doc(db, "registrations", id));
-        }
+        } else { alert("كلمة المرور خاطئة!"); }
     }
 </script>
 </body>
