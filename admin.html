@@ -6,10 +6,11 @@
         :root { --bg: #121418; --card: #1e2025; --primary: #d4537e; --text: #ffffff; --border: #2a2d35; }
         body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; margin: 0; }
 
+        /* الهيدر: الشعار يمين والأزرار يسار */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: var(--card); border-bottom: 2px solid var(--primary); }
         .nav-left { display: flex; gap: 15px; }
         .nav-left button { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 6px; cursor: pointer; }
-        .nav-left button.active { background: var(--primary); border: none; }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
         
         .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 30px; }
         .stat-card { background: var(--card); padding: 25px; text-align: center; border-radius: 8px; border: 1px solid var(--border); }
@@ -28,26 +29,23 @@
 <body>
 
 <div class="header">
-    <div style="display: flex; gap: 10px;">
-        <button>🔒</button><button>☀️</button>
-    </div>
     <div class="nav-left">
-        <button class="active">الطلاب 👥</button>
-        <button>تسجيل جديد 👤</button>
         <button>بحث 🔍</button>
-        <button>الدفعات 📄</button>
     </div>
-    <div style="text-align: right;">
-        <div style="font-weight: bold;">مركز الشلول للتايكوندو</div>
-        <div style="font-size: 11px; color: #888;">نظام إدارة الطلاب</div>
+    <div class="logo-area">
+        <div style="text-align: right;">
+            <div style="font-weight: bold;">مركز الشلول للتايكوندو</div>
+            <div style="font-size: 11px; color: #888;">نظام إدارة الطلاب</div>
+        </div>
+        <img src="https://via.placeholder.com/40" alt="Logo">
     </div>
 </div>
 
 <div class="stats-container">
     <div class="stat-card"><div class="stat-num" id="total-count">0</div><div>إجمالي الطلاب</div></div>
-    <div class="stat-card"><div class="stat-num">0</div><div>اشتراك فعال</div></div>
-    <div class="stat-card"><div class="stat-num">0</div><div>ينتهي قريباً</div></div>
-    <div class="stat-card"><div class="stat-num">0</div><div>منتهي</div></div>
+    <div class="stat-card"><div class="stat-num" id="male-count">0</div><div>عدد الذكور</div></div>
+    <div class="stat-card"><div class="stat-num" id="female-count">0</div><div>عدد الإناث</div></div>
+    <div class="stat-card"><div class="stat-num" id="baby-count">0</div><div>عدد الرضع (< 1 سنة)</div></div>
 </div>
 
 <div class="table-section">
@@ -68,38 +66,42 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    const firebaseConfig = { /* ضع بياناتك هنا */ };
+    const firebaseConfig = { /* أضف بيانات الـ config هنا */ };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
     onSnapshot(collection(db, "registrations"), (snapshot) => {
+        let males = 0, females = 0, babies = 0;
         const tbody = document.getElementById("data-body");
         tbody.innerHTML = "";
-        document.getElementById("total-count").innerText = snapshot.size;
-
+        
         snapshot.forEach((docSnap) => {
             const d = docSnap.data();
+            
+            // حساب الإحصائيات
+            if(d.gender === 'ذكر') males++;
+            if(d.gender === 'أنثى') females++;
+            if(d.age_years < 1) babies++; // بافتراض وجود حقل age_years أو تاريخ ميلاد
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${d.fullname || '---'}</td>
                 <td>${d.gender || '---'}</td>
                 <td>${d.mother_phone || '---'}</td>
                 <td class="action-btns">
-                    <button class="btn-action view" onclick="viewItem('${docSnap.id}')">👁️</button>
-                    <button class="btn-action edit" onclick="editItem('${docSnap.id}')">✏️</button>
-                    <button class="btn-action delete" onclick="deleteItem('${docSnap.id}')">🗑️</button>
+                    <button class="btn-action view" onclick="alert('عرض')">👁️</button>
+                    <button class="btn-action edit" onclick="alert('تعديل')">✏️</button>
+                    <button class="btn-action delete" onclick="deleteDoc(doc(db, 'registrations', '${docSnap.id}'))">🗑️</button>
                 </td>
             `;
             tbody.appendChild(tr);
         });
-    });
 
-    // وظائف الأزرار
-    window.viewItem = (id) => alert("عرض تفاصيل: " + id);
-    window.editItem = (id) => alert("تعديل بيانات: " + id);
-    window.deleteItem = async (id) => {
-        if(confirm("هل أنت متأكد؟")) await deleteDoc(doc(db, "registrations", id));
-    };
+        document.getElementById("total-count").innerText = snapshot.size;
+        document.getElementById("male-count").innerText = males;
+        document.getElementById("female-count").innerText = females;
+        document.getElementById("baby-count").innerText = babies;
+    });
 </script>
 </body>
 </html>
