@@ -55,7 +55,14 @@
     import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     // أضف بيانات الـ firebaseConfig الخاصة بك هنا
-    const firebaseConfig = { /* ... */ };
+    const firebaseConfig = { const firebaseConfig = {
+  apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
+  authDomain: "woodpecker-508d8.firebaseapp.com",
+  projectId: "woodpecker-508d8",
+  storageBucket: "woodpecker-508d8.firebasestorage.app",
+  messagingSenderId: "434327620481",
+  appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
+}; };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
