@@ -3,169 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استمارة تسجيل طفل جديد | حضانة نقار الخشب</title>
+    <title>استمارة التسجيل | حضانة نقار الخشب</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #1a202c;
-            --text-muted: #64748b;
-            --primary: #d4537e;
-            --primary-hover: #b8436b;
-            --border-color: #e2e8f0;
-            --radius: 12px;
-        }
-
+        :root { --bg: #121418; --card: #1e2025; --text: #ffffff; --muted: #94a3b8; --primary: #d4537e; --border: #2a2d35; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .form-card { background: var(--card); padding: 30px; border-radius: 12px; border: 1px solid var(--border); width: 100%; max-width: 500px; text-align: center; }
         
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            padding: 40px 20px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-        }
-
-        .container { 
-            background: var(--card-bg); 
-            padding: 40px; 
-            border-radius: var(--radius); 
-            border: 1px solid var(--border-color); 
-            width: 100%; 
-            max-width: 700px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-        }
-
-        .header { text-align: center; margin-bottom: 30px; }
-        .header img { height: 95px; width: auto; object-fit: contain; margin-bottom: 15px; }
-        .header h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 10px; }
-        .header p { color: var(--text-muted); font-size: 14px; }
-
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 650px) { .form-grid { grid-template-columns: 1fr; } }
-
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .form-group.full-width { grid-column: 1 / -1; }
-
-        label { font-size: 14px; font-weight: 600; color: var(--text-main); }
-        input, select, textarea { 
-            padding: 12px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 8px; 
-            outline: none; 
-            font-size: 14px; 
-            background: #fafafa; 
-            transition: 0.2s; 
-        }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); background: #fff; }
-        textarea { resize: vertical; min-height: 80px; }
-
-        .btn-submit { 
-            grid-column: 1 / -1; 
-            background: var(--primary); 
-            color: white; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 16px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: 0.2s; 
-            margin-top: 10px; 
-        }
-        .btn-submit:hover { background: var(--primary-hover); }
-        .btn-submit:disabled { background: var(--text-muted); cursor: not-allowed; }
-
-        .success-card { 
-            display: none; 
-            text-align: center; 
-            padding: 30px 10px;
-        }
-        .success-card h2 { color: #10b981; margin-bottom: 15px; }
-        .success-card p { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
+        /* تنسيق الشعار الجديد في رأس الصفحة */
+        .form-card img { height: 85px; width: auto; object-fit: contain; margin-bottom: 15px; }
+        
+        .form-card h2 { color: var(--primary); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 14px; }
+        .form-group input { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; outline: none; }
+        .btn { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 16px; }
+        .btn:hover { background: #b8436b; }
+        .success { color: #10b981; margin-top: 15px; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="form-container">
-        <!-- تم دمج مسار الشعار تلقائياً هنا -->
-        <div class="header">
-            <img src="Wood.png" alt="شعار الحضانة" onerror="this.style.display='none';">
-            <h1>استمارة تسجيل طفل جديد</h1>
-            <p>يرجى تعبئة كافة الحقول بدقة لتسجيل طفلكم في حضانة نقار الخشب</p>
+<div class="form-card">
+    <!-- الشعار يظهر هنا تلقائياً بمجرد رفع صورة باسم logo.png -->
+    <img src="Wood.png" alt="شعار الحضانة" onerror="this.style.display='none';">
+    
+    <h2>📋 استمارة التسجيل</h2>
+    <form id="regForm">
+        <div class="form-group">
+            <label>اسم الطفل الثلاثي</label>
+            <input type="text" id="childName" required>
         </div>
-
-        <form id="parentRegistrationForm">
-            <div class="form-grid">
-                
-                <div class="form-group full-width">
-                    <label>اسم الطفل الرباعي *</label>
-                    <input type="text" id="fullname" required placeholder="أدخل اسم الطفل كاملاً">
-                </div>
-
-                <div class="form-group">
-                    <label>تاريخ ميلاد الطفل *</label>
-                    <input type="date" id="dob" required>
-                </div>
-
-                <div class="form-group">
-                    <label>الجنس *</label>
-                    <select id="gender" required>
-                        <option value="" disabled selected>اختر الجنس</option>
-                        <option value="ذكر">ذكر</option>
-                        <option value="أنثى">أنثى</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>اسم الأب والشهرة *</label>
-                    <input type="text" id="father_name" required placeholder="اسم الأب الكامل">
-                </div>
-
-                <div class="form-group">
-                    <label>رقم هاتف الأب (للتواصل الرئيسي) *</label>
-                    <input type="tel" id="phone" required placeholder="07xxxxxxx" style="text-align: right;">
-                </div>
-
-                <div class="form-group">
-                    <label>اسم الأم الكامل *</label>
-                    <input type="text" id="mother_name" required placeholder="اسم الأم الكامل">
-                </div>
-
-                <div class="form-group">
-                    <label>رقم هاتف الأم المباشر *</label>
-                    <input type="tel" id="mother_phone" required placeholder="07xxxxxxx" style="text-align: right;">
-                </div>
-
-                <div class="form-group full-width">
-                    <label>عنوان السكن بالتفصيل *</label>
-                    <input type="text" id="address" required placeholder="المدينة، المنطقة، اسم الشارع، القرب من معلم معروف">
-                </div>
-
-                <div class="form-group full-width">
-                    <label>تاريخ بدء الالتحاق المفضل</label>
-                    <input type="date" id="start_date">
-                </div>
-
-                <div class="form-group full-width">
-                    <label>هل يعاني الطفل من أي حالة صحية أو ملاحظات خاصة يجب معرفتها؟</label>
-                    <textarea id="notes" placeholder="اكتب هنا أي ملاحظات صحية، حساسية، أو طلبات خاصة... (اتركه فارغاً إن لم يوجد)"></textarea>
-                </div>
-
-                <button type="submit" id="submitBtn" class="btn-submit">ارسال الاستمارة الآن ✨</button>
-
-            </div>
-        </form>
-    </div>
-
-    <div id="success-screen" class="success-card">
-        <h2>🎉 تم إرسال الاستمارة بنجاح!</h2>
-        <p>شكرًا لثقتكم بنا في <strong>حضانة نقار الخشب</strong>.<br>تم حفظ بيانات طفلكم في النظام، وسيقوم القسم الإداري بمراجعة الطلب والتواصل معكم في أقرب وقت ممكن.</p>
-    </div>
+        <div class="form-group">
+            <label>اسم الأم</label>
+            <input type="text" id="motherName" required>
+        </div>
+        <div class="form-group">
+            <label>رقم هاتف الأم</label>
+            <input type="tel" id="motherPhone" required placeholder="07xxxxxxx">
+        </div>
+        <button type="submit" class="btn" id="subBtn">إرسال الاستمارة</button>
+    </form>
+    <div id="msg" class="success">🎉 تم إرسال طلبك بنجاح!</div>
 </div>
 
 <script type="module">
@@ -184,37 +64,26 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const form = document.getElementById('parentRegistrationForm');
-    const submitBtn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', async (e) => {
+    document.getElementById('regForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        submitBtn.disabled = true;
-        submitBtn.innerText = "جاري إرسال البيانات وآمنها...";
-
-        const formData = {
-            fullname: document.getElementById('fullname').value,
-            dob: document.getElementById('dob').value,
-            gender: document.getElementById('gender').value,
-            father_name: document.getElementById('father_name').value,
-            phone: document.getElementById('phone').value,
-            mother_name: document.getElementById('mother_name').value,
-            mother_phone: document.getElementById('mother_phone').value,
-            address: document.getElementById('address').value,
-            start_date: document.getElementById('start_date').value || 'غير محدد',
-            notes: document.getElementById('notes').value || 'لا يوجد ملاحظات خاصة',
-            timestamp: new Date()
-        };
+        const btn = document.getElementById('subBtn');
+        btn.disabled = true;
+        btn.innerText = "جاري الإرسال...";
 
         try {
-            await addDoc(collection(db, "registrations"), formData);
-            document.getElementById('form-container').style.display = 'none';
-            document.getElementById('success-screen').style.display = 'block';
+            await addDoc(collection(db, "registrations"), {
+                fullname: document.getElementById('childName').value,
+                mother_name: document.getElementById('motherName').value,
+                mother_phone: document.getElementById('motherPhone').value,
+                timestamp: new Date()
+            });
+            document.getElementById('msg').style.display = 'block';
+            document.getElementById('regForm').reset();
         } catch (error) {
-            console.error("Firebase Error: ", error);
-            alert("عذراً، حدث خطأ أثناء إرسال الاستمارة، يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.");
-            submitBtn.disabled = false;
-            submitBtn.innerText = "ارسال الاستمارة الآن ✨";
+            alert("حدث خطأ أثناء الإرسال، حاول مرة أخرى");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "إرسال الاستمارة";
         }
     });
 </script>
