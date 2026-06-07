@@ -591,45 +591,57 @@ textarea{resize:vertical;min-height:80px;line-height:1.7}
 
 </main>
 
-<script>
-function selectPill(el) {
-  var row = el.closest('.radio-row');
-  row.querySelectorAll('.r-pill').forEach(function(p){ p.classList.remove('active'); });
-  el.classList.add('active');
-}
+<script type="module">
+  // 1. استيراد الدوال من مكتبة Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-function toggleChk(el) {
-  el.classList.toggle('active');
-  var box = el.querySelector('.cbox');
-  box.textContent = el.classList.contains('active') ? '✓' : '';
-}
+  // 2. إعدادات المشروع (انسخها من لوحة تحكم Firebase)
+  const firebaseConfig = {
+    apiKey: "AIza...",
+    authDomain: "your-app.firebaseapp.com",
+    projectId: "your-app",
+    storageBucket: "your-app.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abc123def"
+  };
 
-function setTime(el) {
-  document.querySelectorAll('#timeGrid .time-card').forEach(function(c){ c.classList.remove('active'); });
-  el.classList.add('active');
-}
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-function handleSubmit(e) {
-  e.preventDefault();
-  var required = document.querySelectorAll('[required]');
-  var valid = true;
-  required.forEach(function(inp) {
-    if (!inp.value.trim()) {
-      inp.style.borderColor = '#e24b4a';
-      inp.style.background = '#fcebeb';
-      valid = false;
-      inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } else {
-      inp.style.borderColor = '';
-      inp.style.background = '';
+  // 3. ربط الدالة بالزر (هذا الجزء يجعلها تعمل عند الضغط)
+  window.handleSubmit = async function(e) {
+    e.preventDefault();
+    
+    // تجميع البيانات من المدخلات
+    const data = {
+      fullname: document.getElementById('fullname').value,
+      father_name: document.getElementById('father-name').value,
+      phone: document.getElementById('father-phone').value,
+      // يمكنك إضافة بقية الحقول بنفس الطريقة
+      timestamp: new Date()
+    };
+
+    try {
+      await addDoc(collection(db, "registrations"), data);
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    } catch (e) {
+      alert("خطأ في الإرسال");
     }
-  });
-  if (!valid) return;
-  document.getElementById('mainForm').style.display = 'none';
-  var msg = document.getElementById('successMsg');
-  msg.style.display = 'block';
-  msg.scrollIntoView({ behavior: 'smooth' });
-}
+  };
+
+  // 4. الدوال المساعدة (التي كانت موجودة سابقاً)
+  window.selectPill = function(el) {
+    var row = el.closest('.radio-row');
+    row.querySelectorAll('.r-pill').forEach(function(p){ p.classList.remove('active'); });
+    el.classList.add('active');
+  }
+  
+  window.setTime = function(el) {
+    document.querySelectorAll('#timeGrid .time-card').forEach(function(c){ c.classList.remove('active'); });
+    el.classList.add('active');
+  }
 </script>
 </body>
 </html>
