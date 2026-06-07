@@ -1,648 +1,223 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حضانة نقار الخشب — استمارة تسجيل</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --pk:#d4537e;--pk-light:#fbeaf0;--pk-mid:#ed93b1;--pk-dark:#993556;
-  --gray-50:#f7f6f2;--gray-100:#ede9e3;--gray-200:#d3d1c7;
-  --gray-500:#888780;--gray-700:#444441;--gray-900:#2c2c2a;
-  --white:#ffffff;--radius:10px;--radius-lg:14px
-}
-body{
-  font-family:'Cairo',sans-serif;
-  direction:rtl;
-  background:var(--gray-50);
-  color:var(--gray-900);
-  font-size:14px;
-  min-height:100vh;
-  padding:2rem 1rem 4rem;
-}
-.page{max-width:700px;margin:0 auto}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استمارة تسجيل طفل جديد | حضانة نقار الخشب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a202c;
+            --text-muted: #64748b;
+            --primary: #d4537e;
+            --primary-hover: #b8436b;
+            --border-color: #e2e8f0;
+            --radius: 12px;
+        }
 
-/* Header */
-.header{
-  text-align:center;
-  margin-bottom:1.5rem;
-  padding:2rem 1.5rem;
-  background:var(--white);
-  border-radius:var(--radius-lg);
-  border:1px solid var(--gray-200);
-  box-shadow:0 2px 10px rgba(0,0,0,0.06)
-}
-.logo-circle{
-  width:60px;height:60px;
-  background:var(--pk-light);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 12px;
-  border:2px solid var(--pk-mid);
-  font-size:28px
-}
-.header h1{font-size:1.5rem;font-weight:700;color:var(--pk);margin-bottom:4px}
-.header p{font-size:13px;color:var(--gray-500)}
-.dots{display:flex;gap:5px;justify-content:center;margin-top:12px}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--gray-200)}
-.dot.on{background:var(--pk);width:22px;border-radius:4px}
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            padding: 40px 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
 
-/* Card */
-.card{
-  background:var(--white);
-  border-radius:var(--radius-lg);
-  border:1px solid var(--gray-200);
-  padding:1.5rem;
-  margin-bottom:1.25rem;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05)
-}
-.sec-head{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:1.25rem;
-  padding-bottom:.9rem;
-  border-bottom:2px solid var(--pk-light)
-}
-.sec-icon{
-  font-size:18px;color:var(--pk);
-  background:var(--pk-light);
-  width:36px;height:36px;border-radius:9px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0
-}
-.sec-head h2{font-size:1rem;font-weight:700;color:var(--gray-900)}
-.sub-hd{
-  font-size:13px;font-weight:700;color:var(--gray-700);
-  margin:1rem 0 .7rem;
-  display:flex;align-items:center;gap:7px
-}
-.sub-hd::before{
-  content:'';width:3px;height:15px;
-  background:var(--pk);border-radius:2px;display:inline-block
-}
+        .container { 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: var(--radius); 
+            border: 1px solid var(--border-color); 
+            width: 100%; 
+            max-width: 700px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+        }
 
-/* Grid */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.65rem}
-.full{grid-column:1/-1}
-.f{display:flex;flex-direction:column;gap:5px}
-.divider{height:1px;background:var(--gray-100);margin:1rem 0}
+        .header { text-align: center; margin-bottom: 30px; }
+        .header img { height: 95px; width: auto; object-fit: contain; margin-bottom: 15px; }
+        .header h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 10px; }
+        .header p { color: var(--text-muted); font-size: 14px; }
 
-/* Labels */
-label.lbl,span.lbl{
-  font-size:12px;font-weight:700;
-  color:var(--gray-500);letter-spacing:.3px;
-  display:block
-}
-.req{color:var(--pk)}
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 650px) { .form-grid { grid-template-columns: 1fr; } }
 
-/* Inputs */
-input[type=text],input[type=date],input[type=tel],input[type=email],select,textarea{
-  width:100%;
-  padding:10px 13px;
-  border:1.5px solid var(--gray-200);
-  border-radius:var(--radius);
-  font-family:'Cairo',sans-serif;
-  font-size:13.5px;font-weight:500;
-  color:var(--gray-900);
-  background:var(--gray-50);
-  transition:border .2s,background .2s,box-shadow .2s;
-  outline:none;
-  direction:rtl;
-  appearance:none;-webkit-appearance:none
-}
-input:hover,select:hover{border-color:var(--pk-mid)}
-input:focus,select:focus,textarea:focus{
-  border-color:var(--pk);background:var(--white);
-  box-shadow:0 0 0 3px rgba(212,83,126,0.12)
-}
-input::placeholder,textarea::placeholder{color:#c0bdb5;font-weight:400}
-select{
-  cursor:pointer;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:left 12px center;
-  padding-left:32px
-}
-select option{color:var(--gray-900)}
-textarea{resize:vertical;min-height:80px;line-height:1.7}
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group.full-width { grid-column: 1 / -1; }
 
-/* Radio Pills */
-.radio-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px}
-.r-pill{
-  display:inline-flex;align-items:center;gap:7px;
-  padding:8px 16px;
-  border:1.5px solid var(--gray-200);border-radius:50px;
-  cursor:pointer;font-size:13px;font-weight:600;
-  color:var(--gray-700);background:var(--gray-50);
-  transition:all .15s;user-select:none
-}
-.r-pill:hover{border-color:var(--pk-mid);background:var(--pk-light);color:var(--pk-dark)}
-.r-pill.active{border-color:var(--pk);background:var(--pk-light);color:var(--pk-dark)}
-.rdot{
-  width:15px;height:15px;border-radius:50%;
-  border:2px solid var(--gray-200);flex-shrink:0;
-  transition:all .15s;position:relative
-}
-.r-pill.active .rdot{border-color:var(--pk);background:var(--pk)}
-.r-pill.active .rdot::after{
-  content:'';position:absolute;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  width:5px;height:5px;border-radius:50%;background:#fff
-}
+        label { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        input, select, textarea { 
+            padding: 12px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            outline: none; 
+            font-size: 14px; 
+            background: #fafafa; 
+            transition: 0.2s; 
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); background: #fff; }
+        textarea { resize: vertical; min-height: 80px; }
 
-/* Checkbox Cards */
-.chk-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:8px}
-.chk-card{
-  display:flex;align-items:center;gap:9px;
-  padding:10px 13px;
-  border:1.5px solid var(--gray-200);border-radius:var(--radius);
-  cursor:pointer;font-size:13px;font-weight:600;
-  color:var(--gray-700);background:var(--gray-50);
-  transition:all .15s;user-select:none
-}
-.chk-card:hover{border-color:var(--pk-mid);background:var(--pk-light);color:var(--pk-dark)}
-.chk-card.active{border-color:var(--pk);background:var(--pk-light);color:var(--pk-dark)}
-.cbox{
-  width:17px;height:17px;border-radius:5px;
-  border:2px solid var(--gray-200);flex-shrink:0;
-  transition:all .15s;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;color:#fff;font-weight:700
-}
-.chk-card.active .cbox{border-color:var(--pk);background:var(--pk)}
+        .btn-submit { 
+            grid-column: 1 / -1; 
+            background: var(--primary); 
+            color: white; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            margin-top: 10px; 
+        }
+        .btn-submit:hover { background: var(--primary-hover); }
+        .btn-submit:disabled { background: var(--text-muted); cursor: not-allowed; }
 
-/* Day Buttons */
-.days-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.day-btn{
-  padding:9px 18px;
-  border:1.5px solid var(--gray-200);border-radius:50px;
-  font-family:'Cairo',sans-serif;
-  font-size:13px;font-weight:700;
-  cursor:pointer;
-  background:var(--gray-50);color:var(--gray-700);
-  transition:all .15s;user-select:none
-}
-.day-btn:hover{border-color:var(--pk-mid);background:var(--pk-light);color:var(--pk-dark)}
-.day-btn.on{background:var(--pk);color:#fff;border-color:var(--pk)}
-
-/* Time Cards */
-.time-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:8px}
-.time-card{
-  display:flex;align-items:center;gap:9px;
-  padding:11px 13px;
-  border:1.5px solid var(--gray-200);border-radius:var(--radius);
-  cursor:pointer;font-size:13px;font-weight:600;
-  color:var(--gray-700);background:var(--gray-50);
-  transition:all .15s;user-select:none
-}
-.time-card:hover{border-color:var(--pk-mid);background:var(--pk-light);color:var(--pk-dark)}
-.time-card.active{border-color:var(--pk);background:var(--pk-light);color:var(--pk-dark)}
-.tdot{
-  width:14px;height:14px;border-radius:50%;
-  border:2px solid var(--gray-200);flex-shrink:0;
-  transition:all .15s;position:relative
-}
-.time-card.active .tdot{border-color:var(--pk);background:var(--pk)}
-.time-card.active .tdot::after{
-  content:'';position:absolute;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  width:4px;height:4px;border-radius:50%;background:#fff
-}
-
-/* Notice */
-.notice{
-  background:var(--pk-light);
-  border:1px solid var(--pk-mid);
-  border-radius:var(--radius);
-  padding:1rem 1.25rem;
-  font-size:13px;color:var(--pk-dark);line-height:2;
-  margin-top:1rem
-}
-.notice strong{font-weight:700}
-
-/* Submit */
-.btn-row{text-align:center;margin-top:2rem;padding-bottom:2rem}
-.btn-main{
-  background:var(--pk);color:#fff;
-  font-family:'Cairo',sans-serif;font-weight:700;font-size:16px;
-  border:none;padding:15px 60px;border-radius:50px;
-  cursor:pointer;
-  display:inline-flex;align-items:center;gap:10px;
-  transition:background .15s,transform .1s;
-  box-shadow:0 4px 16px rgba(212,83,126,0.3)
-}
-.btn-main:hover{background:var(--pk-dark)}
-.btn-main:active{transform:scale(.97)}
-.btn-main svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-/* Success Message */
-.success-msg{
-  display:none;text-align:center;
-  padding:2rem;background:var(--white);
-  border-radius:var(--radius-lg);border:1px solid #c0dd97;
-  margin-top:1rem
-}
-.success-icon{
-  width:64px;height:64px;background:#eaf3de;
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  margin:0 auto 1rem;font-size:30px
-}
-.success-msg h3{font-size:1.2rem;font-weight:700;color:#3b6d11;margin-bottom:.5rem}
-.success-msg p{font-size:13px;color:var(--gray-500)}
-
-/* Responsive */
-@media(max-width:540px){
-  .g2,.g3,.chk-grid,.time-grid{grid-template-columns:1fr}
-  body{padding:1rem .75rem 3rem}
-  .card{padding:1.25rem 1rem}
-}
-</style>
+        .success-card { 
+            display: none; 
+            text-align: center; 
+            padding: 30px 10px;
+        }
+        .success-card h2 { color: #10b981; margin-bottom: 15px; }
+        .success-card p { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
+    </style>
 </head>
 <body>
-<main class="page">
 
-  <div class="header">
-    <div class="logo-circle">🌸</div>
-    <h1>حضانة نقار الخشب</h1>
-    <p>استمارة تسجيل الطفل — يرجى تعبئة جميع الحقول</p>
-    <div class="dots">
-      <div class="dot on"></div>
-      <div class="dot on"></div>
-      <div class="dot"></div>
-    </div>
-  </div>
+<div class="container">
+    <div id="form-container">
+        <!-- تم دمج مسار الشعار تلقائياً هنا -->
+        <div class="header">
+            <img src="logo.png" alt="شعار الحضانة" onerror="this.style.display='none';">
+            <h1>استمارة تسجيل طفل جديد</h1>
+            <p>يرجى تعبئة كافة الحقول بدقة لتسجيل طفلكم في حضانة نقار الخشب</p>
+        </div>
 
-  <form id="mainForm" onsubmit="handleSubmit(event)" novalidate>
+        <form id="parentRegistrationForm">
+            <div class="form-grid">
+                
+                <div class="form-group full-width">
+                    <label>اسم الطفل الرباعي *</label>
+                    <input type="text" id="fullname" required placeholder="أدخل اسم الطفل كاملاً">
+                </div>
 
-    <!-- معلومات الطفل -->
-    <div class="card">
-      <div class="sec-head">
-        <div class="sec-icon">👶</div>
-        <h2>معلومات الطفل</h2>
-      </div>
-      <div class="g2">
-        <div class="f full">
-          <label class="lbl" for="fullname">الاسم الرباعي <span class="req">*</span></label>
-          <input id="fullname" type="text" placeholder="أدخل الاسم الرباعي كاملاً" required>
-        </div>
-        <div class="f">
-          <label class="lbl" for="dob">تاريخ الميلاد <span class="req">*</span></label>
-          <input id="dob" type="date" required>
-        </div>
-        <div class="f">
-          <label class="lbl" for="age">العمر</label>
-          <input id="age" type="text" placeholder="مثال: 3 سنوات">
-        </div>
-        <div class="f">
-          <label class="lbl" for="gender">الجنس <span class="req">*</span></label>
-          <select id="gender" required>
-            <option value="">اختر...</option>
-            <option>ذكر</option>
-            <option>أنثى</option>
-          </select>
-        </div>
-        <div class="f">
-          <label class="lbl" for="religion">الديانة</label>
-          <select id="religion">
-            <option value="">اختر...</option>
-            <option>مسلم</option>
-            <option>مسيحي</option>
-            <option>أخرى</option>
-          </select>
-        </div>
-      </div>
-    </div>
+                <div class="form-group">
+                    <label>تاريخ ميلاد الطفل *</label>
+                    <input type="date" id="dob" required>
+                </div>
 
-    <!-- معلومات الوالدين -->
-    <div class="card">
-      <div class="sec-head">
-        <div class="sec-icon">👪</div>
-        <h2>معلومات الوالدين</h2>
-      </div>
+                <div class="form-group">
+                    <label>الجنس *</label>
+                    <select id="gender" required>
+                        <option value="" disabled selected>اختر الجنس</option>
+                        <option value="ذكر">ذكر</option>
+                        <option value="أنثى">أنثى</option>
+                    </select>
+                </div>
 
-      <div class="sub-hd">معلومات الأب</div>
-      <div class="g2">
-        <div class="f full">
-          <label class="lbl" for="father-name">الاسم الكامل <span class="req">*</span></label>
-          <input id="father-name" type="text" placeholder="الاسم الكامل" required>
-        </div>
-        <div class="f">
-          <label class="lbl" for="father-id">رقم الهوية</label>
-          <input id="father-id" type="text" placeholder="رقم الهوية">
-        </div>
-        <div class="f">
-          <label class="lbl" for="father-nat">الجنسية</label>
-          <input id="father-nat" type="text" placeholder="الجنسية">
-        </div>
-        <div class="f">
-          <label class="lbl" for="father-phone">رقم الهاتف <span class="req">*</span></label>
-          <input id="father-phone" type="tel" placeholder="07XXXXXXXX" required>
-        </div>
-        <div class="f full">
-          <label class="lbl" for="father-job">المسمى الوظيفي ومكان العمل</label>
-          <input id="father-job" type="text" placeholder="المسمى الوظيفي ومكان العمل">
-        </div>
-      </div>
+                <div class="form-group">
+                    <label>اسم الأب والشهرة *</label>
+                    <input type="text" id="father_name" required placeholder="اسم الأب الكامل">
+                </div>
 
-      <div class="divider"></div>
+                <div class="form-group">
+                    <label>رقم هاتف الأب (للتواصل الرئيسي) *</label>
+                    <input type="tel" id="phone" required placeholder="07xxxxxxx" style="text-align: right;">
+                </div>
 
-      <div class="sub-hd">معلومات الأم</div>
-      <div class="g2">
-        <div class="f full">
-          <label class="lbl" for="mother-name">الاسم الكامل <span class="req">*</span></label>
-          <input id="mother-name" type="text" placeholder="الاسم الكامل" required>
-        </div>
-        <div class="f">
-          <label class="lbl" for="mother-id">رقم الهوية</label>
-          <input id="mother-id" type="text" placeholder="رقم الهوية">
-        </div>
-        <div class="f">
-          <label class="lbl" for="mother-nat">الجنسية</label>
-          <input id="mother-nat" type="text" placeholder="الجنسية">
-        </div>
-        <div class="f">
-          <label class="lbl" for="mother-phone">رقم الهاتف <span class="req">*</span></label>
-          <input id="mother-phone" type="tel" placeholder="07XXXXXXXX" required>
-        </div>
-        <div class="f full">
-          <label class="lbl" for="mother-job">المسمى الوظيفي ومكان العمل</label>
-          <input id="mother-job" type="text" placeholder="المسمى الوظيفي ومكان العمل">
-        </div>
-        <div class="f">
-          <label class="lbl" for="marital">الحالة الاجتماعية</label>
-          <select id="marital">
-            <option value="">اختر...</option>
-            <option>متزوج</option>
-            <option>مطلق</option>
-            <option>أرمل</option>
-          </select>
-        </div>
-        <div class="f">
-          <label class="lbl" for="custody">الحضانة القانونية</label>
-          <select id="custody">
-            <option value="">اختر...</option>
-            <option>الأب</option>
-            <option>الأم</option>
-            <option>مشتركة</option>
-          </select>
-        </div>
-      </div>
+                <div class="form-group">
+                    <label>اسم الأم الكامل *</label>
+                    <input type="text" id="mother_name" required placeholder="اسم الأم الكامل">
+                </div>
+
+                <div class="form-group">
+                    <label>رقم هاتف الأم المباشر *</label>
+                    <input type="tel" id="mother_phone" required placeholder="07xxxxxxx" style="text-align: right;">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>عنوان السكن بالتفصيل *</label>
+                    <input type="text" id="address" required placeholder="المدينة، المنطقة، اسم الشارع، القرب من معلم معروف">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>تاريخ بدء الالتحاق المفضل</label>
+                    <input type="date" id="start_date">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>هل يعاني الطفل من أي حالة صحية أو ملاحظات خاصة يجب معرفتها؟</label>
+                    <textarea id="notes" placeholder="اكتب هنا أي ملاحظات صحية، حساسية، أو طلبات خاصة... (اتركه فارغاً إن لم يوجد)"></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-submit">ارسال الاستمارة الآن ✨</button>
+
+            </div>
+        </form>
     </div>
 
-    <!-- معلومات الاتصال -->
-    <div class="card">
-      <div class="sec-head">
-        <div class="sec-icon">📍</div>
-        <h2>معلومات الاتصال</h2>
-      </div>
-      <div class="g2">
-        <div class="f full">
-          <label class="lbl" for="address">عنوان السكن <span class="req">*</span></label>
-          <input id="address" type="text" placeholder="المنطقة / الشارع / رقم المبنى" required>
-        </div>
-        <div class="f">
-          <label class="lbl" for="entrance">رقم دخل</label>
-          <input id="entrance" type="text" placeholder="رقم دخل">
-        </div>
-        <div class="f">
-          <label class="lbl" for="main-phone">رقم التواصل الرئيسي</label>
-          <input id="main-phone" type="tel" placeholder="07XXXXXXXX">
-        </div>
-      </div>
+    <div id="success-screen" class="success-card">
+        <h2>🎉 تم إرسال الاستمارة بنجاح!</h2>
+        <p>شكرًا لثقتكم بنا في <strong>حضانة نقار الخشب</strong>.<br>تم حفظ بيانات طفلكم في النظام، وسيقوم القسم الإداري بمراجعة الطلب والتواصل معكم في أقرب وقت ممكن.</p>
     </div>
-
-    <!-- المعلومات الصحية -->
-    <div class="card">
-      <div class="sec-head">
-        <div class="sec-icon">🏥</div>
-        <h2>المعلومات الصحية</h2>
-      </div>
-
-      <div class="f" style="margin-bottom:.9rem">
-        <span class="lbl">هل يعاني الطفل من أي مرض مزمن؟</span>
-        <div class="radio-row" data-group="chronic">
-          <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>نعم</div>
-          <div class="r-pill active" onclick="selectPill(this)"><span class="rdot"></span>لا</div>
-        </div>
-      </div>
-      <div class="f" style="margin-bottom:.9rem">
-        <span class="lbl">هل يعاني الطفل من أي حساسية؟</span>
-        <div class="radio-row" data-group="allergy">
-          <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>نعم</div>
-          <div class="r-pill active" onclick="selectPill(this)"><span class="rdot"></span>لا</div>
-        </div>
-      </div>
-      <div class="f" style="margin-bottom:.9rem">
-        <span class="lbl">هل يتناول الطفل أدوية بشكل منتظم؟</span>
-        <div class="radio-row" data-group="meds">
-          <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>نعم</div>
-          <div class="r-pill active" onclick="selectPill(this)"><span class="rdot"></span>لا</div>
-        </div>
-      </div>
-      <div class="f">
-        <span class="lbl">في حال الطوارئ، يُبلَّغ:</span>
-        <div class="radio-row" data-group="emergency">
-          <div class="r-pill active" onclick="selectPill(this)"><span class="rdot"></span>كلاهما</div>
-          <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>الأب فقط</div>
-          <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>الأم فقط</div>
-          <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>قريب آخر</div>
-        </div>
-      </div>
-    </div>
-
-
-
-    <!-- تسجيل الطفل -->
-    <div class="card">
-      <div class="sec-head">
-        <div class="sec-icon">📅</div>
-        <h2>تسجيل الطفل</h2>
-      </div>
-
-      <div class="g2" style="margin-bottom:1.1rem">
-        <div class="f">
-          <label class="lbl" for="start-date">تاريخ الالتحاق <span class="req">*</span></label>
-          <input id="start-date" type="date" required>
-        </div>
-        <div class="f">
-          <span class="lbl">نوع الالتحاق</span>
-          <div class="radio-row" data-group="enroll-type" style="margin-top:8px">
-            <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>يومي</div>
-            <div class="r-pill active" onclick="selectPill(this)"><span class="rdot"></span>أسبوعي</div>
-            <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>شهري</div>
-          </div>
-        </div>
-      </div>
-
-      <span class="lbl">أيام الدوام</span>
-      <div class="days-wrap">
-        <button type="button" class="day-btn on" onclick="this.classList.toggle('on')">الأحد</button>
-        <button type="button" class="day-btn on" onclick="this.classList.toggle('on')">الاثنين</button>
-        <button type="button" class="day-btn on" onclick="this.classList.toggle('on')">الثلاثاء</button>
-        <button type="button" class="day-btn on" onclick="this.classList.toggle('on')">الأربعاء</button>
-        <button type="button" class="day-btn on" onclick="this.classList.toggle('on')">الخميس</button>
-        <button type="button" class="day-btn" onclick="this.classList.toggle('on')">الجمعة</button>
-        <button type="button" class="day-btn" onclick="this.classList.toggle('on')">السبت</button>
-      </div>
-
-      <span class="lbl" style="display:block;margin-top:1.2rem">الوقت المناسب</span>
-      <div class="time-grid" id="timeGrid">
-        <div class="time-card" onclick="setTime(this)"><span class="tdot"></span>☀️ 8:00 ص — 1:00 م</div>
-        <div class="time-card active" onclick="setTime(this)"><span class="tdot"></span>☀️ 8:00 ص — 3:00 م</div>
-        <div class="time-card" onclick="setTime(this)"><span class="tdot"></span>🌤️ 8:00 ص — 5:00 م</div>
-        <div class="time-card" onclick="setTime(this)"><span class="tdot"></span>🌙 مبكر 7:00 ص — 5:00 م</div>
-      </div>
-    </div>
-
-    <!-- الأشخاص المصرح لهم -->
-    <div class="card">
-      <div class="sec-head">
-        <div class="sec-icon">🛡️</div>
-        <h2>الأشخاص المصرح لهم باصطحاب الطفل</h2>
-      </div>
-      <div class="g3">
-        <div class="f"><label class="lbl" for="p1-name">الاسم الكامل</label><input id="p1-name" type="text" placeholder="الاسم الكامل"></div>
-        <div class="f"><label class="lbl" for="p2-name">الاسم الكامل</label><input id="p2-name" type="text" placeholder="الاسم الكامل"></div>
-        <div class="f"><label class="lbl" for="p3-name">الاسم الكامل</label><input id="p3-name" type="text" placeholder="الاسم الكامل"></div>
-        <div class="f">
-          <label class="lbl" for="p1-rel">صلة القرابة</label>
-          <select id="p1-rel">
-            <option value="">اختر...</option>
-            <option>الأب</option>
-            <option>الأم</option>
-            <option>الجد</option>
-            <option>الجدة</option>
-            <option>العم</option>
-            <option>العمة</option>
-            <option>الخال</option>
-            <option>الخالة</option>
-            <option>الأخ</option>
-            <option>الأخت</option>
-            <option>أخرى</option>
-          </select>
-        </div>
-        <div class="f">
-          <label class="lbl" for="p2-rel">صلة القرابة</label>
-          <select id="p2-rel">
-            <option value="">اختر...</option>
-            <option>الأب</option>
-            <option>الأم</option>
-            <option>الجد</option>
-            <option>الجدة</option>
-            <option>العم</option>
-            <option>العمة</option>
-            <option>الخال</option>
-            <option>الخالة</option>
-            <option>الأخ</option>
-            <option>الأخت</option>
-            <option>أخرى</option>
-          </select>
-        </div>
-        <div class="f">
-          <label class="lbl" for="p3-rel">صلة القرابة</label>
-          <select id="p3-rel">
-            <option value="">اختر...</option>
-            <option>الأب</option>
-            <option>الأم</option>
-            <option>الجد</option>
-            <option>الجدة</option>
-            <option>العم</option>
-            <option>العمة</option>
-            <option>الخال</option>
-            <option>الخالة</option>
-            <option>الأخ</option>
-            <option>الأخت</option>
-            <option>أخرى</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="f">
-        <span class="lbl">السماح بنشر صور الطفل على وسائل التواصل الاجتماعي؟</span>
-        <div class="radio-row" data-group="photo-perm">
-          <div class="r-pill" onclick="selectPill(this)"><span class="rdot"></span>نعم</div>
-          <div class="r-pill active" onclick="selectPill(this)"><span class="rdot"></span>لا</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="notice">
-      <strong>إقرار وموافقة:</strong> أقر أنا وليّ الأمر بأن جميع البيانات المُدخلة صحيحة وكاملة، وأوافق على لوائح وأنظمة الحضانة المعتمدة وحفظ البيانات بسرية تامة وفقاً للسياسات المعمول بها في المؤسسة.
-    </div>
-
-    <div class="btn-row">
-      <button type="submit" class="btn-main">
-        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        إرسال الاستمارة
-      </button>
-    </div>
-
-  </form>
-
-  <div class="success-msg" id="successMsg">
-    <div class="success-icon">✅</div>
-    <h3>تم إرسال الاستمارة بنجاح!</h3>
-    <p>سيتواصل معك فريق الحضانة قريباً لتأكيد التسجيل.</p>
-  </div>
-
-</main>
+</div>
 
 <script type="module">
-  // 1. استيراد الدوال من مكتبة Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-  // 2. إعدادات المشروع (انسخها من لوحة تحكم Firebase)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-  authDomain: "woodpecker-508d8.firebaseapp.com",
-  projectId: "woodpecker-508d8",
-  storageBucket: "woodpecker-508d8.firebasestorage.app",
-  messagingSenderId: "434327620481",
-  appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
-
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // 3. ربط الدالة بالزر (هذا الجزء يجعلها تعمل عند الضغط)
-  window.handleSubmit = async function(e) {
-    e.preventDefault();
-    
-    // تجميع البيانات من المدخلات
-    const data = {
-      fullname: document.getElementById('fullname').value,
-      father_name: document.getElementById('father-name').value,
-      phone: document.getElementById('father-phone').value,
-      // يمكنك إضافة بقية الحقول بنفس الطريقة
-      timestamp: new Date()
+    const firebaseConfig = {
+        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
+        authDomain: "woodpecker-508d8.firebaseapp.com",
+        projectId: "woodpecker-508d8",
+        storageBucket: "woodpecker-508d8.firebasestorage.app",
+        messagingSenderId: "434327620481",
+        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680"
     };
 
-    try {
-      await addDoc(collection(db, "registrations"), data);
-      document.getElementById('mainForm').style.display = 'none';
-      document.getElementById('successMsg').style.display = 'block';
-    } catch (e) {
-      alert("خطأ في الإرسال");
-    }
-  };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  // 4. الدوال المساعدة (التي كانت موجودة سابقاً)
-  window.selectPill = function(el) {
-    var row = el.closest('.radio-row');
-    row.querySelectorAll('.r-pill').forEach(function(p){ p.classList.remove('active'); });
-    el.classList.add('active');
-  }
-  
-  window.setTime = function(el) {
-    document.querySelectorAll('#timeGrid .time-card').forEach(function(c){ c.classList.remove('active'); });
-    el.classList.add('active');
-  }
+    const form = document.getElementById('parentRegistrationForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.innerText = "جاري إرسال البيانات وآمنها...";
+
+        const formData = {
+            fullname: document.getElementById('fullname').value,
+            dob: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            father_name: document.getElementById('father_name').value,
+            phone: document.getElementById('phone').value,
+            mother_name: document.getElementById('mother_name').value,
+            mother_phone: document.getElementById('mother_phone').value,
+            address: document.getElementById('address').value,
+            start_date: document.getElementById('start_date').value || 'غير محدد',
+            notes: document.getElementById('notes').value || 'لا يوجد ملاحظات خاصة',
+            timestamp: new Date()
+        };
+
+        try {
+            await addDoc(collection(db, "registrations"), formData);
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'block';
+        } catch (error) {
+            console.error("Firebase Error: ", error);
+            alert("عذراً، حدث خطأ أثناء إرسال الاستمارة، يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.");
+            submitBtn.disabled = false;
+            submitBtn.innerText = "ارسال الاستمارة الآن ✨";
+        }
+    });
 </script>
+
 </body>
 </html>
