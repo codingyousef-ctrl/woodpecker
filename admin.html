@@ -2,133 +2,103 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة الإدارة | حضانة نقار الخشب</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg: #121418; 
-            --card: #1e2025; 
-            --text: #ffffff; 
-            --muted: #94a3b8; 
-            --primary: #d4537e; 
-            --primary-hover: #b8436b;
-            --border: #2a2d35;
-            --danger: #ef4444;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
+        :root { --bg: #121418; --card: #1e2025; --primary: #d4537e; --text: #ffffff; --border: #2a2d35; }
+        body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; margin: 0; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: var(--card); border-bottom: 2px solid var(--primary); }
+        .nav-left { display: flex; gap: 15px; }
+        .nav-left button { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+        .nav-left button.active { background: var(--primary); border: none; }
         
-        /* Login Card */
-        #login-screen { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
-        .login-card { background: var(--card); padding: 40px; border-radius: 16px; border: 1px solid var(--border); text-align: center; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .login-card input { width: 100%; padding: 12px; margin: 15px 0; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; outline: none; }
-        .login-card button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        
-        /* Dashboard */
-        #dashboard { display: none; max-width: 1000px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header img { height: 100px; width: auto; margin-bottom: 10px; border-radius: 12px; }
-        .header h2 { color: var(--primary); }
-        
-        .stat-card { background: var(--card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center; margin-bottom: 20px; }
-        .stat-value { font-size: 32px; font-weight: bold; color: var(--primary); }
-        
-        .table-container { background: var(--card); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; text-align: right; }
-        th { padding: 15px; background: rgba(0,0,0,0.2); color: var(--muted); border-bottom: 1px solid var(--border); }
+        .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 30px; }
+        .stat-card { background: var(--card); padding: 25px; text-align: center; border-radius: 8px; border: 1px solid var(--border); }
+        .stat-num { font-size: 28px; font-weight: bold; color: var(--primary); }
+
+        .table-section { padding: 0 30px; }
+        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
+        th { padding: 15px; text-align: right; border-bottom: 1px solid var(--border); color: #94a3b8; }
         td { padding: 15px; border-bottom: 1px solid var(--border); }
         
-        .btn-view { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-left: 5px; }
-        .btn-delete { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
-        
-        /* Modal */
-        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+        .action-btns { display: flex; gap: 8px; }
+        .btn-action { border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: white; }
+        .view { background: #3b82f6; } .edit { background: #f59e0b; } .delete { background: #ef4444; }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <div class="login-card">
-        <h2>🔒 لوحة إدارة الحضانة</h2>
-        <input type="password" id="pass" placeholder="كلمة المرور">
-        <button onclick="checkPass()">دخول</button>
+<div class="header">
+    <div style="display: flex; gap: 10px;">
+        <button>🔒</button><button>☀️</button>
+    </div>
+    <div class="nav-left">
+        <button class="active">الطلاب 👥</button>
+        <button>تسجيل جديد 👤</button>
+        <button>بحث 🔍</button>
+        <button>الدفعات 📄</button>
+    </div>
+    <div style="text-align: right;">
+        <div style="font-weight: bold;">مركز الشلول للتايكوندو</div>
+        <div style="font-size: 11px; color: #888;">نظام إدارة الطلاب</div>
     </div>
 </div>
 
-<div id="dashboard">
-    <div class="header">
-        <img src="https://images.gemini.googleusercontent.com/v1/images/r/3588f2195f00e932" alt="الشعار">
-        <h2>لوحة التحكم</h2>
-    </div>
-    
-    <div class="stat-card">
-        <p>إجمالي الطلاب المسجلين</p>
-        <div class="stat-value" id="total-students">0</div>
-    </div>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>الاسم</th>
-                    <th>الأم</th>
-                    <th>الهاتف</th>
-                    <th>تحكم</th>
-                </tr>
-            </thead>
-            <tbody id="data-body"></tbody>
-        </table>
-    </div>
+<div class="stats-container">
+    <div class="stat-card"><div class="stat-num" id="total-count">0</div><div>إجمالي الطلاب</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div>اشتراك فعال</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div>ينتهي قريباً</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div>منتهي</div></div>
 </div>
 
-<script>
-    function checkPass() {
-        if(document.getElementById('pass').value === "123456") {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            if(window.loadFirebaseData) window.loadFirebaseData();
-        } else { alert("كلمة المرور خاطئة"); }
-    }
-</script>
+<div class="table-section">
+    <table>
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>الجنس</th>
+                <th>هاتف الأم</th>
+                <th>إجراءات</th>
+            </tr>
+        </thead>
+        <tbody id="data-body"></tbody>
+    </table>
+</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-        authDomain: "woodpecker-508d8.firebaseapp.com",
-        projectId: "woodpecker-508d8",
-        storageBucket: "woodpecker-508d8.firebasestorage.app",
-        messagingSenderId: "434327620481",
-        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680"
-    };
-
+    const firebaseConfig = { /* ضع بياناتك هنا */ };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    window.loadFirebaseData = function() {
-        onSnapshot(collection(db, "registrations"), (snapshot) => {
-            const tableBody = document.getElementById("data-body");
-            tableBody.innerHTML = "";
-            document.getElementById("total-students").innerText = snapshot.size;
+    onSnapshot(collection(db, "registrations"), (snapshot) => {
+        const tbody = document.getElementById("data-body");
+        tbody.innerHTML = "";
+        document.getElementById("total-count").innerText = snapshot.size;
 
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${data.fullname || '---'}</td>
-                    <td>${data.mother_name || '---'}</td>
-                    <td>${data.mother_phone || '---'}</td>
-                    <td>
-                        <button class="btn-delete" onclick="deleteDoc(doc(db, 'registrations', '${docSnap.id}'))">حذف</button>
-                    </td>
-                `;
-                tableBody.appendChild(tr);
-            });
+        snapshot.forEach((docSnap) => {
+            const d = docSnap.data();
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${d.fullname || '---'}</td>
+                <td>${d.gender || '---'}</td>
+                <td>${d.mother_phone || '---'}</td>
+                <td class="action-btns">
+                    <button class="btn-action view" onclick="viewItem('${docSnap.id}')">👁️</button>
+                    <button class="btn-action edit" onclick="editItem('${docSnap.id}')">✏️</button>
+                    <button class="btn-action delete" onclick="deleteItem('${docSnap.id}')">🗑️</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
         });
+    });
+
+    // وظائف الأزرار
+    window.viewItem = (id) => alert("عرض تفاصيل: " + id);
+    window.editItem = (id) => alert("تعديل بيانات: " + id);
+    window.deleteItem = async (id) => {
+        if(confirm("هل أنت متأكد؟")) await deleteDoc(doc(db, "registrations", id));
     };
 </script>
 </body>
