@@ -90,9 +90,16 @@
                     <input type="date" id="dob" required>
                 </div>
                 <div class="form-group">
-                    <label>العمر الحالي</label>
-                    <input type="text" id="age" placeholder="مثال: سنتين و3 أشهر">
-                </div>
+    <label>العمر الحالي *</label>
+    <select id="age" required>
+        <option value="" disabled selected>اختر الفئة العمرية</option>
+        <option value="أقل من سنة">أقل من سنة</option>
+        <option value="سنة - سنتين">سنة إلى سنتين</option>
+        <option value="سنتين - 3 سنوات">سنتين إلى 3 سنوات</option>
+        <option value="3 - 4 سنوات">3 إلى 4 سنوات</option>
+        <option value="4 - 5 سنوات">4 إلى 5 سنوات</option>
+    </select>
+</div>
                 <div class="form-group">
                     <label>الجنس *</label>
                     <select id="gender" required>
