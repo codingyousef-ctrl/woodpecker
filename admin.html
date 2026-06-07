@@ -2,100 +2,726 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم | حضانة نقار الخشب</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #121418; --card: #1e2025; --primary: #d4537e; --text: #ffffff; --border: #2a2d35; }
-        body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; margin: 0; padding: 20px; }
-        
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: var(--card); border-bottom: 2px solid var(--primary); border-radius: 8px; }
-        .logo-area { display: flex; align-items: center; gap: 10px; font-weight: bold; }
-        
-        .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 30px 0; }
-        .stat-card { background: var(--card); padding: 25px; text-align: center; border-radius: 8px; border: 1px solid var(--border); }
-        .stat-num { font-size: 28px; font-weight: bold; color: var(--primary); }
-        
-        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
-        th { padding: 15px; text-align: right; border-bottom: 1px solid var(--border); color: #94a3b8; }
-        td { padding: 15px; border-bottom: 1px solid var(--border); }
-        
-        .btn-action { border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: white; margin: 0 2px; }
-        .view { background: #3b82f6; } .delete { background: #ef4444; }
+        :root {
+            --bg: #0c0e12;
+            --bg-soft: #12151c;
+            --card: #181c24;
+            --card-hover: #1e2330;
+            --primary: #d4537e;
+            --primary-soft: rgba(212, 83, 126, 0.14);
+            --primary-glow: rgba(212, 83, 126, 0.35);
+            --accent: #f4b860;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #2a3140;
+            --success: #22c55e;
+            --info: #3b82f6;
+            --danger: #ef4444;
+            --radius: 14px;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse 80% 50% at 100% 0%, rgba(212, 83, 126, 0.12), transparent 55%),
+                radial-gradient(ellipse 60% 40% at 0% 100%, rgba(244, 184, 96, 0.08), transparent 50%),
+                var(--bg);
+            color: var(--text);
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.6;
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, rgba(24, 28, 36, 0.98), rgba(30, 32, 37, 0.95));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 16px;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            inset-inline: 24px;
+            bottom: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+            border-radius: 999px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* ── Logo area ──
+           ضع شعارك هنا بإحدى الطريقتين:
+           1) ضع ملف logo.png داخل مجلد public ثم فعّل السطر في JS: LOGO_PATH = "./logo.png"
+           2) انقر على منطقة الشعار لرفع صورة (تُحفظ تلقائياً في المتصفح)
+        */
+        .logo-wrap {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: var(--primary-soft);
+            border: 2px dashed rgba(212, 83, 126, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            flex-shrink: 0;
+        }
+
+        .logo-wrap:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px var(--primary-glow);
+        }
+
+        .logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 6px;
+        }
+
+        .logo-placeholder {
+            font-size: 28px;
+            opacity: 0.7;
+        }
+
+        .logo-hint {
+            position: absolute;
+            bottom: 0;
+            inset-inline: 0;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fff;
+            font-size: 9px;
+            text-align: center;
+            padding: 2px 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .logo-wrap:hover .logo-hint { opacity: 1; }
+
+        .brand-text h1 {
+            margin: 0;
+            font-size: 1.35rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-text p {
+            margin: 2px 0 0;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 260px;
+            max-width: 100%;
+            padding: 11px 42px 11px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-soft);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-soft);
+        }
+
+        .search-box span {
+            position: absolute;
+            inset-inline-end: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .badge-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-live::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        /* ── Stats ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin: 28px 0;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.2s, background 0.2s, border-color 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            background: var(--card-hover);
+            border-color: rgba(212, 83, 126, 0.25);
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.total { background: rgba(59, 130, 246, 0.15); }
+        .stat-icon.male { background: rgba(96, 165, 250, 0.15); }
+        .stat-icon.female { background: rgba(212, 83, 126, 0.15); }
+        .stat-icon.baby { background: rgba(244, 184, 96, 0.15); }
+
+        .stat-info .stat-num {
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--text);
+        }
+
+        .stat-info .stat-label {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        /* ── Table section ── */
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .section-head span {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .table-wrap {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        th {
+            padding: 16px 18px;
+            text-align: right;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px 18px;
+            border-bottom: 1px solid rgba(42, 49, 64, 0.6);
+            font-size: 0.95rem;
+        }
+
+        tbody tr {
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(212, 83, 126, 0.04);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .gender-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .gender-tag.male {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+        }
+
+        .gender-tag.female {
+            background: rgba(212, 83, 126, 0.15);
+            color: #f9a8d4;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:active { transform: scale(0.96); }
+        .btn-view { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .btn-delete { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        .btn-view:hover, .btn-delete:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3); }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--muted);
+        }
+
+        .empty-state .icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: min(480px, 100%);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            animation: slideUp 0.25s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal h3 {
+            margin: 0 0 18px;
+            font-size: 1.2rem;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(42, 49, 64, 0.5);
+            font-size: 0.92rem;
+        }
+
+        .modal-row:last-of-type { border-bottom: none; }
+        .modal-row .label { color: var(--muted); }
+        .modal-row .value { font-weight: 600; text-align: left; }
+
+        .modal-close {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #logo-input { display: none; }
+
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 560px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .page { padding: 16px; }
+            .header { position: static; }
+            th, td { padding: 12px 14px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <div class="nav-left"><button>بحث 🔍</button></div>
-    <div class="logo-area">
-        <span>مركز حضانة نقار الخشب</span>
+<div class="page">
+    <header class="header">
+        <div class="brand">
+            <div class="logo-wrap" id="logo-area" title="انقر لرفع الشعار">
+                <img id="logo-img" alt="شعار الحضانة" hidden>
+                <span class="logo-placeholder" id="logo-fallback">🪵</span>
+                <span class="logo-hint">رفع شعار</span>
+            </div>
+            <div class="brand-text">
+                <h1>مركز حضانة نقار الخشب</h1>
+                <p>لوحة تحكم الإدارة — متابعة التسجيلات</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="search-box">
+                <input type="search" id="search-input" placeholder="بحث بالاسم أو الهاتف...">
+                <span>🔍</span>
+            </div>
+            <div class="badge-live">متصل مباشرة</div>
+        </div>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon total">👥</div>
+            <div class="stat-info">
+                <div class="stat-num" id="total-count">0</div>
+                <div class="stat-label">إجمالي الطلاب</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon male">👦</div>
+            <div class="stat-info">
+                <div class="stat-num" id="male-count">0</div>
+                <div class="stat-label">عدد الذكور</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon female">👧</div>
+            <div class="stat-info">
+                <div class="stat-num" id="female-count">0</div>
+                <div class="stat-label">عدد الإناث</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon baby">🍼</div>
+            <div class="stat-info">
+                <div class="stat-num" id="baby-count">0</div>
+                <div class="stat-label">عدد الرضع (&lt; 1 سنة)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-head">
+        <h2>📋 قائمة المسجلين</h2>
+        <span id="results-count">0 نتيجة</span>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>الجنس</th>
+                    <th>هاتف الأم</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody id="data-body"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state" hidden>
+            <div class="icon">📭</div>
+            <p>لا توجد تسجيلات حتى الآن</p>
+        </div>
     </div>
 </div>
 
-<div class="stats-container">
-    <div class="stat-card"><div class="stat-num" id="total-count">0</div><div>إجمالي الطلاب</div></div>
-    <div class="stat-card"><div class="stat-num" id="male-count">0</div><div>عدد الذكور</div></div>
-    <div class="stat-card"><div class="stat-num" id="female-count">0</div><div>عدد الإناث</div></div>
-    <div class="stat-card"><div class="stat-num" id="baby-count">0</div><div>عدد الرضع (< 1 سنة)</div></div>
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <h3>👁️ تفاصيل الطالب</h3>
+        <div id="modal-body"></div>
+        <button class="modal-close" id="modal-close">إغلاق</button>
+    </div>
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>الاسم</th>
-            <th>الجنس</th>
-            <th>هاتف الأم</th>
-            <th>إجراءات</th>
-        </tr>
-    </thead>
-    <tbody id="data-body"></tbody>
-</table>
+<input type="file" id="logo-input" accept="image/*">
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    // أضف بيانات الـ firebaseConfig الخاصة بك هنا
     const firebaseConfig = {
-  apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-  authDomain: "woodpecker-508d8.firebaseapp.com",
-  projectId: "woodpecker-508d8",
-  storageBucket: "woodpecker-508d8.firebasestorage.app",
-  messagingSenderId: "434327620481",
-  appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
-}; };
+        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
+        authDomain: "woodpecker-508d8.firebaseapp.com",
+        projectId: "woodpecker-508d8",
+        storageBucket: "woodpecker-508d8.firebasestorage.app",
+        messagingSenderId: "434327620481",
+        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
+    };
+
+    // ── الشعار: ضع مسار صورتك هنا (مثال: "./logo.png") ──
+    const LOGO_PATH = "./logo.png";
+    const LOGO_STORAGE_KEY = "naqqar_admin_logo";
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    onSnapshot(collection(db, "registrations"), (snapshot) => {
-        let males = 0, females = 0, babies = 0;
-        const tbody = document.getElementById("data-body");
-        tbody.innerHTML = "";
-        
-        snapshot.forEach((docSnap) => {
-            const d = docSnap.data();
-            
-            // حساب الإحصائيات
-            if(d.gender === 'ذكر') males++;
-            if(d.gender === 'أنثى') females++;
-            if(d.age === 'أقل من سنة') babies++; // الشرط المخصص للرضع
+    let allRecords = [];
+    let searchQuery = "";
 
-            const tr = document.createElement('tr');
+    // ── Logo handling ──
+    const logoArea = document.getElementById("logo-area");
+    const logoImg = document.getElementById("logo-img");
+    const logoFallback = document.getElementById("logo-fallback");
+    const logoInput = document.getElementById("logo-input");
+
+    function showLogo(src) {
+        logoImg.src = src;
+        logoImg.hidden = false;
+        logoFallback.hidden = true;
+    }
+
+    function initLogo() {
+        const saved = localStorage.getItem(LOGO_STORAGE_KEY);
+        if (saved) {
+            showLogo(saved);
+            return;
+        }
+        if (LOGO_PATH) {
+            const img = new Image();
+            img.onload = () => showLogo(LOGO_PATH);
+            img.onerror = () => {};
+            img.src = LOGO_PATH;
+        }
+    }
+
+    logoArea.addEventListener("click", () => logoInput.click());
+    logoInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) {
+            alert("حجم الشعار يجب أن يكون أقل من 2MB");
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            localStorage.setItem(LOGO_STORAGE_KEY, ev.target.result);
+            showLogo(ev.target.result);
+        };
+        reader.readAsDataURL(file);
+    });
+
+    initLogo();
+
+    // ── Modal ──
+    const modal = document.getElementById("modal");
+    const modalBody = document.getElementById("modal-body");
+
+    function openModal(data) {
+        modalBody.innerHTML = `
+            <div class="modal-row"><span class="label">الاسم</span><span class="value">${data.fullname || "—"}</span></div>
+            <div class="modal-row"><span class="label">الجنس</span><span class="value">${data.gender || "—"}</span></div>
+            <div class="modal-row"><span class="label">العمر</span><span class="value">${data.age || "—"}</span></div>
+            <div class="modal-row"><span class="label">هاتف الأم</span><span class="value">${data.mother_phone || "—"}</span></div>
+        `;
+        modal.classList.add("open");
+    }
+
+    document.getElementById("modal-close").addEventListener("click", () => modal.classList.remove("open"));
+    modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
+
+    // ── Delete ──
+    window.handleDelete = async (id, name) => {
+        if (!confirm(`هل تريد حذف تسجيل "${name}"؟`)) return;
+        try {
+            await deleteDoc(doc(db, "registrations", id));
+        } catch (err) {
+            alert("حدث خطأ أثناء الحذف");
+            console.error(err);
+        }
+    };
+
+    window.handleView = (data) => openModal(data);
+
+    // ── Search ──
+    document.getElementById("search-input").addEventListener("input", (e) => {
+        searchQuery = e.target.value.trim().toLowerCase();
+        renderTable(allRecords);
+    });
+
+    function renderTable(records) {
+        const filtered = records.filter((d) => {
+            if (!searchQuery) return true;
+            const name = (d.fullname || "").toLowerCase();
+            const phone = (d.mother_phone || "").toLowerCase();
+            return name.includes(searchQuery) || phone.includes(searchQuery);
+        });
+
+        const tbody = document.getElementById("data-body");
+        const empty = document.getElementById("empty-state");
+        tbody.innerHTML = "";
+
+        document.getElementById("results-count").textContent = `${filtered.length} نتيجة`;
+
+        if (filtered.length === 0) {
+            empty.hidden = false;
+            return;
+        }
+        empty.hidden = true;
+
+        filtered.forEach(({ id, ...d }) => {
+            const isMale = d.gender === "ذكر";
+            const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td>${d.fullname || '---'}</td>
-                <td>${d.gender || '---'}</td>
-                <td>${d.mother_phone || '---'}</td>
+                <td><strong>${d.fullname || "—"}</strong></td>
+                <td><span class="gender-tag ${isMale ? "male" : "female"}">${d.gender || "—"}</span></td>
+                <td dir="ltr" style="text-align:right">${d.mother_phone || "—"}</td>
                 <td>
-                    <button class="btn-action view" onclick="alert('الاسم: ${d.fullname}')">👁️</button>
-                    <button class="btn-action delete" onclick="deleteDoc(doc(db, 'registrations', '${docSnap.id}'))">🗑️</button>
+                    <div class="actions">
+                        <button class="btn btn-view" data-view='${JSON.stringify(d).replace(/'/g, "&#39;")}'>👁️ عرض</button>
+                        <button class="btn btn-delete" data-id="${id}" data-name="${(d.fullname || "").replace(/"/g, "&quot;")}">🗑️ حذف</button>
+                    </div>
                 </td>
             `;
             tbody.appendChild(tr);
         });
 
-        document.getElementById("total-count").innerText = snapshot.size;
-        document.getElementById("male-count").innerText = males;
-        document.getElementById("female-count").innerText = females;
-        document.getElementById("baby-count").innerText = babies;
+        tbody.querySelectorAll("[data-view]").forEach((btn) => {
+            btn.addEventListener("click", () => openModal(JSON.parse(btn.dataset.view)));
+        });
+        tbody.querySelectorAll("[data-id]").forEach((btn) => {
+            btn.addEventListener("click", () => handleDelete(btn.dataset.id, btn.dataset.name));
+        });
+    }
+
+    function updateStats(records) {
+        let males = 0, females = 0, babies = 0;
+        records.forEach((d) => {
+            if (d.gender === "ذكر") males++;
+            if (d.gender === "أنثى") females++;
+            if (d.age === "أقل من سنة") babies++;
+        });
+        document.getElementById("total-count").textContent = records.length;
+        document.getElementById("male-count").textContent = males;
+        document.getElementById("female-count").textContent = females;
+        document.getElementById("baby-count").textContent = babies;
+    }
+
+    onSnapshot(collection(db, "registrations"), (snapshot) => {
+        allRecords = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+        updateStats(allRecords);
+        renderTable(allRecords);
     });
 </script>
 
