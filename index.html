@@ -58,6 +58,38 @@
         .img-remove { position: absolute; top: 6px; left: 6px; background: rgba(239,68,68,0.8); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; display: none; align-items: center; justify-content: center; z-index: 2; }
         .img-remove.show { display: flex; }
 
+        /* ── Signature Pad ── */
+        .sig-wrap {
+            background: #fff;
+            border-radius: 8px;
+            border: 2px dashed rgba(212,83,126,0.4);
+            overflow: hidden;
+            position: relative;
+        }
+        #signature-pad {
+            width: 100%;
+            height: 180px;
+            display: block;
+            cursor: crosshair;
+        }
+        .sig-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .btn-clear-sig {
+            padding: 8px 18px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.2s;
+        }
+        .btn-clear-sig:hover { border-color: var(--primary); color: var(--primary); }
+
         .pledge-box { background: rgba(212,83,126,0.05); border: 1px dashed var(--primary); padding: 20px; border-radius: 8px; margin-top: 30px; text-align: right; }
         .pledge-box p { font-size: 15px; line-height: 1.8; margin-bottom: 15px; }
         .btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 16px; margin-top: 25px; }
@@ -117,7 +149,6 @@
                     <label>الديانة *</label>
                     <input type="text" id="religion" required value="الإسلام">
                 </div>
-                <!-- شهادة الميلاد: رقم + صورة -->
                 <div class="form-group">
                     <label>الرقم الوطني للطفل</label>
                     <input type="text" id="birth_certificate_no" placeholder="أدخل رقم شهادة الميلاد">
@@ -149,7 +180,6 @@
                     <label>عمل الأب</label>
                     <input type="text" id="father_job">
                 </div>
-                <!-- هوية الأب: رقم + صورة -->
                 <div class="form-group">
                     <label>رقم الوطني للأب</label>
                     <input type="text" id="father_id">
@@ -178,7 +208,6 @@
                     <label>عمل الأم</label>
                     <input type="text" id="mother_job">
                 </div>
-                <!-- هوية الأم: رقم + صورة -->
                 <div class="form-group">
                     <label>رقم الوطني للأم</label>
                     <input type="text" id="mother_id">
@@ -195,9 +224,8 @@
                     </div>
                 </div>
 
-                <!-- دفتر العائلة: رقم + صورة -->
                 <div class="form-group">
-                    <label>رقم  دفتر العائلة</label>
+                    <label>رقم دفتر العائلة</label>
                     <input type="text" id="family_book_no">
                 </div>
                 <div class="form-group">
@@ -384,14 +412,19 @@
                 أقر أنا ولي أمر الطفل المذكور أعلاه بصحة كافة البيانات الواردة في هذه الاستمارة، وأتعهد بسداد كافة الرسوم في مواعيدها المحددة دون تأخير.</p>
                 <div class="form-group">
                     <label>اسم ولي الأمر (إقرار رقمي) *</label>
-                    <input type="text" id="parent_signature" required placeholder="اكتب اسمك الكامل كإقرار">
+                    <input type="text" id="parent_signature_text" required placeholder="اكتب اسمك الكامل كإقرار">
                 </div>
             </div>
-          <div class="form-group full-width">
-    <label>توقيع ولي الأمر (رسم):</label>
-    <canvas id="signature-pad" style="border:1px solid #ccc; width:100%; height:200px; background:white;"></canvas>
-    <button type="button" id="clear-signature" class="btn">مسح التوقيع</button>
-</div>
+
+            <div class="form-group full-width" style="margin-top:20px">
+                <label>توقيع ولي الأمر (رسم يدوي):</label>
+                <div class="sig-wrap">
+                    <canvas id="signature-pad"></canvas>
+                </div>
+                <div class="sig-actions">
+                    <button type="button" class="btn-clear-sig" id="clear-signature">🗑️ مسح التوقيع</button>
+                </div>
+            </div>
 
             <button type="submit" class="btn" id="subBtn">إرسال وتوثيق الاستمارة الرسمية</button>
         </form>
@@ -399,6 +432,7 @@
     <div id="msg" class="success">🎉 تم إرسال استمارة التسجيل بنجاح! شكراً لكم.</div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.7/signature_pad.umd.min.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
@@ -414,17 +448,32 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // تهيئة لوحة التوقيع
-const canvas = document.getElementById('signature-pad');
-let signaturePad;
+    /* ── تهيئة لوحة التوقيع بعد تحميل الصفحة مباشرة ── */
+    const canvas = document.getElementById('signature-pad');
+    const signaturePad = new SignaturePad(canvas, {
+        backgroundColor: 'rgb(255, 255, 255)',
+        penColor: 'rgb(0, 0, 0)'
+    });
 
-if (canvas) {
-    signaturePad = new SignaturePad(canvas);
+    // ضبط حجم الكانفس بشكل صحيح
+    function resizeCanvas() {
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = (rect.width || canvas.offsetWidth) * ratio;
+        canvas.height = 180 * ratio;
+        canvas.getContext('2d').scale(ratio, ratio);
+        signaturePad.clear();
+    }
+    // تأخير بسيط لضمان تحميل الـ layout
+    setTimeout(resizeCanvas, 100);
+    window.addEventListener('resize', resizeCanvas);
+
     document.getElementById('clear-signature').addEventListener('click', () => signaturePad.clear());
-};
 
+    /* ── تاريخ اليوم ── */
     document.getElementById('form_date').valueAsDate = new Date();
 
+    /* ── رفع الصور ── */
     async function uploadToCloudinary(file) {
         if (!file) return null;
         const formData = new FormData();
@@ -435,15 +484,15 @@ if (canvas) {
             body: formData
         });
         const data = await response.json();
-        return data.secure_url;
+        return data.secure_url || null;
     }
 
     const fileObjects = {};
     function setupImgUpload(inputId, previewId, areaId, removeId, key) {
-        const input = document.getElementById(inputId);
+        const input   = document.getElementById(inputId);
         const preview = document.getElementById(previewId);
-        const area = document.getElementById(areaId);
-        const rmBtn = document.getElementById(removeId);
+        const area    = document.getElementById(areaId);
+        const rmBtn   = document.getElementById(removeId);
 
         input.addEventListener('change', () => {
             const file = input.files[0];
@@ -474,10 +523,11 @@ if (canvas) {
     }
 
     setupImgUpload('img-birth', 'prev-birth', 'area-birth', 'rm-birth', 'birthCertImage');
-    setupImgUpload('img-fid', 'prev-fid', 'area-fid', 'rm-fid', 'fatherIdImage');
-    setupImgUpload('img-mid', 'prev-mid', 'area-mid', 'rm-mid', 'motherIdImage');
+    setupImgUpload('img-fid',   'prev-fid',   'area-fid',   'rm-fid',   'fatherIdImage');
+    setupImgUpload('img-mid',   'prev-mid',   'area-mid',   'rm-mid',   'motherIdImage');
     setupImgUpload('img-fbook', 'prev-fbook', 'area-fbook', 'rm-fbook', 'familyBookImage');
 
+    /* ── إرسال الاستمارة ── */
     document.getElementById('regForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('subBtn');
@@ -495,84 +545,75 @@ if (canvas) {
             const selectedDays = [];
             document.querySelectorAll('input[name="days"]:checked').forEach(cb => selectedDays.push(cb.value));
 
+            // التوقيع: إذا فارغ نحفظ null، وإلا نحفظ dataURL
+            const signatureData = signaturePad.isEmpty() ? null : signaturePad.toDataURL('image/png');
+
             const payload = {
-                childName: document.getElementById('childName').value,
-                fatherName: document.getElementById('father_name').value,
-                motherName: document.getElementById('motherName').value,
-                fatherPhone: document.getElementById('father_phone').value,
-                motherPhone: document.getElementById('motherPhone').value,
-                birthDate: document.getElementById('dob').value,
-                age: document.getElementById('age').value,
-                gender: document.getElementById('gender').value,
-                religion: document.getElementById('religion').value,
-                birthCertNo: document.getElementById('birth_certificate_no').value,
-                birthCertImage: bUrl,
-                fatherNationality: document.getElementById('father_nationality').value,
-                motherNationality: document.getElementById('mother_nationality').value,
-                fatherJob: document.getElementById('father_job').value,
-                motherJob: document.getElementById('mother_job').value,
-                fatherNationalId: document.getElementById('father_id').value,
-                fatherIdImage: fUrl,
-                motherNationalId: document.getElementById('mother_id').value,
-                motherIdImage: mUrl,
-                familyBook: document.getElementById('family_book_no').value,
-                familyBookImage: fbUrl,
-                maritalStatus: document.getElementById('marital_status').value,
-                address: document.getElementById('address').value,
-                contactPhone: document.getElementById('father_phone').value,
-                contactPhone2: document.getElementById('work_phone').value,
-                emergencyPhone: document.getElementById('emergency_phone').value,
-                chronicDisease: document.getElementById('has_chronic_disease').value === 'نعم' ? 'yes' : 'no',
+                childName:            document.getElementById('childName').value,
+                fatherName:           document.getElementById('father_name').value,
+                motherName:           document.getElementById('motherName').value,
+                fatherPhone:          document.getElementById('father_phone').value,
+                motherPhone:          document.getElementById('motherPhone').value,
+                birthDate:            document.getElementById('dob').value,
+                age:                  document.getElementById('age').value,
+                gender:               document.getElementById('gender').value,
+                religion:             document.getElementById('religion').value,
+                birthCertNo:          document.getElementById('birth_certificate_no').value,
+                birthCertImage:       bUrl,
+                fatherNationality:    document.getElementById('father_nationality').value,
+                motherNationality:    document.getElementById('mother_nationality').value,
+                fatherJob:            document.getElementById('father_job').value,
+                motherJob:            document.getElementById('mother_job').value,
+                fatherNationalId:     document.getElementById('father_id').value,
+                fatherIdImage:        fUrl,
+                motherNationalId:     document.getElementById('mother_id').value,
+                motherIdImage:        mUrl,
+                familyBook:           document.getElementById('family_book_no').value,
+                familyBookImage:      fbUrl,
+                maritalStatus:        document.getElementById('marital_status').value,
+                address:              document.getElementById('address').value,
+                contactPhone2:        document.getElementById('work_phone').value,
+                emergencyPhone:       document.getElementById('emergency_phone').value,
+                chronicDisease:       document.getElementById('has_chronic_disease').value === 'نعم' ? 'yes' : 'no',
                 chronicDiseaseDetail: document.getElementById('chronic_disease_details').value,
-                allergy: document.getElementById('has_allergy').value === 'نعم' ? 'yes' : 'no',
-                allergyDetail: document.getElementById('allergy_details').value,
-                specialDiet: document.getElementById('special_diet').value === 'نعم' ? 'yes' : 'no',
-                specialDietDetail: document.getElementById('diet_details').value,
-                feverAction: document.getElementById('fever_action').value,
-                favFood: document.getElementById('favorite_food').value,
-                strangerRelation: document.getElementById('strangers_relation').value,
-                kidsRelation: document.getElementById('children_relation').value,
-                bathroomSelf: document.getElementById('toilet_independent').value,
-                bathroomExpression: document.getElementById('toilet_expression').value,
-                bathroomReminder: document.getElementById('toilet_remind').value === 'نعم' ? 'yes' : 'no',
-                attendanceStart: document.getElementById('start_date').value,
-                attendanceFreq: document.getElementById('subscription_type').value,
-                attendanceDays: selectedDays,
-                attendanceTime: document.getElementById('time_slot').value,
+                allergy:              document.getElementById('has_allergy').value === 'نعم' ? 'yes' : 'no',
+                allergyDetail:        document.getElementById('allergy_details').value,
+                specialDiet:          document.getElementById('special_diet').value === 'نعم' ? 'yes' : 'no',
+                specialDietDetail:    document.getElementById('diet_details').value,
+                feverAction:          document.getElementById('fever_action').value,
+                favFood:              document.getElementById('favorite_food').value,
+                strangerRelation:     document.getElementById('strangers_relation').value,
+                kidsRelation:         document.getElementById('children_relation').value,
+                bathroomSelf:         document.getElementById('toilet_independent').value,
+                bathroomExpression:   document.getElementById('toilet_expression').value,
+                bathroomReminder:     document.getElementById('toilet_remind').value === 'نعم' ? 'yes' : 'no',
+                attendanceStart:      document.getElementById('start_date').value,
+                attendanceFreq:       document.getElementById('subscription_type').value,
+                attendanceDays:       selectedDays,
+                attendanceTime:       document.getElementById('time_slot').value,
                 attendanceTimeCustom: document.getElementById('custom_time_slot').value,
-                pickup1Name: document.getElementById('pickup_name_1').value,
-                pickup1Relation: document.getElementById('pickup_relation_1').value,
-                pickup1Phone: document.getElementById('pickup_phone_1').value,
-                pickup2Name: document.getElementById('pickup_name_2').value,
-                pickup2Relation: document.getElementById('pickup_relation_2').value,
-                pickup2Phone: document.getElementById('pickup_phone_1').value,
-                parentSignature: signaturePad.toDataURL(), // هنا أضفنا التوقيع
-                registrationDate: new Date().toLocaleDateString('ar-JO'),
-                parentSignature: signaturePad.toDataURL(),
-                timestamp: new Date() 
+                pickup1Name:          document.getElementById('pickup_name_1').value,
+                pickup1Relation:      document.getElementById('pickup_relation_1').value,
+                pickup1Phone:         document.getElementById('pickup_phone_1').value,
+                pickup2Name:          document.getElementById('pickup_name_2').value,
+                pickup2Relation:      document.getElementById('pickup_relation_2').value,
+                pickup2Phone:         document.getElementById('pickup_phone_2').value,
+                parentSignatureText:  document.getElementById('parent_signature_text').value,
+                parentSignature:      signatureData,   // ← صورة التوقيع اليدوي
+                registrationDate:     new Date().toLocaleDateString('ar-JO'),
+                timestamp:            new Date()
             };
 
             await addDoc(collection(db, "registrations"), payload);
             document.getElementById('msg').style.display = 'block';
             document.getElementById('form-body').style.display = 'none';
-            window.scrollTo({top: 0, behavior: 'smooth'});
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (error) {
             console.error(error);
-            alert("حدث خطأ أثناء الإرسال");
+            alert("حدث خطأ أثناء الإرسال: " + error.message);
             btn.disabled = false;
             btn.innerText = "إرسال وتوثيق الاستمارة الرسمية";
         }
-        
- // استبدل كود تهيئة التوقيع بهذا الشكل:
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('signature-pad');
-    if (canvas) {
-        window.signaturePad = new SignaturePad(canvas);
-        document.getElementById('clear-signature').addEventListener('click', () => {
-            window.signaturePad.clear();
-        });
-    }
-
     });
 </script>
 </body>
