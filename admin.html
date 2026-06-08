@@ -483,23 +483,24 @@
     const d = allRecords.find(r => r.id === id); 
     if (!d) return;
 
-    document.getElementById("pledge-subtitle").textContent = `ولي أمر: ${getName(d)}`;
-    document.getElementById("pledge-child").textContent = getName(d);
-
-    // 1. تحديد العناصر (تأكد أن هذه الـ IDs موجودة في الـ HTML الخاص بـ pledge-sig)
-    const sigContainer = document.getElementById("pledge-sig");
-    const sigData = d.parentSignature || d.parent_signature;
+    // استخدام if قبل تعيين النص لمنع الخطأ
+    const subtitle = document.getElementById("pledge-subtitle");
+    if (subtitle) subtitle.textContent = `ولي أمر: ${getName(d)}`;
     
-    // 2. تحديث المحتوى بناءً على وجود التوقيع
-    if (sigData && sigData.startsWith('data:image')) {
-        // إذا كان هناك توقيع، نضع الصورة
-        sigContainer.innerHTML = `<img src="${sigData}" style="width:100%; max-width:300px; border:1px solid #ccc;">`;
-    } else {
-        // إذا لم يكن هناك توقيع، نضع النص
-        sigContainer.textContent = "— لم يُوقّع —";
+    const child = document.getElementById("pledge-child");
+    if (child) child.textContent = getName(d);
+
+    const sigDiv = document.getElementById("pledge-sig");
+    if (sigDiv) {
+        // إذا كان هناك توقيع محفوظ (كصورة)
+        if (d.parentSignature && d.parentSignature.startsWith('data:image')) {
+            sigDiv.innerHTML = `<img src="${d.parentSignature}" style="width:100%; max-width:200px;">`;
+        } else {
+            sigDiv.textContent = "— لم يُوقّع —";
+        }
     }
 
-    pledgeModal.classList.add("open");
+    if (pledgeModal) pledgeModal.classList.add("open");
 }
     /* ── Edit Modal ── */
     const editModal = document.getElementById("edit-modal");
