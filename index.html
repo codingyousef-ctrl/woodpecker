@@ -562,21 +562,24 @@ if (canvas) {
             btn.disabled = false;
             btn.innerText = "إرسال وتوثيق الاستمارة الرسمية";
         }
-        document.addEventListener('DOMContentLoaded', () => {
-        const canvas = document.getElementById('signature-pad');
-        if (canvas) {
-            // تهيئة لوحة الرسم
-            window.signaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgb(255, 255, 255)'
-            });
-            
-            // زر المسح (تأكد أن ID الزر هو clear-signature)
+        
+    
+    });
+</script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('signature-pad');
+    if (canvas) {
+        // التأكد من تحميل المكتبة أولاً
+        if (typeof SignaturePad !== 'undefined') {
+            window.signaturePad = new SignaturePad(canvas);
             const clearBtn = document.getElementById('clear-signature');
             if (clearBtn) {
                 clearBtn.addEventListener('click', () => window.signaturePad.clear());
             }
-    
-    });
+        }
+    }
+});
 </script>
 </body>
 </html>
