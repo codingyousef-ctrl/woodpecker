@@ -9,493 +9,182 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0c0e12;
-            --bg-soft: #12151c;
-            --card: #181c24;
-            --card-hover: #1e2330;
-            --primary: #d4537e;
-            --primary-soft: rgba(212, 83, 126, 0.14);
-            --primary-glow: rgba(212, 83, 126, 0.35);
-            --accent: #f4b860;
-            --text: #f1f5f9;
-            --muted: #94a3b8;
-            --border: #2a3140;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --radius: 14px;
-            --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+            --bg:#0c0e12; --bg-soft:#12151c; --card:#181c24; --card-hover:#1e2330;
+            --primary:#d4537e; --primary-soft:rgba(212,83,126,0.14); --primary-glow:rgba(212,83,126,0.35);
+            --accent:#f4b860; --text:#f1f5f9; --muted:#94a3b8; --border:#2a3140;
+            --success:#22c55e; --danger:#ef4444; --radius:14px; --shadow:0 10px 40px rgba(0,0,0,0.35);
         }
-
-        * { box-sizing: border-box; }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background:
-                radial-gradient(ellipse 80% 50% at 100% 0%, rgba(212, 83, 126, 0.12), transparent 55%),
-                radial-gradient(ellipse 60% 40% at 0% 100%, rgba(244, 184, 96, 0.08), transparent 50%),
-                var(--bg);
-            color: var(--text);
-            font-family: 'Cairo', sans-serif;
-            line-height: 1.6;
-        }
-
-        /* ══════════════════════════════
-           شاشة تسجيل الدخول
-        ══════════════════════════════ */
-        #login-screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-
-        .login-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 48px 40px 40px;
-            width: min(420px, 100%);
-            box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-            text-align: center;
-            animation: fadeInUp 0.4s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-logo {
-            width: 110px;
-            height: 110px;
-            border-radius: 22px;
-            object-fit: contain;
-            margin: 0 auto 22px;
-            display: block;
-            background: var(--primary-soft);
-            border: 2px solid rgba(212,83,126,0.3);
-            padding: 8px;
-        }
-
-        .login-logo-fallback {
-            width: 110px;
-            height: 110px;
-            border-radius: 22px;
-            background: var(--primary-soft);
-            border: 2px solid rgba(212,83,126,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            margin: 0 auto 22px;
-        }
-
-        .login-title {
-            font-size: 1.4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 0 0 6px;
-        }
-
-        .login-subtitle {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin: 0 0 32px;
-        }
-
-        .login-label {
-            display: block;
-            text-align: right;
-            color: var(--muted);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .login-input-wrap {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 14px 18px;
-            padding-inline-start: 48px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--bg-soft);
-            color: var(--text);
-            font-family: inherit;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            letter-spacing: 3px;
-        }
-
-        .login-input::placeholder { letter-spacing: 0; }
-
-        .login-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-soft);
-        }
-
-        .login-input.shake {
-            animation: shake 0.4s ease;
-            border-color: var(--danger);
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%       { transform: translateX(-8px); }
-            40%       { transform: translateX(8px); }
-            60%       { transform: translateX(-6px); }
-            80%       { transform: translateX(6px); }
-        }
-
-        .toggle-pass {
-            position: absolute;
-            inset-inline-start: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--muted);
-            cursor: pointer;
-            font-size: 1.1rem;
-            padding: 4px;
-            transition: color 0.2s;
-        }
-        .toggle-pass:hover { color: var(--text); }
-
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--primary), #b8436b);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.2s;
-            margin-top: 4px;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px var(--primary-glow);
-        }
-
-        .login-btn:active { transform: scale(0.97); }
-
-        .login-error {
-            color: #fca5a5;
-            font-size: 0.85rem;
-            margin-top: 14px;
-            min-height: 20px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .login-error.show { opacity: 1; }
-
-        /* ══════════════════════════════
-           لوحة التحكم (مخفية بالبداية)
-        ══════════════════════════════ */
-        #dashboard { display: none; }
-
-        .page {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 24px;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
-            padding: 18px 24px;
-            background: linear-gradient(135deg, rgba(24, 28, 36, 0.98), rgba(30, 32, 37, 0.95));
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 16px;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-        }
-
-        .header::after {
-            content: "";
-            position: absolute;
-            inset-inline: 24px;
-            bottom: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
-            border-radius: 999px;
-        }
-
-        .brand { display: flex; align-items: center; gap: 16px; }
-
-        .logo-wrap {
-            position: relative;
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            background: var(--primary-soft);
-            border: 2px dashed rgba(212, 83, 126, 0.45);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-            flex-shrink: 0;
-        }
-
-        .logo-wrap:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: 0 8px 24px var(--primary-glow); }
-        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
-        .logo-placeholder { font-size: 28px; opacity: 0.7; }
-
-        .logo-hint {
-            position: absolute;
-            bottom: 0;
-            inset-inline: 0;
-            background: rgba(0,0,0,0.65);
-            color: #fff;
-            font-size: 9px;
-            text-align: center;
-            padding: 2px 4px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .logo-wrap:hover .logo-hint { opacity: 1; }
-
-        .brand-text h1 {
-            margin: 0;
-            font-size: 1.35rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .brand-text p { margin: 2px 0 0; color: var(--muted); font-size: 0.85rem; }
-
-        .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-        .search-box { position: relative; }
-
-        .search-box input {
-            width: 260px;
-            max-width: 100%;
-            padding: 11px 42px 11px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--bg-soft);
-            color: var(--text);
-            font-family: inherit;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
-
-        .search-box span {
-            position: absolute;
-            inset-inline-end: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .badge-live {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: rgba(34,197,94,0.12);
-            border: 1px solid rgba(34,197,94,0.3);
-            color: #86efac;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .badge-live::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50%       { opacity: 0.5; transform: scale(0.85); }
-        }
-
-        .btn-logout {
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(239,68,68,0.3);
-            background: rgba(239,68,68,0.1);
-            color: #fca5a5;
-            font-family: inherit;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-        }
-        .btn-logout:hover { background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.5); }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin: 28px 0;
-        }
-
-        .stat-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 22px 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: transform 0.2s, background 0.2s, border-color 0.2s;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-
-        .stat-card:hover { transform: translateY(-3px); background: var(--card-hover); border-color: rgba(212,83,126,0.25); }
-
-        .stat-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
-        .stat-icon.total  { background: rgba(59,130,246,0.15); }
-        .stat-icon.male   { background: rgba(96,165,250,0.15); }
-        .stat-icon.female { background: rgba(212,83,126,0.15); }
-        .stat-icon.baby   { background: rgba(244,184,96,0.15); }
-
-        .stat-info .stat-num   { font-size: 1.75rem; font-weight: 800; line-height: 1.1; color: var(--text); }
-        .stat-info .stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
-
-        .section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
-        .section-head h2  { margin: 0; font-size: 1.15rem; font-weight: 700; }
-        .section-head span { color: var(--muted); font-size: 0.85rem; }
-
-        .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-
-        table { width: 100%; border-collapse: collapse; }
-        thead { background: rgba(255,255,255,0.03); }
-
-        th { padding: 16px 18px; text-align: right; font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--border); }
-        td { padding: 16px 18px; border-bottom: 1px solid rgba(42,49,64,0.6); font-size: 0.95rem; }
-
-        tbody tr { transition: background 0.15s; }
-        tbody tr:hover { background: rgba(212,83,126,0.04); }
-        tbody tr:last-child td { border-bottom: none; }
-
-        .gender-tag { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
-        .gender-tag.male   { background: rgba(59,130,246,0.15); color: #93c5fd; }
-        .gender-tag.female { background: rgba(212,83,126,0.15); color: #f9a8d4; }
-
-        .actions { display: flex; gap: 8px; }
-
-        .btn { border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: white; transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s; display: inline-flex; align-items: center; gap: 6px; }
-        .btn:active { transform: scale(0.96); }
-        .btn-view   { background: linear-gradient(135deg, #2563eb, #3b82f6); }
-        .btn-delete { background: linear-gradient(135deg, #dc2626, #ef4444); }
-        .btn-view:hover, .btn-delete:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
-
-        .empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
-        .empty-state .icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
-
-        /* Modal */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
-        .modal-overlay.open { display: flex; }
-
-        .modal { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); width: min(860px, 96vw); max-height: 90vh; display: flex; flex-direction: column; padding: 0; box-shadow: var(--shadow); animation: slideUp 0.25s ease; }
-
-        .modal-header { padding: 22px 28px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-        .modal-header h3 { margin: 0 0 4px; font-size: 1.25rem; padding: 0; border: none; }
-        .modal-header p  { margin: 0; color: var(--muted); font-size: 0.85rem; }
-
-        #modal-body { padding: 8px 28px 20px; overflow-y: auto; flex: 1; }
-
-        .detail-section { margin-bottom: 18px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-        .detail-section-title { background: rgba(212,83,126,0.1); padding: 10px 16px; font-weight: 700; font-size: 0.95rem; border-bottom: 1px solid var(--border); }
-
-        .detail-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 10px 16px; border-bottom: 1px solid rgba(42,49,64,0.45); font-size: 0.9rem; }
-        .detail-row:last-child { border-bottom: none; }
-        .detail-row .label { color: var(--muted); flex-shrink: 0; min-width: 130px; }
-        .detail-row .value { font-weight: 600; text-align: left; word-break: break-word; }
-
-        .detail-img { max-height: 120px; max-width: 200px; border-radius: 8px; border: 1px solid var(--border); object-fit: contain; cursor: pointer; }
-
-        .modal-footer { padding: 16px 28px 22px; border-top: 1px solid var(--border); flex-shrink: 0; }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .modal-close { width: 100%; padding: 12px; border: none; border-radius: 10px; background: var(--primary); color: white; font-family: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
-
-        #logo-input { display: none; }
-
-        @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
-        @media (max-width: 560px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .page { padding: 16px; }
-            .header { position: static; }
-            th, td { padding: 12px 14px; }
-            .login-card { padding: 36px 24px 32px; }
+        * { box-sizing:border-box; }
+        body { margin:0; min-height:100vh; background: radial-gradient(ellipse 80% 50% at 100% 0%,rgba(212,83,126,.12),transparent 55%), radial-gradient(ellipse 60% 40% at 0% 100%,rgba(244,184,96,.08),transparent 50%), var(--bg); color:var(--text); font-family:'Cairo',sans-serif; line-height:1.6; }
+
+        /* ── Login ── */
+        #login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+        .login-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:48px 40px 40px; width:min(420px,100%); box-shadow:0 24px 64px rgba(0,0,0,.5); text-align:center; animation:fadeInUp .4s ease; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        .login-logo { width:110px; height:110px; border-radius:22px; object-fit:contain; margin:0 auto 22px; display:block; background:var(--primary-soft); border:2px solid rgba(212,83,126,.3); padding:8px; }
+        .login-logo-fallback { width:110px; height:110px; border-radius:22px; background:var(--primary-soft); border:2px solid rgba(212,83,126,.3); display:flex; align-items:center; justify-content:center; font-size:3rem; margin:0 auto 22px; }
+        .login-title { font-size:1.4rem; font-weight:800; background:linear-gradient(135deg,#fff 0%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0 0 6px; }
+        .login-subtitle { color:var(--muted); font-size:.9rem; margin:0 0 32px; }
+        .login-label { display:block; text-align:right; color:var(--muted); font-size:.85rem; font-weight:600; margin-bottom:8px; }
+        .login-input-wrap { position:relative; margin-bottom:20px; }
+        .login-input { width:100%; padding:14px 18px; padding-inline-start:48px; border-radius:10px; border:1px solid var(--border); background:var(--bg-soft); color:var(--text); font-family:inherit; font-size:1rem; outline:none; transition:border-color .2s,box-shadow .2s; letter-spacing:3px; }
+        .login-input::placeholder { letter-spacing:0; }
+        .login-input:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-soft); }
+        .login-input.shake { animation:shake .4s ease; border-color:var(--danger); }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
+        .toggle-pass { position:absolute; inset-inline-start:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer; font-size:1.1rem; padding:4px; transition:color .2s; }
+        .toggle-pass:hover { color:var(--text); }
+        .login-btn { width:100%; padding:14px; background:linear-gradient(135deg,var(--primary),#b8436b); color:white; border:none; border-radius:10px; font-family:inherit; font-size:1rem; font-weight:700; cursor:pointer; transition:transform .15s,box-shadow .2s; margin-top:4px; }
+        .login-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--primary-glow); }
+        .login-btn:active { transform:scale(.97); }
+        .login-error { color:#fca5a5; font-size:.85rem; margin-top:14px; min-height:20px; opacity:0; transition:opacity .2s; }
+        .login-error.show { opacity:1; }
+
+        /* ── Dashboard ── */
+        #dashboard { display:none; }
+        .page { max-width:1280px; margin:0 auto; padding:24px; }
+        .header { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:18px 24px; background:linear-gradient(135deg,rgba(24,28,36,.98),rgba(30,32,37,.95)); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); position:sticky; top:16px; z-index:100; backdrop-filter:blur(12px); }
+        .header::after { content:""; position:absolute; inset-inline:24px; bottom:0; height:2px; background:linear-gradient(90deg,transparent,var(--primary),var(--accent),transparent); border-radius:999px; }
+        .brand { display:flex; align-items:center; gap:16px; }
+        .logo-wrap { position:relative; width:64px; height:64px; border-radius:16px; background:var(--primary-soft); border:2px dashed rgba(212,83,126,.45); display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer; transition:transform .2s,border-color .2s,box-shadow .2s; flex-shrink:0; }
+        .logo-wrap:hover { transform:translateY(-2px); border-color:var(--primary); box-shadow:0 8px 24px var(--primary-glow); }
+        .logo-wrap img { width:100%; height:100%; object-fit:contain; padding:6px; }
+        .logo-placeholder { font-size:28px; opacity:.7; }
+        .logo-hint { position:absolute; bottom:0; inset-inline:0; background:rgba(0,0,0,.65); color:#fff; font-size:9px; text-align:center; padding:2px 4px; opacity:0; transition:opacity .2s; }
+        .logo-wrap:hover .logo-hint { opacity:1; }
+        .brand-text h1 { margin:0; font-size:1.35rem; font-weight:800; background:linear-gradient(135deg,#fff 0%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .brand-text p { margin:2px 0 0; color:var(--muted); font-size:.85rem; }
+        .header-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+        .search-box { position:relative; }
+        .search-box input { width:260px; max-width:100%; padding:11px 42px 11px 16px; border-radius:10px; border:1px solid var(--border); background:var(--bg-soft); color:var(--text); font-family:inherit; font-size:.9rem; outline:none; transition:border-color .2s,box-shadow .2s; }
+        .search-box input:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-soft); }
+        .search-box span { position:absolute; inset-inline-end:14px; top:50%; transform:translateY(-50%); opacity:.5; pointer-events:none; }
+        .badge-live { display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:999px; background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.3); color:#86efac; font-size:.8rem; font-weight:600; }
+        .badge-live::before { content:""; width:8px; height:8px; border-radius:50%; background:var(--success); animation:pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.85)} }
+        .btn-logout { padding:8px 16px; border-radius:8px; border:1px solid rgba(239,68,68,.3); background:rgba(239,68,68,.1); color:#fca5a5; font-family:inherit; font-size:.85rem; font-weight:600; cursor:pointer; transition:background .2s,border-color .2s; }
+        .btn-logout:hover { background:rgba(239,68,68,.2); border-color:rgba(239,68,68,.5); }
+
+        .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin:28px 0; }
+        .stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:22px 20px; display:flex; align-items:center; gap:16px; transition:transform .2s,background .2s,border-color .2s; box-shadow:0 4px 20px rgba(0,0,0,.15); }
+        .stat-card:hover { transform:translateY(-3px); background:var(--card-hover); border-color:rgba(212,83,126,.25); }
+        .stat-icon { width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+        .stat-icon.total  { background:rgba(59,130,246,.15); }
+        .stat-icon.male   { background:rgba(96,165,250,.15); }
+        .stat-icon.female { background:rgba(212,83,126,.15); }
+        .stat-icon.baby   { background:rgba(244,184,96,.15); }
+        .stat-info .stat-num   { font-size:1.75rem; font-weight:800; line-height:1.1; }
+        .stat-info .stat-label { color:var(--muted); font-size:.85rem; margin-top:2px; }
+
+        .section-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+        .section-head h2 { margin:0; font-size:1.15rem; font-weight:700; }
+        .section-head span { color:var(--muted); font-size:.85rem; }
+
+        .table-wrap { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
+        table { width:100%; border-collapse:collapse; }
+        thead { background:rgba(255,255,255,.03); }
+        th { padding:16px 18px; text-align:right; font-size:.8rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--border); }
+        td { padding:14px 18px; border-bottom:1px solid rgba(42,49,64,.6); font-size:.93rem; }
+        tbody tr { transition:background .15s; }
+        tbody tr:hover { background:rgba(212,83,126,.04); }
+        tbody tr:last-child td { border-bottom:none; }
+
+        .gender-tag { display:inline-block; padding:4px 12px; border-radius:999px; font-size:.8rem; font-weight:600; }
+        .gender-tag.male   { background:rgba(59,130,246,.15); color:#93c5fd; }
+        .gender-tag.female { background:rgba(212,83,126,.15); color:#f9a8d4; }
+
+        .actions { display:flex; gap:6px; flex-wrap:wrap; }
+        .btn { border:none; padding:7px 12px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:.8rem; font-weight:600; color:white; transition:transform .15s,box-shadow .15s; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+        .btn:active { transform:scale(.96); }
+        .btn-view    { background:linear-gradient(135deg,#2563eb,#3b82f6); }
+        .btn-pledge  { background:linear-gradient(135deg,#7c3aed,#8b5cf6); }
+        .btn-edit    { background:linear-gradient(135deg,#d97706,#f59e0b); }
+        .btn-delete  { background:linear-gradient(135deg,#dc2626,#ef4444); }
+        .btn:hover   { box-shadow:0 4px 14px rgba(0,0,0,.3); }
+
+        .empty-state { text-align:center; padding:60px 24px; color:var(--muted); }
+        .empty-state .icon { font-size:3rem; margin-bottom:12px; opacity:.5; }
+
+        /* ── Modal base ── */
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:200; padding:20px; }
+        .modal-overlay.open { display:flex; }
+        .modal { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); width:min(860px,96vw); max-height:90vh; display:flex; flex-direction:column; box-shadow:var(--shadow); animation:slideUp .25s ease; }
+        @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .modal-header { padding:22px 28px 16px; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .modal-header h3 { margin:0 0 4px; font-size:1.25rem; }
+        .modal-header p  { margin:0; color:var(--muted); font-size:.85rem; }
+        .modal-body { padding:8px 28px 20px; overflow-y:auto; flex:1; }
+        .modal-footer { padding:16px 28px 22px; border-top:1px solid var(--border); flex-shrink:0; display:flex; gap:10px; }
+        .modal-close { flex:1; padding:12px; border:none; border-radius:10px; background:var(--primary); color:white; font-family:inherit; font-size:.95rem; font-weight:700; cursor:pointer; }
+
+        /* Detail sections */
+        .detail-section { margin-bottom:18px; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+        .detail-section-title { background:rgba(212,83,126,.1); padding:10px 16px; font-weight:700; font-size:.95rem; border-bottom:1px solid var(--border); }
+        .detail-row { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:10px 16px; border-bottom:1px solid rgba(42,49,64,.45); font-size:.9rem; }
+        .detail-row:last-child { border-bottom:none; }
+        .detail-row .label { color:var(--muted); flex-shrink:0; min-width:130px; }
+        .detail-row .value { font-weight:600; text-align:left; word-break:break-word; }
+        .detail-img { max-height:140px; max-width:220px; border-radius:8px; border:1px solid var(--border); object-fit:contain; cursor:pointer; transition:transform .2s; }
+        .detail-img:hover { transform:scale(1.03); }
+
+        /* Pledge modal */
+        #pledge-modal .modal { width:min(600px,96vw); }
+        .pledge-content { padding:24px 28px; line-height:2; font-size:1rem; }
+        .pledge-content strong { color:var(--accent); }
+        .pledge-sig { margin-top:20px; padding:14px 18px; background:rgba(212,83,126,.08); border:1px solid rgba(212,83,126,.3); border-radius:10px; font-size:1.1rem; font-weight:700; text-align:center; color:var(--accent); }
+
+        /* Edit modal */
+        #edit-modal .modal { width:min(800px,96vw); }
+        .edit-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; padding:16px 28px; }
+        .edit-group { display:flex; flex-direction:column; gap:6px; }
+        .edit-group.full { grid-column:1/-1; }
+        .edit-group label { color:var(--muted); font-size:.82rem; font-weight:600; }
+        .edit-group input, .edit-group select { padding:10px 13px; background:var(--bg-soft); border:1px solid var(--border); color:var(--text); border-radius:8px; font-family:inherit; font-size:.9rem; outline:none; transition:border-color .2s; }
+        .edit-group input:focus, .edit-group select:focus { border-color:var(--primary); }
+        .edit-section-title { grid-column:1/-1; color:var(--primary); font-size:.95rem; font-weight:700; padding-top:8px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+        .btn-save { flex:2; padding:12px; border:none; border-radius:10px; background:linear-gradient(135deg,#16a34a,#22c55e); color:white; font-family:inherit; font-size:.95rem; font-weight:700; cursor:pointer; }
+
+        /* Image lightbox */
+        #lightbox { position:fixed; inset:0; background:rgba(0,0,0,.9); display:none; align-items:center; justify-content:center; z-index:500; cursor:zoom-out; }
+        #lightbox.open { display:flex; }
+        #lightbox img { max-width:90vw; max-height:90vh; border-radius:8px; object-fit:contain; }
+
+        #logo-input { display:none; }
+
+        @media(max-width:900px) { .stats-grid{grid-template-columns:repeat(2,1fr)} }
+        @media(max-width:640px) {
+            .stats-grid{grid-template-columns:1fr} .page{padding:16px} .header{position:static}
+            th,td{padding:10px 12px} .edit-grid{grid-template-columns:1fr} .login-card{padding:36px 24px 32px}
         }
     </style>
 </head>
 <body>
 
-<!-- ══ شاشة الدخول ══ -->
+<!-- ══ Login ══ -->
 <div id="login-screen">
     <div class="login-card">
         <img id="login-logo-img" class="login-logo" src="./wood.png" alt="شعار الحضانة"
-             onerror="this.style.display='none'; document.getElementById('login-logo-fallback').style.display='flex';">
+             onerror="this.style.display='none';document.getElementById('login-logo-fallback').style.display='flex'">
         <div class="login-logo-fallback" id="login-logo-fallback" style="display:none">🪵</div>
-
         <h2 class="login-title">حضانة نقار الخشب</h2>
         <p class="login-subtitle">لوحة تحكم الإدارة — يرجى إدخال كلمة المرور</p>
-
         <label class="login-label" for="password-input">🔒 كلمة المرور</label>
         <div class="login-input-wrap">
-            <input class="login-input" type="password" id="password-input"
-                   placeholder="أدخل كلمة المرور" autocomplete="current-password">
-            <button class="toggle-pass" id="toggle-pass" type="button" title="إظهار/إخفاء">👁️</button>
+            <input class="login-input" type="password" id="password-input" placeholder="أدخل كلمة المرور" autocomplete="current-password">
+            <button class="toggle-pass" id="toggle-pass" type="button">👁️</button>
         </div>
-
         <button class="login-btn" id="login-btn">دخول إلى لوحة التحكم</button>
-        <p class="login-error" id="login-error">❌ كلمة المرور غير صحيحة، حاول مجدداً</p>
+        <p class="login-error" id="login-error">❌ كلمة المرور غير صحيحة</p>
     </div>
 </div>
 
-<!-- ══ لوحة التحكم ══ -->
+<!-- ══ Dashboard ══ -->
 <div id="dashboard">
 <div class="page">
     <header class="header">
         <div class="brand">
-            <div class="logo-wrap" id="logo-area" title="انقر لرفع الشعار">
-                <img id="logo-img" alt="شعار الحضانة" hidden>
+            <div class="logo-wrap" id="logo-area">
+                <img id="logo-img" alt="شعار" hidden>
                 <span class="logo-placeholder" id="logo-fallback">🪵</span>
                 <span class="logo-hint">رفع شعار</span>
             </div>
@@ -515,343 +204,410 @@
     </header>
 
     <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon total">👥</div>
-            <div class="stat-info">
-                <div class="stat-num" id="total-count">0</div>
-                <div class="stat-label">إجمالي الطلاب</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon male">👦</div>
-            <div class="stat-info">
-                <div class="stat-num" id="male-count">0</div>
-                <div class="stat-label">عدد الذكور</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon female">👧</div>
-            <div class="stat-info">
-                <div class="stat-num" id="female-count">0</div>
-                <div class="stat-label">عدد الإناث</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon baby">🍼</div>
-            <div class="stat-info">
-                <div class="stat-num" id="baby-count">0</div>
-                <div class="stat-label">عدد الرضع (&lt; 1 سنة)</div>
-            </div>
-        </div>
+        <div class="stat-card"><div class="stat-icon total">👥</div><div class="stat-info"><div class="stat-num" id="total-count">0</div><div class="stat-label">إجمالي الطلاب</div></div></div>
+        <div class="stat-card"><div class="stat-icon male">👦</div><div class="stat-info"><div class="stat-num" id="male-count">0</div><div class="stat-label">عدد الذكور</div></div></div>
+        <div class="stat-card"><div class="stat-icon female">👧</div><div class="stat-info"><div class="stat-num" id="female-count">0</div><div class="stat-label">عدد الإناث</div></div></div>
+        <div class="stat-card"><div class="stat-icon baby">🍼</div><div class="stat-info"><div class="stat-num" id="baby-count">0</div><div class="stat-label">عدد الرضع</div></div></div>
     </div>
 
     <div class="section-head">
         <h2>📋 قائمة المسجلين</h2>
         <span id="results-count">0 نتيجة</span>
     </div>
-
     <div class="table-wrap">
         <table>
-            <thead>
-                <tr>
-                    <th>الاسم</th>
-                    <th>الجنس</th>
-                    <th>هاتف الأب</th>
-                    <th>تاريخ التسجيل</th>
-                    <th>إجراءات</th>
-                </tr>
-            </thead>
+            <thead><tr>
+                <th>الاسم</th><th>الجنس</th><th>هاتف الأب</th><th>تاريخ التسجيل</th><th>إجراءات</th>
+            </tr></thead>
             <tbody id="data-body"></tbody>
         </table>
-        <div class="empty-state" id="empty-state" hidden>
-            <div class="icon">📭</div>
-            <p>لا توجد تسجيلات حتى الآن</p>
-        </div>
+        <div class="empty-state" id="empty-state" hidden><div class="icon">📭</div><p>لا توجد تسجيلات حتى الآن</p></div>
     </div>
 </div>
 </div>
 
-<div class="modal-overlay" id="modal">
+<!-- ══ View Modal ══ -->
+<div class="modal-overlay" id="view-modal">
     <div class="modal">
-        <div class="modal-header">
-            <h3 id="modal-title">👁️ ملف الطالب</h3>
-            <p id="modal-subtitle"></p>
+        <div class="modal-header"><h3 id="view-title">👁️ ملف الطالب</h3><p id="view-subtitle"></p></div>
+        <div class="modal-body" id="view-body"></div>
+        <div class="modal-footer"><button class="modal-close" id="view-close">إغلاق</button></div>
+    </div>
+</div>
+
+<!-- ══ Pledge Modal ══ -->
+<div class="modal-overlay" id="pledge-modal">
+    <div class="modal">
+        <div class="modal-header"><h3>📝 إقرار وتعهد ولي الأمر</h3><p id="pledge-subtitle"></p></div>
+        <div class="modal-body">
+            <div class="pledge-content">
+                <p>أقر أنا ولي أمر الطفل <strong id="pledge-child"></strong> بصحة كافة البيانات والمعلومات الواردة في استمارة التسجيل الإلكترونية، وأتعهد بسداد كافة الرسوم والمستحقات الخاصة بالحضانة في مواعيدها المحددة دون تأخير.</p>
+                <div class="pledge-sig" id="pledge-sig">—</div>
+            </div>
         </div>
-        <div id="modal-body"></div>
+        <div class="modal-footer"><button class="modal-close" id="pledge-close">إغلاق</button></div>
+    </div>
+</div>
+
+<!-- ══ Edit Modal ══ -->
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+        <div class="modal-header"><h3>✏️ تعديل بيانات الطالب</h3><p id="edit-subtitle"></p></div>
+        <div class="modal-body" style="padding:0">
+            <div class="edit-grid">
+                <div class="edit-section-title">👶 معلومات الطفل</div>
+                <div class="edit-group full"><label>الاسم الرباعي</label><input id="e-childName"></div>
+                <div class="edit-group"><label>تاريخ الميلاد</label><input type="date" id="e-birthDate"></div>
+                <div class="edit-group"><label>العمر</label>
+                    <select id="e-age">
+                        <option value="أقل من سنة">أقل من سنة</option>
+                        <option value="سنة - سنتين">سنة إلى سنتين</option>
+                        <option value="سنتين - 3 سنوات">سنتين إلى 3 سنوات</option>
+                        <option value="3 - 4 سنوات">3 إلى 4 سنوات</option>
+                        <option value="4 - 5 سنوات">4 إلى 5 سنوات</option>
+                    </select>
+                </div>
+                <div class="edit-group"><label>الجنس</label>
+                    <select id="e-gender"><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select>
+                </div>
+                <div class="edit-group"><label>الديانة</label><input id="e-religion"></div>
+
+                <div class="edit-section-title">👔 معلومات الأب</div>
+                <div class="edit-group"><label>اسم الأب</label><input id="e-fatherName"></div>
+                <div class="edit-group"><label>هاتف الأب</label><input id="e-fatherPhone"></div>
+                <div class="edit-group"><label>جنسية الأب</label><input id="e-fatherNationality"></div>
+                <div class="edit-group"><label>رقم هوية الأب</label><input id="e-fatherNationalId"></div>
+                <div class="edit-group"><label>عمل الأب</label><input id="e-fatherJob"></div>
+
+                <div class="edit-section-title">👩 معلومات الأم</div>
+                <div class="edit-group"><label>اسم الأم</label><input id="e-motherName"></div>
+                <div class="edit-group"><label>هاتف الأم</label><input id="e-motherPhone"></div>
+                <div class="edit-group"><label>جنسية الأم</label><input id="e-motherNationality"></div>
+                <div class="edit-group"><label>رقم هوية الأم</label><input id="e-motherNationalId"></div>
+                <div class="edit-group"><label>عمل الأم</label><input id="e-motherJob"></div>
+
+                <div class="edit-section-title">📁 وثائق وجهات الاتصال</div>
+                <div class="edit-group"><label>رقم دفتر العائلة</label><input id="e-familyBook"></div>
+                <div class="edit-group"><label>الحالة الاجتماعية</label>
+                    <select id="e-maritalStatus">
+                        <option value="متزوجين">متزوجين</option>
+                        <option value="منفصلين">منفصلين</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+                <div class="edit-group full"><label>عنوان السكن</label><input id="e-address"></div>
+                <div class="edit-group"><label>هاتف إضافي</label><input id="e-contactPhone2"></div>
+                <div class="edit-group"><label>هاتف الطوارئ</label><input id="e-emergencyPhone"></div>
+
+                <div class="edit-section-title">📅 الحضور</div>
+                <div class="edit-group"><label>بداية الحضور</label><input type="date" id="e-attendanceStart"></div>
+                <div class="edit-group"><label>نوع الاشتراك</label>
+                    <select id="e-attendanceFreq">
+                        <option value="شهري">شهري</option>
+                        <option value="اسبوعي">أسبوعي</option>
+                        <option value="يومي">يومي</option>
+                    </select>
+                </div>
+                <div class="edit-group full"><label>وقت الحضور</label><input id="e-attendanceTime"></div>
+            </div>
+        </div>
         <div class="modal-footer">
-            <button class="modal-close" id="modal-close">إغلاق</button>
+            <button class="modal-close" id="edit-close">إلغاء</button>
+            <button class="btn-save" id="edit-save">💾 حفظ التعديلات</button>
         </div>
     </div>
 </div>
+
+<!-- ══ Lightbox ══ -->
+<div id="lightbox"><img id="lightbox-img" alt="صورة مكبرة"></div>
 
 <input type="file" id="logo-input" accept="image/*">
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, deleteDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    /* ══ كلمة المرور ══ */
+    /* ── Auth ── */
     const PASSWORD = "naqqar2026";
     const SESSION_KEY = "naqqar_auth";
-
     const loginScreen = document.getElementById("login-screen");
     const dashboard   = document.getElementById("dashboard");
     const passInput   = document.getElementById("password-input");
-    const loginBtn    = document.getElementById("login-btn");
     const loginError  = document.getElementById("login-error");
-    const togglePass  = document.getElementById("toggle-pass");
-    const logoutBtn   = document.getElementById("logout-btn");
 
-    function showDashboard() {
-        loginScreen.style.display = "none";
-        dashboard.style.display = "block";
-    }
+    const showDash  = () => { loginScreen.style.display="none"; dashboard.style.display="block"; };
+    const showLogin = () => { sessionStorage.removeItem(SESSION_KEY); dashboard.style.display="none"; loginScreen.style.display="flex"; passInput.value=""; };
 
-    function showLogin() {
-        sessionStorage.removeItem(SESSION_KEY);
-        dashboard.style.display = "none";
-        loginScreen.style.display = "flex";
-        passInput.value = "";
-    }
-
-    // تحقق من الجلسة عند التحميل
-    if (sessionStorage.getItem(SESSION_KEY) === "1") {
-        showDashboard();
-    }
+    if (sessionStorage.getItem(SESSION_KEY)==="1") showDash();
 
     function tryLogin() {
         if (passInput.value === PASSWORD) {
-            sessionStorage.setItem(SESSION_KEY, "1");
+            sessionStorage.setItem(SESSION_KEY,"1");
             loginError.classList.remove("show");
-            showDashboard();
+            showDash();
         } else {
             passInput.classList.remove("shake");
-            void passInput.offsetWidth; // إعادة تشغيل animation
+            void passInput.offsetWidth;
             passInput.classList.add("shake");
             loginError.classList.add("show");
             passInput.select();
         }
     }
-
-    loginBtn.addEventListener("click", tryLogin);
-    passInput.addEventListener("keydown", (e) => { if (e.key === "Enter") tryLogin(); });
+    document.getElementById("login-btn").addEventListener("click", tryLogin);
+    passInput.addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
     passInput.addEventListener("input", () => loginError.classList.remove("show"));
 
-    togglePass.addEventListener("click", () => {
-        if (passInput.type === "password") {
-            passInput.type = "text";
-            togglePass.textContent = "🙈";
-        } else {
-            passInput.type = "password";
-            togglePass.textContent = "👁️";
-        }
+    document.getElementById("toggle-pass").addEventListener("click", () => {
+        passInput.type = passInput.type==="password" ? "text" : "password";
+        document.getElementById("toggle-pass").textContent = passInput.type==="password" ? "👁️" : "🙈";
     });
+    document.getElementById("logout-btn").addEventListener("click", () => { if(confirm("هل تريد تسجيل الخروج؟")) showLogin(); });
 
-    logoutBtn.addEventListener("click", () => {
-        if (confirm("هل تريد تسجيل الخروج؟")) showLogin();
-    });
-
-    /* ══ Firebase ══ */
+    /* ── Firebase ── */
     const firebaseConfig = {
-        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-        authDomain: "woodpecker-508d8.firebaseapp.com",
-        projectId: "woodpecker-508d8",
-        storageBucket: "woodpecker-508d8.firebasestorage.app",
-        messagingSenderId: "434327620481",
-        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
+        apiKey:"AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
+        authDomain:"woodpecker-508d8.firebaseapp.com",
+        projectId:"woodpecker-508d8",
+        storageBucket:"woodpecker-508d8.firebasestorage.app",
+        messagingSenderId:"434327620481",
+        appId:"1:434327620481:web:99d8d5e0af9ae5eafa3680"
     };
-
-    const LOGO_PATH = "./wood.png";
-    const LOGO_STORAGE_KEY = "naqqar_admin_logo";
-    const COLLECTION = "registrations";
-
-    const RELATION = { father:"الأب", mother:"الأم", grandfather:"الجد", grandmother:"الجدة", uncle:"العم/الخال", aunt:"العمة/الخالة", sibling:"الأخ/الأخت", driver:"السائق", other:"أخرى" };
-    const RELIGION  = { muslim:"مسلم", christian:"مسيحي", other:"أخرى" };
-    const MARITAL   = { married:"متزوجان", divorced:"مطلقان", widowed:"أرمل/أرملة", other:"أخرى" };
-    const FEVER     = { medicine:"إعطاء خافض حرارة", contact:"الاتصال بالأهل", both:"كلاهما" };
-    const STRANGER  = { social:"اجتماعي", reserved:"مستنكر", scared:"خوف" };
-    const KIDS      = { plays:"يلعب معهم", reserved:"مستنكر", avoids:"ينفر منهم" };
-    const BATHROOM  = { yes:"مستقل", no:"يحتاج مساعدة", sometimes:"أحياناً" };
-    const FREQ      = { daily:"يومي", weekly:"أسبوعي", monthly:"شهري" };
-    const TIME      = { "8-1":"8:00 ص – 1:00 ظ", "8-3":"8:00 ص – 3:00 ظ", "8-5":"8:00 ص – 5:00 ظ", early:"الطيور المبكرة 7:00–5:00" };
-
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
+    const COLLECTION = "registrations";
 
     let allRecords = [];
     let searchQuery = "";
+    let editId = null;
 
-    const esc    = (s) => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-    const dash   = (v) => (v === null || v === undefined || v === "" ? "—" : v);
-    const yesNo  = (v, detail) => v === "yes" ? `نعم${detail ? " – "+detail : ""}` : v === "no" ? "لا" : dash(v);
-    const genderLabel = (g) => ({ male:"ذكر", female:"أنثى", ذكر:"ذكر", أنثى:"أنثى" }[g] || dash(g));
-    const isMale = (g) => g === "male" || g === "ذكر";
-    const getName  = (d) => d.childName || d.fullname || "—";
+    /* ── Helpers ── */
+    const esc = s => String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    const dash = v => (v===null||v===undefined||v===""?"—":v);
+    const genderLabel = g => ({male:"ذكر",female:"أنثى",ذكر:"ذكر",أنثى:"أنثى"}[g]||dash(g));
+    const isMale = g => g==="male"||g==="ذكر";
+    const getName = d => d.childName||d.fullname||"—";
+    const yesNo = (v,det) => v==="yes"?`نعم${det?" – "+det:""}`:v==="no"?"لا":dash(v);
 
+    /* ── Lightbox ── */
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
+    function openLightbox(src) { lightboxImg.src=src; lightbox.classList.add("open"); }
+
+    /* ── renderValue ── */
     function renderValue(val) {
-        if (!val || val === "—") return `<span class="value">—</span>`;
-        if (typeof val === "string" && val.startsWith("data:image"))
-            return `<img class="detail-img" src="${val}" alt="مرفق" onclick="window.open(this.src,'_blank')">`;
+        if (!val || val==="—") return `<span class="value">—</span>`;
+        if (typeof val==="string" && val.startsWith("data:image"))
+            return `<img class="detail-img" src="${val}" alt="مرفق" onclick="document.getElementById('lightbox-img').src=this.src;document.getElementById('lightbox').classList.add('open')">`;
         return `<span class="value">${esc(val)}</span>`;
     }
 
+    /* ── Build sections for view modal ── */
     function buildSections(d) {
-        const pickup = (n) => {
-            const name = d[`pickup${n}Name`];
-            const rel  = d[`pickup${n}Relation`];
-            return name ? `${name} (${RELATION[rel] || rel || ""})` : "";
+        const pickup = n => {
+            const name=d[`pickup${n}Name`], rel=d[`pickup${n}Relation`], ph=d[`pickup${n}Phone`];
+            return name ? `${name}${rel?" ("+rel+")":""}${ph?" – "+ph:""}` : "";
         };
-        const attTime = TIME[d.attendanceTime] || (d.attendanceTime === "custom" ? d.attendanceTimeCustom : d.attendanceTime || d.time_slot || "");
-
         return [
             { title:"👶 معلومات الطفل", rows:[
-                ["الاسم الرباعي", getName(d)],
-                ["تاريخ الميلاد", d.birthDate || d.dob],
-                ["العمر", d.age],
-                ["الجنس", genderLabel(d.gender)],
-                ["الديانة", RELIGION[d.religion] || d.religion],
+                ["الاسم الرباعي",getName(d)],["تاريخ الميلاد",d.birthDate||d.dob],
+                ["العمر",d.age],["الجنس",genderLabel(d.gender)],["الديانة",d.religion],
+                ["رقم شهادة الميلاد",d.birthCertNo],["صورة شهادة الميلاد",d.birthCertImage],
             ]},
             { title:"👔 معلومات الأب", rows:[
-                ["الاسم", d.fatherName || d.father_name],
-                ["الجنسية", d.fatherNationality || d.father_nationality],
-                ["رقم الوطني", d.fatherNationalId || d.father_id],
-                ["الهاتف", d.fatherPhone || d.phone],
-                ["العمل", d.fatherJob || d.father_job],
+                ["الاسم",d.fatherName||d.father_name],["الجنسية",d.fatherNationality||d.father_nationality],
+                ["رقم الهوية",d.fatherNationalId||d.father_id],["الهاتف",d.fatherPhone||d.phone],
+                ["العمل",d.fatherJob||d.father_job],["صورة الهوية",d.fatherIdImage],
             ]},
             { title:"👩 معلومات الأم", rows:[
-                ["الاسم", d.motherName || d.mother_name],
-                ["الجنسية", d.motherNationality || d.mother_nationality],
-                ["رقم الوطني", d.motherNationalId || d.mother_id],
-                ["الهاتف", d.motherPhone || d.mother_phone],
-                ["العمل", d.motherJob || d.mother_job],
+                ["الاسم",d.motherName||d.mother_name],["الجنسية",d.motherNationality||d.mother_nationality],
+                ["رقم الهوية",d.motherNationalId||d.mother_id],["الهاتف",d.motherPhone||d.mother_phone],
+                ["العمل",d.motherJob||d.mother_job],["صورة الهوية",d.motherIdImage],
             ]},
             { title:"📁 وثائق العائلة والاتصال", rows:[
-                ["رقم دفتر العائلة", d.familyBook || d.family_book_no],
-                ["الحالة الاجتماعية", MARITAL[d.maritalStatus] || d.maritalStatus || d.marital_status],
-                ["عنوان السكن", d.address],
-                ["هاتف التواصل", d.contactPhone || d.work_phone],
-                ["هاتف الطوارئ", d.contactPhone2 || d.emergency_phone],
+                ["رقم دفتر العائلة",d.familyBook||d.family_book_no],["صورة دفتر العائلة",d.familyBookImage],
+                ["الحالة الاجتماعية",d.maritalStatus||d.marital_status],["عنوان السكن",d.address],
+                ["هاتف إضافي",d.contactPhone2||d.work_phone],["هاتف الطوارئ",d.emergencyPhone||d.emergency_phone],
             ]},
             { title:"💊 المعلومات الصحية", rows:[
-                ["مرض مزمن", yesNo(d.chronicDisease, d.chronicDiseaseDetail)],
-                ["حساسية", yesNo(d.allergy, d.allergyDetail)],
-                ["نظام غذائي خاص", yesNo(d.specialDiet, d.specialDietDetail)],
-                ["ملاحظات صحية", d.notes],
-                ["عند ارتفاع الحرارة", FEVER[d.feverAction] || d.feverAction || d.fever_action],
+                ["مرض مزمن",yesNo(d.chronicDisease,d.chronicDiseaseDetail)],
+                ["حساسية",yesNo(d.allergy,d.allergyDetail)],
+                ["نظام غذائي خاص",yesNo(d.specialDiet,d.specialDietDetail)],
+                ["عند ارتفاع الحرارة",d.feverAction||d.fever_action],
+                ["ملاحظات",d.notes],
             ]},
             { title:"🌟 معلومات شخصية", rows:[
-                ["الطعام المفضل", d.favFood || d.favorite_food],
-                ["علاقة بالغرباء", STRANGER[d.strangerRelation] || d.strangerRelation || d.strangers_relation],
-                ["علاقة بالأطفال", KIDS[d.kidsRelation] || d.kidsRelation || d.children_relation],
-                ["دورة المياه", d.bathroomSelf || d.toilet_independent || d.toilet_status],
-                ["التعبير عن الحاجة", d.bathroomExpression || d.toilet_expression],
+                ["الطعام المفضل",d.favFood||d.favorite_food],
+                ["علاقة بالغرباء",d.strangerRelation||d.strangers_relation],
+                ["علاقة بالأطفال",d.kidsRelation||d.children_relation],
+                ["دورة المياه",d.bathroomSelf||d.toilet_independent],
+                ["التعبير عن الحاجة",d.bathroomExpression||d.toilet_expression],
             ]},
             { title:"📅 التسجيل والحضور", rows:[
-                ["بداية الحضور", d.attendanceStart || d.start_date],
-                ["أيام الحضور", Array.isArray(d.attendanceDays) ? d.attendanceDays.join("، ") : (d.attendanceDays || d.selected_days)],
-                ["نوع الاشتراك", FREQ[d.attendanceFreq] || d.attendanceFreq || d.subscription_type],
-                ["وقت الحضور", attTime],
-                ["تاريخ التسجيل", d.registrationDate || d.form_date],
+                ["بداية الحضور",d.attendanceStart||d.start_date],
+                ["أيام الحضور",Array.isArray(d.attendanceDays)?d.attendanceDays.join("، "):(d.attendanceDays||d.selected_days)],
+                ["نوع الاشتراك",d.attendanceFreq||d.subscription_type],
+                ["وقت الحضور",d.attendanceTime||d.time_slot],
+                ["تاريخ التسجيل",d.registrationDate||d.form_date],
             ]},
-            { title:"🚗 الأشخاص المسموح لهم بالاصطحاب", rows:[
-                ["الشخص 1", pickup(1) || d.pickup_persons],
-                ["الشخص 2", pickup(2)],
-                ["الشخص 3", pickup(3)],
+            { title:"🚗 أشخاص الاصطحاب", rows:[
+                ["الشخص 1",pickup(1)||d.pickup_persons],["الشخص 2",pickup(2)],["الشخص 3",pickup(3)],
             ]},
         ];
     }
 
-    function renderSection(section) {
-        const rows = section.rows.filter(([, v]) => v && v !== "—" && v !== "");
+    function renderSection(sec) {
+        const rows = sec.rows.filter(([,v]) => v&&v!=="—"&&v!=="");
         if (!rows.length) return "";
-        return `<div class="detail-section">
-            <div class="detail-section-title">${section.title}</div>
-            ${rows.map(([label, val]) => `
-                <div class="detail-row">
-                    <span class="label">${label}</span>
-                    ${renderValue(val)}
-                </div>`).join("")}
-        </div>`;
+        return `<div class="detail-section"><div class="detail-section-title">${sec.title}</div>${
+            rows.map(([l,v]) => `<div class="detail-row"><span class="label">${l}</span>${renderValue(v)}</div>`).join("")
+        }</div>`;
     }
 
-    /* ── Logo ── */
-    const logoArea    = document.getElementById("logo-area");
-    const logoImg     = document.getElementById("logo-img");
-    const logoFallback = document.getElementById("logo-fallback");
-    const logoInput   = document.getElementById("logo-input");
-
-    function showLogo(src) {
-        logoImg.src = src;
-        logoImg.hidden = false;
-        if (logoFallback) logoFallback.hidden = true;
+    /* ── View Modal ── */
+    const viewModal = document.getElementById("view-modal");
+    function openView(id) {
+        const d = allRecords.find(r=>r.id===id); if(!d) return;
+        document.getElementById("view-title").textContent = `🧒 ${getName(d)}`;
+        document.getElementById("view-subtitle").textContent = d.registrationDate ? `تاريخ التسجيل: ${d.registrationDate}` : "";
+        document.getElementById("view-body").innerHTML = buildSections(d).map(renderSection).join("") || `<p style="color:var(--muted);text-align:center;padding:24px">لا توجد بيانات</p>`;
+        viewModal.classList.add("open");
     }
+    document.getElementById("view-close").addEventListener("click", () => viewModal.classList.remove("open"));
+    viewModal.addEventListener("click", e => { if(e.target===viewModal) viewModal.classList.remove("open"); });
 
-    function initLogo() {
-        const saved = localStorage.getItem(LOGO_STORAGE_KEY);
-        if (saved) { showLogo(saved); return; }
-        if (LOGO_PATH) {
-            const img = new Image();
-            img.onload = () => showLogo(LOGO_PATH);
-            img.onerror = () => {};
-            img.src = LOGO_PATH;
+    /* ── Pledge Modal ── */
+    const pledgeModal = document.getElementById("pledge-modal");
+    function openPledge(id) {
+        const d = allRecords.find(r=>r.id===id); if(!d) return;
+        document.getElementById("pledge-subtitle").textContent = `ولي أمر: ${getName(d)}`;
+        document.getElementById("pledge-child").textContent = getName(d);
+        document.getElementById("pledge-sig").textContent = d.parentSignature || d.parent_signature || "— لم يُوقّع —";
+        pledgeModal.classList.add("open");
+    }
+    document.getElementById("pledge-close").addEventListener("click", () => pledgeModal.classList.remove("open"));
+    pledgeModal.addEventListener("click", e => { if(e.target===pledgeModal) pledgeModal.classList.remove("open"); });
+
+    /* ── Edit Modal ── */
+    const editModal = document.getElementById("edit-modal");
+    function openEdit(id) {
+        const d = allRecords.find(r=>r.id===id); if(!d) return;
+        editId = id;
+        document.getElementById("edit-subtitle").textContent = getName(d);
+        // fill fields
+        const f = (elId, val) => { const el=document.getElementById(elId); if(el) el.value=val||""; };
+        f("e-childName",    d.childName||d.fullname);
+        f("e-birthDate",    d.birthDate||d.dob);
+        f("e-age",          d.age);
+        f("e-gender",       d.gender);
+        f("e-religion",     d.religion);
+        f("e-fatherName",   d.fatherName||d.father_name);
+        f("e-fatherPhone",  d.fatherPhone||d.phone);
+        f("e-fatherNationality", d.fatherNationality||d.father_nationality);
+        f("e-fatherNationalId",  d.fatherNationalId||d.father_id);
+        f("e-fatherJob",    d.fatherJob||d.father_job);
+        f("e-motherName",   d.motherName||d.mother_name);
+        f("e-motherPhone",  d.motherPhone||d.mother_phone);
+        f("e-motherNationality", d.motherNationality||d.mother_nationality);
+        f("e-motherNationalId",  d.motherNationalId||d.mother_id);
+        f("e-motherJob",    d.motherJob||d.mother_job);
+        f("e-familyBook",   d.familyBook||d.family_book_no);
+        f("e-maritalStatus",d.maritalStatus||d.marital_status);
+        f("e-address",      d.address);
+        f("e-contactPhone2",d.contactPhone2||d.work_phone);
+        f("e-emergencyPhone",d.emergencyPhone||d.emergency_phone);
+        f("e-attendanceStart",d.attendanceStart||d.start_date);
+        f("e-attendanceFreq",d.attendanceFreq||d.subscription_type);
+        f("e-attendanceTime",d.attendanceTime||d.time_slot);
+        editModal.classList.add("open");
+    }
+    document.getElementById("edit-close").addEventListener("click", () => editModal.classList.remove("open"));
+    editModal.addEventListener("click", e => { if(e.target===editModal) editModal.classList.remove("open"); });
+
+    document.getElementById("edit-save").addEventListener("click", async () => {
+        if (!editId) return;
+        const g = id => document.getElementById(id)?.value||"";
+        const updates = {
+            childName:         g("e-childName"),
+            birthDate:         g("e-birthDate"),
+            age:               g("e-age"),
+            gender:            g("e-gender"),
+            religion:          g("e-religion"),
+            fatherName:        g("e-fatherName"),
+            fatherPhone:       g("e-fatherPhone"),
+            fatherNationality: g("e-fatherNationality"),
+            fatherNationalId:  g("e-fatherNationalId"),
+            fatherJob:         g("e-fatherJob"),
+            motherName:        g("e-motherName"),
+            motherPhone:       g("e-motherPhone"),
+            motherNationality: g("e-motherNationality"),
+            motherNationalId:  g("e-motherNationalId"),
+            motherJob:         g("e-motherJob"),
+            familyBook:        g("e-familyBook"),
+            maritalStatus:     g("e-maritalStatus"),
+            address:           g("e-address"),
+            contactPhone2:     g("e-contactPhone2"),
+            emergencyPhone:    g("e-emergencyPhone"),
+            attendanceStart:   g("e-attendanceStart"),
+            attendanceFreq:    g("e-attendanceFreq"),
+            attendanceTime:    g("e-attendanceTime"),
+        };
+        try {
+            const saveBtn = document.getElementById("edit-save");
+            saveBtn.textContent = "جاري الحفظ...";
+            saveBtn.disabled = true;
+            await updateDoc(doc(db, COLLECTION, editId), updates);
+            editModal.classList.remove("open");
+        } catch(err) {
+            alert("حدث خطأ أثناء الحفظ");
+            console.error(err);
+        } finally {
+            const saveBtn = document.getElementById("edit-save");
+            saveBtn.textContent = "💾 حفظ التعديلات";
+            saveBtn.disabled = false;
         }
-    }
-
-    logoArea.addEventListener("click", () => logoInput.click());
-    logoInput.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (file.size > 2 * 1024 * 1024) { alert("حجم الشعار يجب أن يكون أقل من 2MB"); return; }
-        const reader = new FileReader();
-        reader.onload = (ev) => { localStorage.setItem(LOGO_STORAGE_KEY, ev.target.result); showLogo(ev.target.result); };
-        reader.readAsDataURL(file);
     });
-    initLogo();
-
-    /* ── Modal ── */
-    const modal     = document.getElementById("modal");
-    const modalBody = document.getElementById("modal-body");
-
-    function openModal(id) {
-        const d = allRecords.find((r) => r.id === id);
-        if (!d) return;
-        document.getElementById("modal-title").textContent = `🧒 ${getName(d)}`;
-        document.getElementById("modal-subtitle").textContent = d.registrationDate ? `تاريخ التسجيل: ${d.registrationDate}` : "";
-        modalBody.innerHTML = buildSections(d).map(renderSection).join("") || `<p style="color:var(--muted);text-align:center;padding:24px">لا توجد بيانات تفصيلية</p>`;
-        modal.classList.add("open");
-    }
-
-    document.getElementById("modal-close").addEventListener("click", () => modal.classList.remove("open"));
-    modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
 
     /* ── Delete ── */
     async function handleDelete(id, name) {
         if (!confirm(`هل تريد حذف تسجيل "${name}"؟`)) return;
-        try {
-            await deleteDoc(doc(db, COLLECTION, id));
-        } catch (err) {
-            alert("حدث خطأ أثناء الحذف");
-            console.error(err);
-        }
+        try { await deleteDoc(doc(db, COLLECTION, id)); }
+        catch(err) { alert("حدث خطأ أثناء الحذف"); console.error(err); }
     }
 
+    /* ── Logo ── */
+    const LOGO_PATH = "./wood.png";
+    const LOGO_KEY  = "naqqar_admin_logo";
+    const logoArea  = document.getElementById("logo-area");
+    const logoImg   = document.getElementById("logo-img");
+    const logoFb    = document.getElementById("logo-fallback");
+    const logoInput = document.getElementById("logo-input");
+
+    function showLogo(src) { logoImg.src=src; logoImg.hidden=false; if(logoFb) logoFb.hidden=true; }
+    function initLogo() {
+        const saved = localStorage.getItem(LOGO_KEY);
+        if (saved) { showLogo(saved); return; }
+        const img=new Image(); img.onload=()=>showLogo(LOGO_PATH); img.onerror=()=>{}; img.src=LOGO_PATH;
+    }
+    logoArea.addEventListener("click", () => logoInput.click());
+    logoInput.addEventListener("change", e => {
+        const file=e.target.files[0]; if(!file) return;
+        if(file.size>2*1024*1024){alert("الشعار يجب أن يكون أقل من 2MB");return;}
+        const r=new FileReader(); r.onload=ev=>{localStorage.setItem(LOGO_KEY,ev.target.result);showLogo(ev.target.result);}; r.readAsDataURL(file);
+    });
+    initLogo();
+
     /* ── Search ── */
-    document.getElementById("search-input").addEventListener("input", (e) => {
-        searchQuery = e.target.value.trim().toLowerCase();
-        renderTable(allRecords);
+    document.getElementById("search-input").addEventListener("input", e => {
+        searchQuery=e.target.value.trim().toLowerCase(); renderTable(allRecords);
     });
 
+    /* ── Render Table ── */
     function renderTable(records) {
-        const filtered = records.filter((d) => {
+        const filtered = records.filter(d => {
             if (!searchQuery) return true;
-            const haystack = [
-                getName(d), d.fatherName, d.father_name,
-                d.motherName, d.mother_name,
-                d.fatherPhone, d.phone,
-                d.motherPhone, d.mother_phone,
-                d.contactPhone,
-            ].filter(Boolean).join(" ").toLowerCase();
-            return haystack.includes(searchQuery);
+            return [getName(d),d.fatherName,d.father_name,d.motherName,d.mother_name,d.fatherPhone,d.phone,d.motherPhone,d.mother_phone]
+                .filter(Boolean).join(" ").toLowerCase().includes(searchQuery);
         });
 
         const tbody = document.getElementById("data-body");
@@ -859,42 +615,43 @@
         tbody.innerHTML = "";
         document.getElementById("results-count").textContent = `${filtered.length} نتيجة`;
 
-        if (filtered.length === 0) { empty.hidden = false; return; }
+        if (!filtered.length) { empty.hidden=false; return; }
         empty.hidden = true;
 
-        filtered.forEach((d) => {
-            const male = isMale(d.gender);
-            const phone = d.fatherPhone || d.phone || "—";
-            const date  = d.registrationDate || d.form_date || "—";
+        filtered.forEach(d => {
+            const male  = isMale(d.gender);
+            const phone = d.fatherPhone||d.phone||"—";
+            const date  = d.registrationDate||d.form_date||"—";
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td><strong>${esc(getName(d))}</strong></td>
-                <td><span class="gender-tag ${male ? "male" : "female"}">${genderLabel(d.gender)}</span></td>
+                <td><span class="gender-tag ${male?"male":"female"}">${genderLabel(d.gender)}</span></td>
                 <td dir="ltr" style="text-align:right">${esc(phone)}</td>
                 <td>${esc(date)}</td>
                 <td>
                     <div class="actions">
                         <button class="btn btn-view"   data-id="${d.id}">👁️ عرض</button>
+                        <button class="btn btn-pledge" data-id="${d.id}">📝 إقرار</button>
+                        <button class="btn btn-edit"   data-id="${d.id}">✏️ تعديل</button>
                         <button class="btn btn-delete" data-id="${d.id}" data-name="${esc(getName(d))}">🗑️ حذف</button>
                     </div>
                 </td>`;
             tbody.appendChild(tr);
         });
 
-        tbody.querySelectorAll(".btn-view").forEach((btn) => {
-            btn.addEventListener("click", () => openModal(btn.dataset.id));
-        });
-        tbody.querySelectorAll(".btn-delete").forEach((btn) => {
-            btn.addEventListener("click", () => handleDelete(btn.dataset.id, btn.dataset.name));
-        });
+        tbody.querySelectorAll(".btn-view")  .forEach(b => b.addEventListener("click", () => openView(b.dataset.id)));
+        tbody.querySelectorAll(".btn-pledge").forEach(b => b.addEventListener("click", () => openPledge(b.dataset.id)));
+        tbody.querySelectorAll(".btn-edit")  .forEach(b => b.addEventListener("click", () => openEdit(b.dataset.id)));
+        tbody.querySelectorAll(".btn-delete").forEach(b => b.addEventListener("click", () => handleDelete(b.dataset.id, b.dataset.name)));
     }
 
+    /* ── Stats ── */
     function updateStats(records) {
-        let males = 0, females = 0, babies = 0;
-        records.forEach((d) => {
-            if (isMale(d.gender)) males++;
-            else if (d.gender === "female" || d.gender === "أنثى") females++;
-            if (d.age === "أقل من سنة" || (d.age && String(d.age).includes("أقل"))) babies++;
+        let males=0,females=0,babies=0;
+        records.forEach(d => {
+            if(isMale(d.gender)) males++;
+            else if(d.gender==="female"||d.gender==="أنثى") females++;
+            if(d.age==="أقل من سنة"||(d.age&&String(d.age).includes("أقل"))) babies++;
         });
         document.getElementById("total-count").textContent  = records.length;
         document.getElementById("male-count").textContent   = males;
@@ -902,12 +659,12 @@
         document.getElementById("baby-count").textContent   = babies;
     }
 
-    onSnapshot(collection(db, COLLECTION), (snapshot) => {
-        allRecords = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    /* ── Live listener ── */
+    onSnapshot(collection(db, COLLECTION), snap => {
+        allRecords = snap.docs.map(d => ({id:d.id,...d.data()}));
         updateStats(allRecords);
         renderTable(allRecords);
     });
 </script>
-
 </body>
 </html>
