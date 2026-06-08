@@ -276,14 +276,14 @@
                 <div class="edit-group"><label>اسم الأب</label><input id="e-fatherName"></div>
                 <div class="edit-group"><label>هاتف الأب</label><input id="e-fatherPhone"></div>
                 <div class="edit-group"><label>جنسية الأب</label><input id="e-fatherNationality"></div>
-                <div class="edit-group"><label>رقم هوية الأب</label><input id="e-fatherNationalId"></div>
+                <div class="edit-group"><label>رقم الوطني الأب</label><input id="e-fatherNationalId"></div>
                 <div class="edit-group"><label>عمل الأب</label><input id="e-fatherJob"></div>
 
                 <div class="edit-section-title">👩 معلومات الأم</div>
                 <div class="edit-group"><label>اسم الأم</label><input id="e-motherName"></div>
                 <div class="edit-group"><label>هاتف الأم</label><input id="e-motherPhone"></div>
                 <div class="edit-group"><label>جنسية الأم</label><input id="e-motherNationality"></div>
-                <div class="edit-group"><label>رقم هوية الأم</label><input id="e-motherNationalId"></div>
+                <div class="edit-group"><label>رقم الوطني الأم</label><input id="e-motherNationalId"></div>
                 <div class="edit-group"><label>عمل الأم</label><input id="e-motherJob"></div>
 
                 <div class="edit-section-title">📁 وثائق وجهات الاتصال</div>
@@ -412,7 +412,7 @@
             { title:"👶 معلومات الطفل", rows:[
                 ["الاسم الرباعي",getName(d)],["تاريخ الميلاد",d.birthDate||d.dob],
                 ["العمر",d.age],["الجنس",genderLabel(d.gender)],["الديانة",d.religion],
-                ["رقم شهادة الميلاد",d.birthCertNo],["صورة شهادة الميلاد",d.birthCertImage],
+                ["رقم الوطني للطفل",d.birthCertNo],["صورة شهادة الميلاد",d.birthCertImage],
             ]},
             { title:"👔 معلومات الأب", rows:[
                 ["الاسم",d.fatherName||d.father_name],["الجنسية",d.fatherNationality||d.father_nationality],
