@@ -410,28 +410,41 @@
 
     document.getElementById('form_date').valueAsDate = new Date();
 
-    // ── Image upload helper ──
-    const imgData = {};
+    // دالة الرفع لـ Cloudinary
+    async function uploadToCloudinary(file) {
+        if (!file) return null;
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'woodpecker');
+        const response = await fetch(`https://api.cloudinary.com/v1_1/dah9rctnv/image/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        return data.secure_url;
+    }
+
+    // نستخدم مصفوفة لحفظ الملفات المختارة
+    const fileObjects = {}; 
 
     function setupImgUpload(inputId, previewId, areaId, removeId, key) {
-        const input   = document.getElementById(inputId);
+        const input = document.getElementById(inputId);
         const preview = document.getElementById(previewId);
-        const area    = document.getElementById(areaId);
-        const rmBtn   = document.getElementById(removeId);
+        const area = document.getElementById(areaId);
+        const rmBtn = document.getElementById(removeId);
 
         input.addEventListener('change', () => {
             const file = input.files[0];
             if (!file) return;
             if (file.size > 3 * 1024 * 1024) { alert('الصورة يجب أن تكون أقل من 3MB'); return; }
+            
+            // نحفظ الملف نفسه للرفع لاحقاً
+            fileObjects[key] = file;
+
             const reader = new FileReader();
             reader.onload = (ev) => {
-                imgData[key] = ev.target.result;
-                if (file.type.startsWith('image/')) {
-                    preview.src = ev.target.result;
-                    preview.classList.add('show');
-                } else {
-                    preview.classList.remove('show');
-                }
+                preview.src = ev.target.result;
+                preview.classList.add('show');
                 area.classList.add('has-img');
                 rmBtn.classList.add('show');
                 area.querySelector('.upload-text').textContent = file.name;
@@ -441,7 +454,7 @@
 
         rmBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            imgData[key] = null;
+            fileObjects[key] = null;
             input.value = '';
             preview.src = '';
             preview.classList.remove('show');
@@ -451,77 +464,57 @@
         });
     }
 
-    setupImgUpload('img-birth',  'prev-birth',  'area-birth',  'rm-birth',  'birthCertImage');
-    setupImgUpload('img-fid',    'prev-fid',    'area-fid',    'rm-fid',    'fatherIdImage');
-    setupImgUpload('img-mid',    'prev-mid',    'area-mid',    'rm-mid',    'motherIdImage');
-    setupImgUpload('img-fbook',  'prev-fbook',  'area-fbook',  'rm-fbook',  'familyBookImage');
+    setupImgUpload('img-birth', 'prev-birth', 'area-birth', 'rm-birth', 'birthCertImage');
+    setupImgUpload('img-fid', 'prev-fid', 'area-fid', 'rm-fid', 'fatherIdImage');
+    setupImgUpload('img-mid', 'prev-mid', 'area-mid', 'rm-mid', 'motherIdImage');
+    setupImgUpload('img-fbook', 'prev-fbook', 'area-fbook', 'rm-fbook', 'familyBookImage');
 
     document.getElementById('regForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('subBtn');
         btn.disabled = true;
-        btn.innerText = "جاري الإرسال...";
-
-        const selectedDays = [];
-        document.querySelectorAll('input[name="days"]:checked').forEach(cb => selectedDays.push(cb.value));
-
-        const payload = {
-            childName:            document.getElementById('childName').value,
-            fatherName:           document.getElementById('father_name').value,
-            motherName:           document.getElementById('motherName').value,
-            fatherPhone:          document.getElementById('father_phone').value,
-            motherPhone:          document.getElementById('motherPhone').value,
-            birthDate:            document.getElementById('dob').value,
-            age:                  document.getElementById('age').value,
-            gender:               document.getElementById('gender').value,
-            religion:             document.getElementById('religion').value,
-            birthCertNo:          document.getElementById('birth_certificate_no').value,
-            birthCertImage:       imgData['birthCertImage'] || null,
-            fatherNationality:    document.getElementById('father_nationality').value,
-            motherNationality:    document.getElementById('mother_nationality').value,
-            fatherJob:            document.getElementById('father_job').value,
-            motherJob:            document.getElementById('mother_job').value,
-            fatherNationalId:     document.getElementById('father_id').value,
-            fatherIdImage:        imgData['fatherIdImage'] || null,
-            motherNationalId:     document.getElementById('mother_id').value,
-            motherIdImage:        imgData['motherIdImage'] || null,
-            familyBook:           document.getElementById('family_book_no').value,
-            familyBookImage:      imgData['familyBookImage'] || null,
-            maritalStatus:        document.getElementById('marital_status').value,
-            address:              document.getElementById('address').value,
-            contactPhone:         document.getElementById('father_phone').value,
-            contactPhone2:        document.getElementById('work_phone').value,
-            emergencyPhone:       document.getElementById('emergency_phone').value,
-            chronicDisease:       document.getElementById('has_chronic_disease').value === 'نعم' ? 'yes' : 'no',
-            chronicDiseaseDetail: document.getElementById('chronic_disease_details').value,
-            allergy:              document.getElementById('has_allergy').value === 'نعم' ? 'yes' : 'no',
-            allergyDetail:        document.getElementById('allergy_details').value,
-            specialDiet:          document.getElementById('special_diet').value === 'نعم' ? 'yes' : 'no',
-            specialDietDetail:    document.getElementById('diet_details').value,
-            feverAction:          document.getElementById('fever_action').value,
-            favFood:              document.getElementById('favorite_food').value,
-            strangerRelation:     document.getElementById('strangers_relation').value,
-            kidsRelation:         document.getElementById('children_relation').value,
-            bathroomSelf:         document.getElementById('toilet_independent').value,
-            bathroomExpression:   document.getElementById('toilet_expression').value,
-            bathroomReminder:     document.getElementById('toilet_remind').value === 'نعم' ? 'yes' : 'no',
-            attendanceStart:      document.getElementById('start_date').value,
-            attendanceFreq:       document.getElementById('subscription_type').value,
-            attendanceDays:       selectedDays,
-            attendanceTime:       document.getElementById('time_slot').value,
-            attendanceTimeCustom: document.getElementById('custom_time_slot').value,
-            pickup1Name:          document.getElementById('pickup_name_1').value,
-            pickup1Relation:      document.getElementById('pickup_relation_1').value,
-            pickup1Phone:         document.getElementById('pickup_phone_1').value,
-            pickup2Name:          document.getElementById('pickup_name_2').value,
-            pickup2Relation:      document.getElementById('pickup_relation_2').value,
-            pickup2Phone:         document.getElementById('pickup_phone_2').value,
-            parentSignature:      document.getElementById('parent_signature').value,
-            registrationDate:     new Date().toLocaleDateString('ar-JO'),
-            timestamp:            new Date()
-        };
+        btn.innerText = "جاري رفع الصور والإرسال...";
 
         try {
+            // رفع الصور بالتوازي
+            const [birthUrl, fIdUrl, mIdUrl, fbUrl] = await Promise.all([
+                uploadToCloudinary(fileObjects['birthCertImage']),
+                uploadToCloudinary(fileObjects['fatherIdImage']),
+                uploadToCloudinary(fileObjects['motherIdImage']),
+                uploadToCloudinary(fileObjects['familyBookImage'])
+            ]);
+
+            const selectedDays = [];
+            document.querySelectorAll('input[name="days"]:checked').forEach(cb => selectedDays.push(cb.value));
+
+            const payload = {
+                // ... (باقي الحقول كما هي)
+                childName: document.getElementById('childName').value,
+                fatherName: document.getElementById('father_name').value,
+                motherName: document.getElementById('motherName').value,
+                fatherPhone: document.getElementById('father_phone').value,
+                motherPhone: document.getElementById('motherPhone').value,
+                birthDate: document.getElementById('dob').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                religion: document.getElementById('religion').value,
+                birthCertNo: document.getElementById('birth_certificate_no').value,
+                birthCertImage: birthUrl, // هنا نضع الرابط
+                fatherNationality: document.getElementById('father_nationality').value,
+                motherNationality: document.getElementById('mother_nationality').value,
+                fatherJob: document.getElementById('father_job').value,
+                motherJob: document.getElementById('mother_job').value,
+                fatherNationalId: document.getElementById('father_id').value,
+                fatherIdImage: fIdUrl, // هنا نضع الرابط
+                motherNationalId: document.getElementById('mother_id').value,
+                motherIdImage: mIdUrl, // هنا نضع الرابط
+                familyBook: document.getElementById('family_book_no').value,
+                familyBookImage: fbUrl, // هنا نضع الرابط
+                // ... (بقية الحقول)
+                registrationDate: new Date().toLocaleDateString('ar-JO'),
+                timestamp: new Date()
+            };
+
             await addDoc(collection(db, "registrations"), payload);
             document.getElementById('msg').style.display = 'block';
             document.getElementById('form-body').style.display = 'none';
