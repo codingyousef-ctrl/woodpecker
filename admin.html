@@ -167,11 +167,7 @@
            PRINT STYLES — تنسيق الطباعة
            ══════════════════════════════════════════ */
         @media print {
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            body { background: white !important; color: #1a1a1a !important; font-family: 'Cairo', sans-serif !important; margin: 0 !important; padding: 0 !important; }
-            #login-screen, #dashboard { display: none !important; }
-            #print-area { display: block !important; }
-            .modal-overlay, #lightbox { display: none !important; }
+          
             body > *:not(#print-area) {
         display: none !important;
     }
