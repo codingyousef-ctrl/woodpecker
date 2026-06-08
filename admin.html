@@ -166,20 +166,30 @@
         /* ══════════════════════════════════════════
            PRINT STYLES — تنسيق الطباعة
            ══════════════════════════════════════════ */
-        @media print {
-          
-            body > *:not(#print-area) {
+        /* هذا الكود يضمن أن التنسيق لا يخرج خارج منطقة الطباعة */
+@media print {
+    /* إخفاء كل شيء في الموقع */
+    body > *:not(#print-area) {
         display: none !important;
     }
-        }
 
-        /* ── Print Area ── */
-        #print-area {
+    /* إظهار منطقة الطباعة فقط */
+    #print-area {
         display: block !important;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
+        margin: 0;
+        padding: 0;
+        direction: rtl; /* لضمان اتجاه النص */
+    }
+
+    /* تنسيق خاص بصفحة الطباعة داخلها فقط */
+    #print-area .print-page {
+        width: 100%;
+        margin: 0;
+        padding: 20px;
     }
 }
 
