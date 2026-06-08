@@ -21,7 +21,6 @@
             --muted: #94a3b8;
             --border: #2a3140;
             --success: #22c55e;
-            --info: #3b82f6;
             --danger: #ef4444;
             --radius: 14px;
             --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
@@ -41,13 +40,182 @@
             line-height: 1.6;
         }
 
+        /* ══════════════════════════════
+           شاشة تسجيل الدخول
+        ══════════════════════════════ */
+        #login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .login-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 48px 40px 40px;
+            width: min(420px, 100%);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+            text-align: center;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-logo {
+            width: 110px;
+            height: 110px;
+            border-radius: 22px;
+            object-fit: contain;
+            margin: 0 auto 22px;
+            display: block;
+            background: var(--primary-soft);
+            border: 2px solid rgba(212,83,126,0.3);
+            padding: 8px;
+        }
+
+        .login-logo-fallback {
+            width: 110px;
+            height: 110px;
+            border-radius: 22px;
+            background: var(--primary-soft);
+            border: 2px solid rgba(212,83,126,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 22px;
+        }
+
+        .login-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 6px;
+        }
+
+        .login-subtitle {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin: 0 0 32px;
+        }
+
+        .login-label {
+            display: block;
+            text-align: right;
+            color: var(--muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .login-input-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 14px 18px;
+            padding-inline-start: 48px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-soft);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            letter-spacing: 3px;
+        }
+
+        .login-input::placeholder { letter-spacing: 0; }
+
+        .login-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-soft);
+        }
+
+        .login-input.shake {
+            animation: shake 0.4s ease;
+            border-color: var(--danger);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%       { transform: translateX(-8px); }
+            40%       { transform: translateX(8px); }
+            60%       { transform: translateX(-6px); }
+            80%       { transform: translateX(6px); }
+        }
+
+        .toggle-pass {
+            position: absolute;
+            inset-inline-start: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+        .toggle-pass:hover { color: var(--text); }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), #b8436b);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s;
+            margin-top: 4px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--primary-glow);
+        }
+
+        .login-btn:active { transform: scale(0.97); }
+
+        .login-error {
+            color: #fca5a5;
+            font-size: 0.85rem;
+            margin-top: 14px;
+            min-height: 20px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .login-error.show { opacity: 1; }
+
+        /* ══════════════════════════════
+           لوحة التحكم (مخفية بالبداية)
+        ══════════════════════════════ */
+        #dashboard { display: none; }
+
         .page {
             max-width: 1280px;
             margin: 0 auto;
             padding: 24px;
         }
 
-        /* ── Header ── */
         .header {
             display: flex;
             align-items: center;
@@ -75,17 +243,8 @@
             border-radius: 999px;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+        .brand { display: flex; align-items: center; gap: 16px; }
 
-        /* ── Logo area ──
-           ضع شعارك هنا بإحدى الطريقتين:
-           1) ضع ملف logo.png داخل مجلد public ثم فعّل السطر في JS: LOGO_PATH = "./logo.png"
-           2) انقر على منطقة الشعار لرفع صورة (تُحفظ تلقائياً في المتصفح)
-        */
         .logo-wrap {
             position: relative;
             width: 64px;
@@ -102,29 +261,15 @@
             flex-shrink: 0;
         }
 
-        .logo-wrap:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
-            box-shadow: 0 8px 24px var(--primary-glow);
-        }
-
-        .logo-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 6px;
-        }
-
-        .logo-placeholder {
-            font-size: 28px;
-            opacity: 0.7;
-        }
+        .logo-wrap:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: 0 8px 24px var(--primary-glow); }
+        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+        .logo-placeholder { font-size: 28px; opacity: 0.7; }
 
         .logo-hint {
             position: absolute;
             bottom: 0;
             inset-inline: 0;
-            background: rgba(0, 0, 0, 0.65);
+            background: rgba(0,0,0,0.65);
             color: #fff;
             font-size: 9px;
             text-align: center;
@@ -132,7 +277,6 @@
             opacity: 0;
             transition: opacity 0.2s;
         }
-
         .logo-wrap:hover .logo-hint { opacity: 1; }
 
         .brand-text h1 {
@@ -145,22 +289,11 @@
             background-clip: text;
         }
 
-        .brand-text p {
-            margin: 2px 0 0;
-            color: var(--muted);
-            font-size: 0.85rem;
-        }
+        .brand-text p { margin: 2px 0 0; color: var(--muted); font-size: 0.85rem; }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-        .search-box {
-            position: relative;
-        }
+        .search-box { position: relative; }
 
         .search-box input {
             width: 260px;
@@ -176,10 +309,7 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .search-box input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-soft);
-        }
+        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
 
         .search-box span {
             position: absolute;
@@ -196,8 +326,8 @@
             gap: 6px;
             padding: 8px 14px;
             border-radius: 999px;
-            background: rgba(34, 197, 94, 0.12);
-            border: 1px solid rgba(34, 197, 94, 0.3);
+            background: rgba(34,197,94,0.12);
+            border: 1px solid rgba(34,197,94,0.3);
             color: #86efac;
             font-size: 0.8rem;
             font-weight: 600;
@@ -214,10 +344,23 @@
 
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.85); }
+            50%       { opacity: 0.5; transform: scale(0.85); }
         }
 
-        /* ── Stats ── */
+        .btn-logout {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(239,68,68,0.3);
+            background: rgba(239,68,68,0.1);
+            color: #fca5a5;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .btn-logout:hover { background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.5); }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -234,302 +377,130 @@
             align-items: center;
             gap: 16px;
             transition: transform 0.2s, background 0.2s, border-color 0.2s;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
 
-        .stat-card:hover {
-            transform: translateY(-3px);
-            background: var(--card-hover);
-            border-color: rgba(212, 83, 126, 0.25);
-        }
+        .stat-card:hover { transform: translateY(-3px); background: var(--card-hover); border-color: rgba(212,83,126,0.25); }
 
-        .stat-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            flex-shrink: 0;
-        }
+        .stat-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+        .stat-icon.total  { background: rgba(59,130,246,0.15); }
+        .stat-icon.male   { background: rgba(96,165,250,0.15); }
+        .stat-icon.female { background: rgba(212,83,126,0.15); }
+        .stat-icon.baby   { background: rgba(244,184,96,0.15); }
 
-        .stat-icon.total { background: rgba(59, 130, 246, 0.15); }
-        .stat-icon.male { background: rgba(96, 165, 250, 0.15); }
-        .stat-icon.female { background: rgba(212, 83, 126, 0.15); }
-        .stat-icon.baby { background: rgba(244, 184, 96, 0.15); }
+        .stat-info .stat-num   { font-size: 1.75rem; font-weight: 800; line-height: 1.1; color: var(--text); }
+        .stat-info .stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
 
-        .stat-info .stat-num {
-            font-size: 1.75rem;
-            font-weight: 800;
-            line-height: 1.1;
-            color: var(--text);
-        }
+        .section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+        .section-head h2  { margin: 0; font-size: 1.15rem; font-weight: 700; }
+        .section-head span { color: var(--muted); font-size: 0.85rem; }
 
-        .stat-info .stat-label {
-            color: var(--muted);
-            font-size: 0.85rem;
-            margin-top: 2px;
-        }
+        .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
 
-        /* ── Table section ── */
-        .section-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-        }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: rgba(255,255,255,0.03); }
 
-        .section-head h2 {
-            margin: 0;
-            font-size: 1.15rem;
-            font-weight: 700;
-        }
+        th { padding: 16px 18px; text-align: right; font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--border); }
+        td { padding: 16px 18px; border-bottom: 1px solid rgba(42,49,64,0.6); font-size: 0.95rem; }
 
-        .section-head span {
-            color: var(--muted);
-            font-size: 0.85rem;
-        }
+        tbody tr { transition: background 0.15s; }
+        tbody tr:hover { background: rgba(212,83,126,0.04); }
+        tbody tr:last-child td { border-bottom: none; }
 
-        .table-wrap {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
+        .gender-tag { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+        .gender-tag.male   { background: rgba(59,130,246,0.15); color: #93c5fd; }
+        .gender-tag.female { background: rgba(212,83,126,0.15); color: #f9a8d4; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .actions { display: flex; gap: 8px; }
 
-        thead {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        th {
-            padding: 16px 18px;
-            text-align: right;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            border-bottom: 1px solid var(--border);
-        }
-
-        td {
-            padding: 16px 18px;
-            border-bottom: 1px solid rgba(42, 49, 64, 0.6);
-            font-size: 0.95rem;
-        }
-
-        tbody tr {
-            transition: background 0.15s;
-        }
-
-        tbody tr:hover {
-            background: rgba(212, 83, 126, 0.04);
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .gender-tag {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .gender-tag.male {
-            background: rgba(59, 130, 246, 0.15);
-            color: #93c5fd;
-        }
-
-        .gender-tag.female {
-            background: rgba(212, 83, 126, 0.15);
-            color: #f9a8d4;
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn {
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: white;
-            transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
+        .btn { border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: white; transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s; display: inline-flex; align-items: center; gap: 6px; }
         .btn:active { transform: scale(0.96); }
-        .btn-view { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .btn-view   { background: linear-gradient(135deg, #2563eb, #3b82f6); }
         .btn-delete { background: linear-gradient(135deg, #dc2626, #ef4444); }
-        .btn-view:hover, .btn-delete:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3); }
+        .btn-view:hover, .btn-delete:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
 
-        .empty-state {
-            text-align: center;
-            padding: 60px 24px;
-            color: var(--muted);
-        }
-
+        .empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
         .empty-state .icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
 
-        /* ── Modal ── */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            padding: 20px;
-        }
-
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
         .modal-overlay.open { display: flex; }
 
-        .modal {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            width: min(860px, 96vw);
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-            box-shadow: var(--shadow);
-            animation: slideUp 0.25s ease;
-        }
+        .modal { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); width: min(860px, 96vw); max-height: 90vh; display: flex; flex-direction: column; padding: 0; box-shadow: var(--shadow); animation: slideUp 0.25s ease; }
 
-        .modal-header {
-            padding: 22px 28px 16px;
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-        }
+        .modal-header { padding: 22px 28px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .modal-header h3 { margin: 0 0 4px; font-size: 1.25rem; padding: 0; border: none; }
+        .modal-header p  { margin: 0; color: var(--muted); font-size: 0.85rem; }
 
-        .modal-header h3 {
-            margin: 0 0 4px;
-            font-size: 1.25rem;
-            padding: 0;
-            border: none;
-        }
+        #modal-body { padding: 8px 28px 20px; overflow-y: auto; flex: 1; }
 
-        .modal-header p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 0.85rem;
-        }
+        .detail-section { margin-bottom: 18px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .detail-section-title { background: rgba(212,83,126,0.1); padding: 10px 16px; font-weight: 700; font-size: 0.95rem; border-bottom: 1px solid var(--border); }
 
-        #modal-body {
-            padding: 8px 28px 20px;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .detail-section {
-            margin-bottom: 18px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .detail-section-title {
-            background: rgba(212, 83, 126, 0.1);
-            padding: 10px 16px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 10px 16px;
-            border-bottom: 1px solid rgba(42, 49, 64, 0.45);
-            font-size: 0.9rem;
-        }
-
+        .detail-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 10px 16px; border-bottom: 1px solid rgba(42,49,64,0.45); font-size: 0.9rem; }
         .detail-row:last-child { border-bottom: none; }
         .detail-row .label { color: var(--muted); flex-shrink: 0; min-width: 130px; }
         .detail-row .value { font-weight: 600; text-align: left; word-break: break-word; }
 
-        .detail-img {
-            max-height: 120px;
-            max-width: 200px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            object-fit: contain;
-            cursor: pointer;
-        }
+        .detail-img { max-height: 120px; max-width: 200px; border-radius: 8px; border: 1px solid var(--border); object-fit: contain; cursor: pointer; }
 
-        .modal-footer {
-            padding: 16px 28px 22px;
-            border-top: 1px solid var(--border);
-            flex-shrink: 0;
-        }
+        .modal-footer { padding: 16px 28px 22px; border-top: 1px solid var(--border); flex-shrink: 0; }
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .modal-close {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: var(--primary);
-            color: white;
-            font-family: inherit;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
+        .modal-close { width: 100%; padding: 12px; border: none; border-radius: 10px; background: var(--primary); color: white; font-family: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
 
         #logo-input { display: none; }
 
-        @media (max-width: 900px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
+        @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
         @media (max-width: 560px) {
             .stats-grid { grid-template-columns: 1fr; }
             .page { padding: 16px; }
             .header { position: static; }
             th, td { padding: 12px 14px; }
+            .login-card { padding: 36px 24px 32px; }
         }
     </style>
 </head>
 <body>
 
+<!-- ══ شاشة الدخول ══ -->
+<div id="login-screen">
+    <div class="login-card">
+        <img id="login-logo-img" class="login-logo" src="./wood.png" alt="شعار الحضانة"
+             onerror="this.style.display='none'; document.getElementById('login-logo-fallback').style.display='flex';">
+        <div class="login-logo-fallback" id="login-logo-fallback" style="display:none">🪵</div>
+
+        <h2 class="login-title">حضانة نقار الخشب</h2>
+        <p class="login-subtitle">لوحة تحكم الإدارة — يرجى إدخال كلمة المرور</p>
+
+        <label class="login-label" for="password-input">🔒 كلمة المرور</label>
+        <div class="login-input-wrap">
+            <input class="login-input" type="password" id="password-input"
+                   placeholder="أدخل كلمة المرور" autocomplete="current-password">
+            <button class="toggle-pass" id="toggle-pass" type="button" title="إظهار/إخفاء">👁️</button>
+        </div>
+
+        <button class="login-btn" id="login-btn">دخول إلى لوحة التحكم</button>
+        <p class="login-error" id="login-error">❌ كلمة المرور غير صحيحة، حاول مجدداً</p>
+    </div>
+</div>
+
+<!-- ══ لوحة التحكم ══ -->
+<div id="dashboard">
 <div class="page">
     <header class="header">
         <div class="brand">
             <div class="logo-wrap" id="logo-area" title="انقر لرفع الشعار">
                 <img id="logo-img" alt="شعار الحضانة" hidden>
+                <span class="logo-placeholder" id="logo-fallback">🪵</span>
                 <span class="logo-hint">رفع شعار</span>
             </div>
             <div class="brand-text">
-                <h1> حضانة نقار الخشب</h1>
+                <h1>حضانة نقار الخشب</h1>
                 <p>لوحة تحكم الإدارة — متابعة التسجيلات</p>
             </div>
         </div>
@@ -539,6 +510,7 @@
                 <span>🔍</span>
             </div>
             <div class="badge-live">متصل مباشرة</div>
+            <button class="btn-logout" id="logout-btn">🚪 خروج</button>
         </div>
     </header>
 
@@ -597,6 +569,7 @@
         </div>
     </div>
 </div>
+</div>
 
 <div class="modal-overlay" id="modal">
     <div class="modal">
@@ -617,43 +590,103 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+    /* ══ كلمة المرور ══ */
+    const PASSWORD = "naqqar2026";
+    const SESSION_KEY = "naqqar_auth";
+
+    const loginScreen = document.getElementById("login-screen");
+    const dashboard   = document.getElementById("dashboard");
+    const passInput   = document.getElementById("password-input");
+    const loginBtn    = document.getElementById("login-btn");
+    const loginError  = document.getElementById("login-error");
+    const togglePass  = document.getElementById("toggle-pass");
+    const logoutBtn   = document.getElementById("logout-btn");
+
+    function showDashboard() {
+        loginScreen.style.display = "none";
+        dashboard.style.display = "block";
+    }
+
+    function showLogin() {
+        sessionStorage.removeItem(SESSION_KEY);
+        dashboard.style.display = "none";
+        loginScreen.style.display = "flex";
+        passInput.value = "";
+    }
+
+    // تحقق من الجلسة عند التحميل
+    if (sessionStorage.getItem(SESSION_KEY) === "1") {
+        showDashboard();
+    }
+
+    function tryLogin() {
+        if (passInput.value === PASSWORD) {
+            sessionStorage.setItem(SESSION_KEY, "1");
+            loginError.classList.remove("show");
+            showDashboard();
+        } else {
+            passInput.classList.remove("shake");
+            void passInput.offsetWidth; // إعادة تشغيل animation
+            passInput.classList.add("shake");
+            loginError.classList.add("show");
+            passInput.select();
+        }
+    }
+
+    loginBtn.addEventListener("click", tryLogin);
+    passInput.addEventListener("keydown", (e) => { if (e.key === "Enter") tryLogin(); });
+    passInput.addEventListener("input", () => loginError.classList.remove("show"));
+
+    togglePass.addEventListener("click", () => {
+        if (passInput.type === "password") {
+            passInput.type = "text";
+            togglePass.textContent = "🙈";
+        } else {
+            passInput.type = "password";
+            togglePass.textContent = "👁️";
+        }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+        if (confirm("هل تريد تسجيل الخروج؟")) showLogin();
+    });
+
+    /* ══ Firebase ══ */
     const firebaseConfig = {
-  apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-  authDomain: "woodpecker-508d8.firebaseapp.com",
-  projectId: "woodpecker-508d8",
-  storageBucket: "woodpecker-508d8.firebasestorage.app",
-  messagingSenderId: "434327620481",
-  appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
-};
+        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
+        authDomain: "woodpecker-508d8.firebaseapp.com",
+        projectId: "woodpecker-508d8",
+        storageBucket: "woodpecker-508d8.firebasestorage.app",
+        messagingSenderId: "434327620481",
+        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
+    };
 
     const LOGO_PATH = "./wood.png";
     const LOGO_STORAGE_KEY = "naqqar_admin_logo";
     const COLLECTION = "registrations";
 
-    const RELATION = { father: "الأب", mother: "الأم", grandfather: "الجد", grandmother: "الجدة", uncle: "العم/الخال", aunt: "العمة/الخالة", sibling: "الأخ/الأخت", driver: "السائق", other: "أخرى" };
-    const RELIGION = { muslim: "مسلم", christian: "مسيحي", other: "أخرى" };
-    const MARITAL = { married: "متزوجان", divorced: "مطلقان", widowed: "أرمل/أرملة", other: "أخرى" };
-    const FEVER = { medicine: "إعطاء خافض حرارة", contact: "الاتصال بالأهل", both: "كلاهما" };
-    const STRANGER = { social: "اجتماعي", reserved: "مستنكر", scared: "خوف" };
-    const KIDS = { plays: "يلعب معهم", reserved: "مستنكر", avoids: "ينفر منهم" };
-    const BATHROOM = { yes: "مستقل", no: "يحتاج مساعدة", sometimes: "أحياناً" };
-    const FREQ = { daily: "يومي", weekly: "أسبوعي", monthly: "شهري" };
-    const TIME = { "8-1": "8:00 ص – 1:00 ظ", "8-3": "8:00 ص – 3:00 ظ", "8-5": "8:00 ص – 5:00 ظ", early: "الطيور المبكرة 7:00–5:00" };
+    const RELATION = { father:"الأب", mother:"الأم", grandfather:"الجد", grandmother:"الجدة", uncle:"العم/الخال", aunt:"العمة/الخالة", sibling:"الأخ/الأخت", driver:"السائق", other:"أخرى" };
+    const RELIGION  = { muslim:"مسلم", christian:"مسيحي", other:"أخرى" };
+    const MARITAL   = { married:"متزوجان", divorced:"مطلقان", widowed:"أرمل/أرملة", other:"أخرى" };
+    const FEVER     = { medicine:"إعطاء خافض حرارة", contact:"الاتصال بالأهل", both:"كلاهما" };
+    const STRANGER  = { social:"اجتماعي", reserved:"مستنكر", scared:"خوف" };
+    const KIDS      = { plays:"يلعب معهم", reserved:"مستنكر", avoids:"ينفر منهم" };
+    const BATHROOM  = { yes:"مستقل", no:"يحتاج مساعدة", sometimes:"أحياناً" };
+    const FREQ      = { daily:"يومي", weekly:"أسبوعي", monthly:"شهري" };
+    const TIME      = { "8-1":"8:00 ص – 1:00 ظ", "8-3":"8:00 ص – 3:00 ظ", "8-5":"8:00 ص – 5:00 ظ", early:"الطيور المبكرة 7:00–5:00" };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const db  = getFirestore(app);
 
     let allRecords = [];
     let searchQuery = "";
 
-    // ── Helpers ──
-    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    const dash = (v) => (v === null || v === undefined || v === "" ? "—" : v);
-    const yesNo = (v, detail) => v === "yes" ? `نعم${detail ? " – " + detail : ""}` : v === "no" ? "لا" : dash(v);
-    const genderLabel = (g) => ({ male: "ذكر", female: "أنثى", ذكر: "ذكر", أنثى: "أنثى" }[g] || dash(g));
+    const esc    = (s) => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    const dash   = (v) => (v === null || v === undefined || v === "" ? "—" : v);
+    const yesNo  = (v, detail) => v === "yes" ? `نعم${detail ? " – "+detail : ""}` : v === "no" ? "لا" : dash(v);
+    const genderLabel = (g) => ({ male:"ذكر", female:"أنثى", ذكر:"ذكر", أنثى:"أنثى" }[g] || dash(g));
     const isMale = (g) => g === "male" || g === "ذكر";
-    const getName = (d) => d.childName || d.fullname || "—";
-    const getPhone = (d) => d.fatherPhone || d.motherPhone || d.mother_phone || "—";
+    const getName  = (d) => d.childName || d.fullname || "—";
 
     function renderValue(val) {
         if (!val || val === "—") return `<span class="value">—</span>`;
@@ -665,122 +698,92 @@
     function buildSections(d) {
         const pickup = (n) => {
             const name = d[`pickup${n}Name`];
-            const rel = d[`pickup${n}Relation`];
+            const rel  = d[`pickup${n}Relation`];
             return name ? `${name} (${RELATION[rel] || rel || ""})` : "";
         };
-        const attTime = TIME[d.attendanceTime] || (d.attendanceTime === "custom" ? d.attendanceTimeCustom : "");
+        const attTime = TIME[d.attendanceTime] || (d.attendanceTime === "custom" ? d.attendanceTimeCustom : d.attendanceTime || d.time_slot || "");
 
         return [
-            {
-                title: "👶 معلومات الطفل",
-                rows: [
-                    ["الاسم الرباعي", getName(d)],
-                    ["تاريخ الميلاد", d.birthDate],
-                    ["العمر", d.age],
-                    ["الجنس", genderLabel(d.gender)],
-                    ["الديانة", RELIGION[d.religion] || d.religion],
-                    ["شهادة الميلاد", d.birthCertImage],
-                ],
-            },
-            {
-                title: "👔 معلومات الأب",
-                rows: [
-                    ["الاسم", d.fatherName],
-                    ["الجنسية", d.fatherNationality],
-                    ["رقم الوطني", d.fatherNationalId],
-                    ["الهاتف", d.fatherPhone],
-                    ["العمل", d.fatherJob],
-                    ["صورة الهوية", d.fatherIdImage],
-                ],
-            },
-            {
-                title: "👩 معلومات الأم",
-                rows: [
-                    ["الاسم", d.motherName],
-                    ["الجنسية", d.motherNationality],
-                    ["رقم الوطني", d.motherNationalId],
-                    ["الهاتف", d.motherPhone || d.mother_phone],
-                    ["العمل", d.motherJob],
-                    ["صورة الهوية", d.motherIdImage],
-                ],
-            },
-            {
-                title: "📁 وثائق العائلة والاتصال",
-                rows: [
-                    ["رقم دفتر العائلة", d.familyBook],
-                    ["صورة دفتر العائلة", d.familyBookImage],
-                    ["الحالة الاجتماعية", MARITAL[d.maritalStatus] || d.maritalStatus],
-                    ["عنوان السكن", d.address],
-                    ["هاتف التواصل", d.contactPhone],
-                    ["هاتف آخر", d.contactPhone2],
-                ],
-            },
-            {
-                title: "💊 المعلومات الصحية",
-                rows: [
-                    ["مرض مزمن", yesNo(d.chronicDisease, d.chronicDiseaseDetail)],
-                    ["حساسية", yesNo(d.allergy, d.allergyDetail)],
-                    ["نظام غذائي خاص", yesNo(d.specialDiet, d.specialDietDetail)],
-                    ["عند ارتفاع الحرارة", FEVER[d.feverAction] || d.feverAction],
-                ],
-            },
-            {
-                title: "🌟 معلومات شخصية",
-                rows: [
-                    ["الطعام المفضل", d.favFood],
-                    ["علاقة بالغرباء", STRANGER[d.strangerRelation] || d.strangerRelation],
-                    ["علاقة بالأطفال", KIDS[d.kidsRelation] || d.kidsRelation],
-                    ["دورة المياه – الاستقلالية", BATHROOM[d.bathroomSelf] || d.bathroomSelf],
-                    ["التعبير عن الحاجة", d.bathroomExpression],
-                    ["يحتاج تذكير", d.bathroomReminder === "yes" ? "نعم" : d.bathroomReminder === "no" ? "لا" : d.bathroomReminder],
-                ],
-            },
-            {
-                title: "📅 التسجيل والحضور",
-                rows: [
-                    ["بداية الحضور", d.attendanceStart],
-                    ["أيام الحضور", Array.isArray(d.attendanceDays) ? d.attendanceDays.join("، ") : d.attendanceDays],
-                    ["نوع الاشتراك", FREQ[d.attendanceFreq] || d.attendanceFreq],
-                    ["وقت الحضور", attTime],
-                    ["تاريخ التسجيل", d.registrationDate],
-                ],
-            },
-            {
-                title: "🚗 الأشخاص المسموح لهم بالاصطحاب",
-                rows: [
-                    ["الشخص 1", pickup(1)],
-                    ["الشخص 2", pickup(2)],
-                    ["الشخص 3", pickup(3)],
-                ],
-            },
+            { title:"👶 معلومات الطفل", rows:[
+                ["الاسم الرباعي", getName(d)],
+                ["تاريخ الميلاد", d.birthDate || d.dob],
+                ["العمر", d.age],
+                ["الجنس", genderLabel(d.gender)],
+                ["الديانة", RELIGION[d.religion] || d.religion],
+            ]},
+            { title:"👔 معلومات الأب", rows:[
+                ["الاسم", d.fatherName || d.father_name],
+                ["الجنسية", d.fatherNationality || d.father_nationality],
+                ["رقم الوطني", d.fatherNationalId || d.father_id],
+                ["الهاتف", d.fatherPhone || d.phone],
+                ["العمل", d.fatherJob || d.father_job],
+            ]},
+            { title:"👩 معلومات الأم", rows:[
+                ["الاسم", d.motherName || d.mother_name],
+                ["الجنسية", d.motherNationality || d.mother_nationality],
+                ["رقم الوطني", d.motherNationalId || d.mother_id],
+                ["الهاتف", d.motherPhone || d.mother_phone],
+                ["العمل", d.motherJob || d.mother_job],
+            ]},
+            { title:"📁 وثائق العائلة والاتصال", rows:[
+                ["رقم دفتر العائلة", d.familyBook || d.family_book_no],
+                ["الحالة الاجتماعية", MARITAL[d.maritalStatus] || d.maritalStatus || d.marital_status],
+                ["عنوان السكن", d.address],
+                ["هاتف التواصل", d.contactPhone || d.work_phone],
+                ["هاتف الطوارئ", d.contactPhone2 || d.emergency_phone],
+            ]},
+            { title:"💊 المعلومات الصحية", rows:[
+                ["مرض مزمن", yesNo(d.chronicDisease, d.chronicDiseaseDetail)],
+                ["حساسية", yesNo(d.allergy, d.allergyDetail)],
+                ["نظام غذائي خاص", yesNo(d.specialDiet, d.specialDietDetail)],
+                ["ملاحظات صحية", d.notes],
+                ["عند ارتفاع الحرارة", FEVER[d.feverAction] || d.feverAction || d.fever_action],
+            ]},
+            { title:"🌟 معلومات شخصية", rows:[
+                ["الطعام المفضل", d.favFood || d.favorite_food],
+                ["علاقة بالغرباء", STRANGER[d.strangerRelation] || d.strangerRelation || d.strangers_relation],
+                ["علاقة بالأطفال", KIDS[d.kidsRelation] || d.kidsRelation || d.children_relation],
+                ["دورة المياه", d.bathroomSelf || d.toilet_independent || d.toilet_status],
+                ["التعبير عن الحاجة", d.bathroomExpression || d.toilet_expression],
+            ]},
+            { title:"📅 التسجيل والحضور", rows:[
+                ["بداية الحضور", d.attendanceStart || d.start_date],
+                ["أيام الحضور", Array.isArray(d.attendanceDays) ? d.attendanceDays.join("، ") : (d.attendanceDays || d.selected_days)],
+                ["نوع الاشتراك", FREQ[d.attendanceFreq] || d.attendanceFreq || d.subscription_type],
+                ["وقت الحضور", attTime],
+                ["تاريخ التسجيل", d.registrationDate || d.form_date],
+            ]},
+            { title:"🚗 الأشخاص المسموح لهم بالاصطحاب", rows:[
+                ["الشخص 1", pickup(1) || d.pickup_persons],
+                ["الشخص 2", pickup(2)],
+                ["الشخص 3", pickup(3)],
+            ]},
         ];
     }
 
     function renderSection(section) {
         const rows = section.rows.filter(([, v]) => v && v !== "—" && v !== "");
         if (!rows.length) return "";
-        return `
-            <div class="detail-section">
-                <div class="detail-section-title">${section.title}</div>
-                ${rows.map(([label, val]) => `
-                    <div class="detail-row">
-                        <span class="label">${label}</span>
-                        ${renderValue(val)}
-                    </div>
-                `).join("")}
-            </div>`;
+        return `<div class="detail-section">
+            <div class="detail-section-title">${section.title}</div>
+            ${rows.map(([label, val]) => `
+                <div class="detail-row">
+                    <span class="label">${label}</span>
+                    ${renderValue(val)}
+                </div>`).join("")}
+        </div>`;
     }
 
-    // ── Logo ──
-    const logoArea = document.getElementById("logo-area");
-    const logoImg = document.getElementById("logo-img");
+    /* ── Logo ── */
+    const logoArea    = document.getElementById("logo-area");
+    const logoImg     = document.getElementById("logo-img");
     const logoFallback = document.getElementById("logo-fallback");
-    const logoInput = document.getElementById("logo-input");
+    const logoInput   = document.getElementById("logo-input");
 
     function showLogo(src) {
         logoImg.src = src;
         logoImg.hidden = false;
-        logoFallback.hidden = true;
+        if (logoFallback) logoFallback.hidden = true;
     }
 
     function initLogo() {
@@ -805,8 +808,8 @@
     });
     initLogo();
 
-    // ── Modal ──
-    const modal = document.getElementById("modal");
+    /* ── Modal ── */
+    const modal     = document.getElementById("modal");
     const modalBody = document.getElementById("modal-body");
 
     function openModal(id) {
@@ -821,7 +824,7 @@
     document.getElementById("modal-close").addEventListener("click", () => modal.classList.remove("open"));
     modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
 
-    // ── Delete ──
+    /* ── Delete ── */
     async function handleDelete(id, name) {
         if (!confirm(`هل تريد حذف تسجيل "${name}"؟`)) return;
         try {
@@ -832,7 +835,7 @@
         }
     }
 
-    // ── Search ──
+    /* ── Search ── */
     document.getElementById("search-input").addEventListener("input", (e) => {
         searchQuery = e.target.value.trim().toLowerCase();
         renderTable(allRecords);
@@ -842,8 +845,11 @@
         const filtered = records.filter((d) => {
             if (!searchQuery) return true;
             const haystack = [
-                getName(d), d.fatherName, d.motherName,
-                d.fatherPhone, d.motherPhone, d.mother_phone, d.contactPhone,
+                getName(d), d.fatherName, d.father_name,
+                d.motherName, d.mother_name,
+                d.fatherPhone, d.phone,
+                d.motherPhone, d.mother_phone,
+                d.contactPhone,
             ].filter(Boolean).join(" ").toLowerCase();
             return haystack.includes(searchQuery);
         });
@@ -853,23 +859,22 @@
         tbody.innerHTML = "";
         document.getElementById("results-count").textContent = `${filtered.length} نتيجة`;
 
-        if (filtered.length === 0) {
-            empty.hidden = false;
-            return;
-        }
+        if (filtered.length === 0) { empty.hidden = false; return; }
         empty.hidden = true;
 
         filtered.forEach((d) => {
             const male = isMale(d.gender);
+            const phone = d.fatherPhone || d.phone || "—";
+            const date  = d.registrationDate || d.form_date || "—";
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td><strong>${esc(getName(d))}</strong></td>
                 <td><span class="gender-tag ${male ? "male" : "female"}">${genderLabel(d.gender)}</span></td>
-                <td dir="ltr" style="text-align:right">${esc(d.fatherPhone || "—")}</td>
-                <td>${esc(d.registrationDate || "—")}</td>
+                <td dir="ltr" style="text-align:right">${esc(phone)}</td>
+                <td>${esc(date)}</td>
                 <td>
                     <div class="actions">
-                        <button class="btn btn-view" data-id="${d.id}">👁️ عرض</button>
+                        <button class="btn btn-view"   data-id="${d.id}">👁️ عرض</button>
                         <button class="btn btn-delete" data-id="${d.id}" data-name="${esc(getName(d))}">🗑️ حذف</button>
                     </div>
                 </td>`;
@@ -891,10 +896,10 @@
             else if (d.gender === "female" || d.gender === "أنثى") females++;
             if (d.age === "أقل من سنة" || (d.age && String(d.age).includes("أقل"))) babies++;
         });
-        document.getElementById("total-count").textContent = records.length;
-        document.getElementById("male-count").textContent = males;
+        document.getElementById("total-count").textContent  = records.length;
+        document.getElementById("male-count").textContent   = males;
         document.getElementById("female-count").textContent = females;
-        document.getElementById("baby-count").textContent = babies;
+        document.getElementById("baby-count").textContent   = babies;
     }
 
     onSnapshot(collection(db, COLLECTION), (snapshot) => {
