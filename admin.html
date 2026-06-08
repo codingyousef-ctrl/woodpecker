@@ -172,14 +172,20 @@
             #login-screen, #dashboard { display: none !important; }
             #print-area { display: block !important; }
             .modal-overlay, #lightbox { display: none !important; }
+            body > *:not(#print-area) {
+        display: none !important;
+    }
         }
 
         /* ── Print Area ── */
         #print-area {
-            display: none;
-            direction: rtl;
-            font-family: 'Cairo', sans-serif;
-        }
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+}
 
         .print-page {
             width: 210mm;
