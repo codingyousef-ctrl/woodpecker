@@ -387,14 +387,14 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
-        authDomain: "woodpecker-508d8.firebaseapp.com",
-        projectId: "woodpecker-508d8",
-        storageBucket: "woodpecker-508d8.firebasestorage.app",
-        messagingSenderId: "434327620481",
-        appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680"
-    };
+   const firebaseConfig = {
+  apiKey: "AIzaSyDmPkQg_4ilvZoLZ7qdRYb_0Gq1pCHylQ0",
+  authDomain: "woodpecker-508d8.firebaseapp.com",
+  projectId: "woodpecker-508d8",
+  storageBucket: "woodpecker-508d8.firebasestorage.app",
+  messagingSenderId: "434327620481",
+  appId: "1:434327620481:web:99d8d5e0af9ae5eafa3680",
+};
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -414,58 +414,52 @@
             selectedDays.push(cb.value);
         });
 
-        // تشكيل الكائن السلس لإرساله لفايربيس متطابق مع القاموس المترجم بالكامل للوحة الإدارة
         const studentPayload = {
-            // المدخلات الأساسية المترابطة باللوحة
-            fullname: document.getElementById('childName').value,
-            mother_name: document.getElementById('motherName').value,
-            mother_phone: document.getElementById('motherPhone').value,
-
-            // معلومات الطفل والوالدين التكميلية المدققة
-            form_date: document.getElementById('form_date').value,
-            dob: document.getElementById('dob').value,
-            age: document.getElementById('age').value || 'غير محدد',
-            gender: document.getElementById('gender').value,
-            religion: document.getElementById('religion').value,
-            birth_certificate_no: document.getElementById('birth_certificate_no').value || 'غير مدرج',
-
-            father_name: document.getElementById('father_name').value,
-            father_nationality: document.getElementById('father_nationality').value,
-            father_job: document.getElementById('father_job').value || 'غير محدد',
-            father_id: document.getElementById('father_id').value || 'غير مدرج',
-
-            mother_nationality: document.getElementById('mother_nationality').value,
-            mother_job: document.getElementById('mother_job').value || 'غير محدد',
-            mother_id: document.getElementById('mother_id').value || 'غير مدرج',
-            family_book_no: document.getElementById('family_book_no').value || 'غير مدرج',
-            marital_status: document.getElementById('marital_status').value,
-
-            // الاتصال
-            address: document.getElementById('address').value,
-            phone: document.getElementById('father_phone').value, // هاتف الأب كرئيسي
-            work_phone: document.getElementById('work_phone').value || 'لا يوجد',
-            emergency_phone: document.getElementById('emergency_phone').value || 'لا يوجد',
-
-            // الصحة
-            notes: `مرض مزمن: ${document.getElementById('has_chronic_disease').value} (${document.getElementById('chronic_disease_details').value || 'لا توضيحات'}) | حساسية: ${document.getElementById('has_allergy').value} (${document.getElementById('allergy_details').value || 'لا توضيحات'}) | نظام غذائي: ${document.getElementById('special_diet').value} (${document.getElementById('diet_details').value || 'لا توضيحات'})`,
-            fever_action: document.getElementById('fever_action').value,
-
-            // الشخصية وعادات المياه
-            favorite_food: document.getElementById('favorite_food').value || 'غير محدد',
-            strangers_relation: document.getElementById('strangers_relation').value,
-            children_relation: document.getElementById('children_relation').value,
-            toilet_status: `اعتمادية: ${document.getElementById('toilet_independent').value} | تعبيره: ${document.getElementById('toilet_expression').value || '-'} | تذكير: ${document.getElementById('toilet_remind').value}`,
-
-            // الدوام والاستلام والاقرار
-            start_date: document.getElementById('start_date').value,
-            subscription_type: document.getElementById('subscription_type').value,
-            selected_days: selectedDays.join(' - '),
-            time_slot: document.getElementById('time_slot').value === 'وقت محدد آخر' ? document.getElementById('custom_time_slot').value : document.getElementById('time_slot').value,
-
-            pickup_persons: `1: ${document.getElementById('pickup_name_1').value || 'لا أحد'} (${document.getElementById('pickup_relation_1').value || '-'}) ت: ${document.getElementById('pickup_phone_1').value || '-'} / 2: ${document.getElementById('pickup_name_2').value || 'لا أحد'} (${document.getElementById('pickup_relation_2').value || '-'}) ت: ${document.getElementById('pickup_phone_2').value || '-'}`,
-            parent_signature: document.getElementById('parent_signature').value,
-            timestamp: new Date()
-        };
+    childName: document.getElementById('childName').value,
+    fatherName: document.getElementById('father_name').value,
+    motherName: document.getElementById('motherName').value,
+    fatherPhone: document.getElementById('father_phone').value,
+    motherPhone: document.getElementById('motherPhone').value,
+    birthDate: document.getElementById('dob').value,
+    age: document.getElementById('age').value,
+    gender: document.getElementById('gender').value,
+    religion: document.getElementById('religion').value,
+    fatherNationality: document.getElementById('father_nationality').value,
+    motherNationality: document.getElementById('mother_nationality').value,
+    fatherJob: document.getElementById('father_job').value,
+    motherJob: document.getElementById('mother_job').value,
+    fatherNationalId: document.getElementById('father_id').value,
+    motherNationalId: document.getElementById('mother_id').value,
+    familyBook: document.getElementById('family_book_no').value,
+    maritalStatus: document.getElementById('marital_status').value,
+    address: document.getElementById('address').value,
+    contactPhone: document.getElementById('father_phone').value,
+    contactPhone2: document.getElementById('work_phone').value,
+    chronicDisease: document.getElementById('has_chronic_disease').value === 'نعم' ? 'yes' : 'no',
+    chronicDiseaseDetail: document.getElementById('chronic_disease_details').value,
+    allergy: document.getElementById('has_allergy').value === 'نعم' ? 'yes' : 'no',
+    allergyDetail: document.getElementById('allergy_details').value,
+    specialDiet: document.getElementById('special_diet').value === 'نعم' ? 'yes' : 'no',
+    specialDietDetail: document.getElementById('diet_details').value,
+    feverAction: document.getElementById('fever_action').value,
+    favFood: document.getElementById('favorite_food').value,
+    strangerRelation: document.getElementById('strangers_relation').value,
+    kidsRelation: document.getElementById('children_relation').value,
+    bathroomSelf: document.getElementById('toilet_independent').value,
+    bathroomExpression: document.getElementById('toilet_expression').value,
+    bathroomReminder: document.getElementById('toilet_remind').value === 'نعم' ? 'yes' : 'no',
+    attendanceStart: document.getElementById('start_date').value,
+    attendanceFreq: document.getElementById('subscription_type').value,
+    attendanceDays: selectedDays,
+    attendanceTime: document.getElementById('time_slot').value,
+    attendanceTimeCustom: document.getElementById('custom_time_slot').value,
+    pickup1Name: document.getElementById('pickup_name_1').value,
+    pickup1Relation: document.getElementById('pickup_relation_1').value,
+    pickup2Name: document.getElementById('pickup_name_2').value,
+    pickup2Relation: document.getElementById('pickup_relation_2').value,
+    registrationDate: new Date().toLocaleDateString('ar-JO'),
+    timestamp: new Date()
+};
 
         try {
             await addDoc(collection(db, "registrations"), studentPayload);
