@@ -483,20 +483,20 @@
     const d = allRecords.find(r => r.id === id); 
     if (!d) return;
 
-    // استخدام if قبل تعيين النص لمنع الخطأ
+    // تحقق من وجود العناصر قبل تعيين النص
     const subtitle = document.getElementById("pledge-subtitle");
     if (subtitle) subtitle.textContent = `ولي أمر: ${getName(d)}`;
     
     const child = document.getElementById("pledge-child");
     if (child) child.textContent = getName(d);
 
-    const sigDiv = document.getElementById("pledge-sig");
-    if (sigDiv) {
-        // إذا كان هناك توقيع محفوظ (كصورة)
+    const sig = document.getElementById("pledge-sig");
+    if (sig) {
+        // إذا كان التوقيع صورة، نعرضها، وإلا نعرض النص
         if (d.parentSignature && d.parentSignature.startsWith('data:image')) {
-            sigDiv.innerHTML = `<img src="${d.parentSignature}" style="width:100%; max-width:200px;">`;
+            sig.innerHTML = `<img src="${d.parentSignature}" style="max-width: 100%;">`;
         } else {
-            sigDiv.textContent = "— لم يُوقّع —";
+            sig.textContent = "— لم يُوقّع —";
         }
     }
 
