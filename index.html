@@ -545,6 +545,7 @@
                 parentSignature: signaturePad.toDataURL(), // هنا أضفنا التوقيع
                 registrationDate: new Date().toLocaleDateString('ar-JO'),
                 timestamp: new Date()
+                parentSignature: signaturePad.toDataURL(),
             };
 
             await addDoc(collection(db, "registrations"), payload);
