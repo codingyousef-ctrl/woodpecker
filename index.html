@@ -65,6 +65,7 @@
         .btn:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
         .success { color: #10b981; margin-top: 20px; display: none; font-weight: bold; font-size: 16px; text-align: center; background: rgba(16,185,129,0.1); padding: 15px; border-radius: 8px; border: 1px solid #10b981; }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.7/signature_pad.umd.min.js"></script>
 </head>
 <body>
 <div class="form-card">
@@ -408,9 +409,13 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // تهيئة لوحة التوقيع
+    const canvas = document.getElementById('signature-pad');
+    const signaturePad = new SignaturePad(canvas);
+    document.getElementById('clear-signature').addEventListener('click', () => signaturePad.clear());
+
     document.getElementById('form_date').valueAsDate = new Date();
 
-    // دالة الرفع لـ Cloudinary
     async function uploadToCloudinary(file) {
         if (!file) return null;
         const formData = new FormData();
@@ -424,9 +429,7 @@
         return data.secure_url;
     }
 
-    // نستخدم مصفوفة لحفظ الملفات المختارة
-    const fileObjects = {}; 
-
+    const fileObjects = {};
     function setupImgUpload(inputId, previewId, areaId, removeId, key) {
         const input = document.getElementById(inputId);
         const preview = document.getElementById(previewId);
@@ -437,10 +440,7 @@
             const file = input.files[0];
             if (!file) return;
             if (file.size > 3 * 1024 * 1024) { alert('الصورة يجب أن تكون أقل من 3MB'); return; }
-            
-            // نحفظ الملف نفسه للرفع لاحقاً
             fileObjects[key] = file;
-
             const reader = new FileReader();
             reader.onload = (ev) => {
                 preview.src = ev.target.result;
@@ -473,11 +473,10 @@
         e.preventDefault();
         const btn = document.getElementById('subBtn');
         btn.disabled = true;
-        btn.innerText = "جاري رفع الصور والإرسال...";
+        btn.innerText = "جاري الإرسال...";
 
         try {
-            // رفع الصور بالتوازي
-            const [birthUrl, fIdUrl, mIdUrl, fbUrl] = await Promise.all([
+            const [bUrl, fUrl, mUrl, fbUrl] = await Promise.all([
                 uploadToCloudinary(fileObjects['birthCertImage']),
                 uploadToCloudinary(fileObjects['fatherIdImage']),
                 uploadToCloudinary(fileObjects['motherIdImage']),
@@ -488,7 +487,6 @@
             document.querySelectorAll('input[name="days"]:checked').forEach(cb => selectedDays.push(cb.value));
 
             const payload = {
-                // ... (باقي الحقول كما هي)
                 childName: document.getElementById('childName').value,
                 fatherName: document.getElementById('father_name').value,
                 motherName: document.getElementById('motherName').value,
@@ -499,18 +497,47 @@
                 gender: document.getElementById('gender').value,
                 religion: document.getElementById('religion').value,
                 birthCertNo: document.getElementById('birth_certificate_no').value,
-                birthCertImage: birthUrl, // هنا نضع الرابط
+                birthCertImage: bUrl,
                 fatherNationality: document.getElementById('father_nationality').value,
                 motherNationality: document.getElementById('mother_nationality').value,
                 fatherJob: document.getElementById('father_job').value,
                 motherJob: document.getElementById('mother_job').value,
                 fatherNationalId: document.getElementById('father_id').value,
-                fatherIdImage: fIdUrl, // هنا نضع الرابط
+                fatherIdImage: fUrl,
                 motherNationalId: document.getElementById('mother_id').value,
-                motherIdImage: mIdUrl, // هنا نضع الرابط
+                motherIdImage: mUrl,
                 familyBook: document.getElementById('family_book_no').value,
-                familyBookImage: fbUrl, // هنا نضع الرابط
-                // ... (بقية الحقول)
+                familyBookImage: fbUrl,
+                maritalStatus: document.getElementById('marital_status').value,
+                address: document.getElementById('address').value,
+                contactPhone: document.getElementById('father_phone').value,
+                contactPhone2: document.getElementById('work_phone').value,
+                emergencyPhone: document.getElementById('emergency_phone').value,
+                chronicDisease: document.getElementById('has_chronic_disease').value === 'نعم' ? 'yes' : 'no',
+                chronicDiseaseDetail: document.getElementById('chronic_disease_details').value,
+                allergy: document.getElementById('has_allergy').value === 'نعم' ? 'yes' : 'no',
+                allergyDetail: document.getElementById('allergy_details').value,
+                specialDiet: document.getElementById('special_diet').value === 'نعم' ? 'yes' : 'no',
+                specialDietDetail: document.getElementById('diet_details').value,
+                feverAction: document.getElementById('fever_action').value,
+                favFood: document.getElementById('favorite_food').value,
+                strangerRelation: document.getElementById('strangers_relation').value,
+                kidsRelation: document.getElementById('children_relation').value,
+                bathroomSelf: document.getElementById('toilet_independent').value,
+                bathroomExpression: document.getElementById('toilet_expression').value,
+                bathroomReminder: document.getElementById('toilet_remind').value === 'نعم' ? 'yes' : 'no',
+                attendanceStart: document.getElementById('start_date').value,
+                attendanceFreq: document.getElementById('subscription_type').value,
+                attendanceDays: selectedDays,
+                attendanceTime: document.getElementById('time_slot').value,
+                attendanceTimeCustom: document.getElementById('custom_time_slot').value,
+                pickup1Name: document.getElementById('pickup_name_1').value,
+                pickup1Relation: document.getElementById('pickup_relation_1').value,
+                pickup1Phone: document.getElementById('pickup_phone_1').value,
+                pickup2Name: document.getElementById('pickup_name_2').value,
+                pickup2Relation: document.getElementById('pickup_relation_2').value,
+                pickup2Phone: document.getElementById('pickup_phone_1').value,
+                parentSignature: signaturePad.toDataURL(), // هنا أضفنا التوقيع
                 registrationDate: new Date().toLocaleDateString('ar-JO'),
                 timestamp: new Date()
             };
@@ -521,7 +548,7 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         } catch (error) {
             console.error(error);
-            alert("حدث خطأ أثناء الإرسال، تأكد من الاتصال بالإنترنت.");
+            alert("حدث خطأ أثناء الإرسال");
             btn.disabled = false;
             btn.innerText = "إرسال وتوثيق الاستمارة الرسمية";
         }
