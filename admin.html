@@ -480,15 +480,27 @@
     /* ── Pledge Modal ── */
     const pledgeModal = document.getElementById("pledge-modal");
     function openPledge(id) {
-        const d = allRecords.find(r=>r.id===id); if(!d) return;
-        document.getElementById("pledge-subtitle").textContent = `ولي أمر: ${getName(d)}`;
-        document.getElementById("pledge-child").textContent = getName(d);
-        document.getElementById("pledge-sig").textContent = d.parentSignature || d.parent_signature || "— لم يُوقّع —";
-        pledgeModal.classList.add("open");
-    }
-    document.getElementById("pledge-close").addEventListener("click", () => pledgeModal.classList.remove("open"));
-    pledgeModal.addEventListener("click", e => { if(e.target===pledgeModal) pledgeModal.classList.remove("open"); });
+    const d = allRecords.find(r => r.id === id); 
+    if (!d) return;
 
+    document.getElementById("pledge-subtitle").textContent = `ولي أمر: ${getName(d)}`;
+    document.getElementById("pledge-child").textContent = getName(d);
+
+    // 1. تحديد العناصر (تأكد أن هذه الـ IDs موجودة في الـ HTML الخاص بـ pledge-sig)
+    const sigContainer = document.getElementById("pledge-sig");
+    const sigData = d.parentSignature || d.parent_signature;
+    
+    // 2. تحديث المحتوى بناءً على وجود التوقيع
+    if (sigData && sigData.startsWith('data:image')) {
+        // إذا كان هناك توقيع، نضع الصورة
+        sigContainer.innerHTML = `<img src="${sigData}" style="width:100%; max-width:300px; border:1px solid #ccc;">`;
+    } else {
+        // إذا لم يكن هناك توقيع، نضع النص
+        sigContainer.textContent = "— لم يُوقّع —";
+    }
+
+    pledgeModal.classList.add("open");
+}
     /* ── Edit Modal ── */
     const editModal = document.getElementById("edit-modal");
     function openEdit(id) {
