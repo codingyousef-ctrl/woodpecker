@@ -458,55 +458,76 @@
     }
 
     /* ── Build sections for view modal ── */
+    // الأسماء مطابقة تماماً لـ payload في index.html
     function buildSections(d) {
         const pickup = n => {
             const name=d[`pickup${n}Name`], rel=d[`pickup${n}Relation`], ph=d[`pickup${n}Phone`];
             return name ? `${name}${rel?" ("+rel+")":""}${ph?" – "+ph:""}` : "";
         };
+        const days = Array.isArray(d.attendanceDays) ? d.attendanceDays.join("، ") : (d.attendanceDays||"");
         return [
             { title:"👶 معلومات الطفل", rows:[
-                ["الاسم الرباعي",getName(d)],["تاريخ الميلاد",d.birthDate||d.dob],
-                ["العمر",d.age],["الجنس",genderLabel(d.gender)],["الديانة",d.religion],
-                ["رقم الوطني للطفل",d.birthCertNo],["صورة شهادة الميلاد",d.birthCertImage],
+                ["الاسم الرباعي",   d.childName],
+                ["تاريخ الميلاد",   d.birthDate],
+                ["العمر",           d.age],
+                ["الجنس",           genderLabel(d.gender)],
+                ["الديانة",         d.religion],
+                ["الرقم الوطني",    d.birthCertNo],
+                ["صورة شهادة الميلاد", d.birthCertImage],
             ]},
             { title:"👔 معلومات الأب", rows:[
-                ["الاسم",d.fatherName||d.father_name],["الجنسية",d.fatherNationality||d.father_nationality],
-                ["رقم الهوية",d.fatherNationalId||d.father_id],["الهاتف",d.fatherPhone||d.phone],
-                ["العمل",d.fatherJob||d.father_job],["صورة الهوية",d.fatherIdImage],
+                ["الاسم",           d.fatherName],
+                ["الجنسية",         d.fatherNationality],
+                ["الرقم الوطني",    d.fatherNationalId],
+                ["الهاتف",          d.fatherPhone],
+                ["العمل",           d.fatherJob],
+                ["صورة الهوية",     d.fatherIdImage],
             ]},
             { title:"👩 معلومات الأم", rows:[
-                ["الاسم",d.motherName||d.mother_name],["الجنسية",d.motherNationality||d.mother_nationality],
-                ["رقم الهوية",d.motherNationalId||d.mother_id],["الهاتف",d.motherPhone||d.mother_phone],
-                ["العمل",d.motherJob||d.mother_job],["صورة الهوية",d.motherIdImage],
+                ["الاسم",           d.motherName],
+                ["الجنسية",         d.motherNationality],
+                ["الرقم الوطني",    d.motherNationalId],
+                ["الهاتف",          d.motherPhone],
+                ["العمل",           d.motherJob],
+                ["صورة الهوية",     d.motherIdImage],
             ]},
             { title:"📁 وثائق العائلة والاتصال", rows:[
-                ["رقم دفتر العائلة",d.familyBook||d.family_book_no],["صورة دفتر العائلة",d.familyBookImage],
-                ["الحالة الاجتماعية",d.maritalStatus||d.marital_status],["عنوان السكن",d.address],
-                ["هاتف إضافي",d.contactPhone2||d.work_phone],["هاتف الطوارئ",d.emergencyPhone||d.emergency_phone],
+                ["رقم دفتر العائلة",  d.familyBook],
+                ["صورة دفتر العائلة", d.familyBookImage],
+                ["الحالة الاجتماعية", d.maritalStatus],
+                ["عنوان السكن",       d.address],
+                ["هاتف إضافي",        d.contactPhone2],
+                ["هاتف الطوارئ",      d.emergencyPhone],
             ]},
             { title:"💊 المعلومات الصحية", rows:[
-                ["مرض مزمن",yesNo(d.chronicDisease,d.chronicDiseaseDetail)],
-                ["حساسية",yesNo(d.allergy,d.allergyDetail)],
-                ["نظام غذائي خاص",yesNo(d.specialDiet,d.specialDietDetail)],
-                ["عند ارتفاع الحرارة",d.feverAction||d.fever_action],
-                ["ملاحظات",d.notes],
+                ["مرض مزمن",          yesNo(d.chronicDisease, d.chronicDiseaseDetail)],
+                ["حساسية",            yesNo(d.allergy, d.allergyDetail)],
+                ["نظام غذائي خاص",   yesNo(d.specialDiet, d.specialDietDetail)],
+                ["عند ارتفاع الحرارة", d.feverAction],
+                ["ملاحظات",           d.notes],
             ]},
             { title:"🌟 معلومات شخصية", rows:[
-                ["الطعام المفضل",d.favFood||d.favorite_food],
-                ["علاقة بالغرباء",d.strangerRelation||d.strangers_relation],
-                ["علاقة بالأطفال",d.kidsRelation||d.children_relation],
-                ["دورة المياه",d.bathroomSelf||d.toilet_independent],
-                ["التعبير عن الحاجة",d.bathroomExpression||d.toilet_expression],
+                ["الطعام المفضل",      d.favFood],
+                ["علاقة بالغرباء",    d.strangerRelation],
+                ["علاقة بالأطفال",    d.kidsRelation],
+                ["دورة المياه",       d.bathroomSelf],
+                ["التعبير عن الحاجة", d.bathroomExpression],
+                ["تذكير بالحمام",     d.bathroomReminder === "yes" ? "نعم" : d.bathroomReminder === "no" ? "لا" : d.bathroomReminder],
             ]},
             { title:"📅 التسجيل والحضور", rows:[
-                ["بداية الحضور",d.attendanceStart||d.start_date],
-                ["أيام الحضور",Array.isArray(d.attendanceDays)?d.attendanceDays.join("، "):(d.attendanceDays||d.selected_days)],
-                ["نوع الاشتراك",d.attendanceFreq||d.subscription_type],
-                ["وقت الحضور",d.attendanceTime||d.time_slot],
-                ["تاريخ التسجيل",d.registrationDate||d.form_date],
+                ["بداية الحضور",     d.attendanceStart],
+                ["أيام الحضور",      days],
+                ["نوع الاشتراك",     d.attendanceFreq],
+                ["وقت الحضور",       d.attendanceTime],
+                ["وقت مخصص",         d.attendanceTimeCustom],
+                ["تاريخ التسجيل",    d.registrationDate],
             ]},
             { title:"🚗 أشخاص الاصطحاب", rows:[
-                ["الشخص 1",pickup(1)||d.pickup_persons],["الشخص 2",pickup(2)],["الشخص 3",pickup(3)],
+                ["الشخص الأول",  pickup(1)],
+                ["الشخص الثاني", pickup(2)],
+            ]},
+            { title:"📝 الإقرار والتوقيع", rows:[
+                ["اسم ولي الأمر", d.parentSignatureText],
             ]},
         ];
     }
