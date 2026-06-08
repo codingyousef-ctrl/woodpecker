@@ -563,23 +563,17 @@ if (canvas) {
             btn.innerText = "إرسال وتوثيق الاستمارة الرسمية";
         }
         
-    
-    });
-</script>
-    <script>
+ // استبدل كود تهيئة التوقيع بهذا الشكل:
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('signature-pad');
     if (canvas) {
-        // التأكد من تحميل المكتبة أولاً
-        if (typeof SignaturePad !== 'undefined') {
-            window.signaturePad = new SignaturePad(canvas);
-            const clearBtn = document.getElementById('clear-signature');
-            if (clearBtn) {
-                clearBtn.addEventListener('click', () => window.signaturePad.clear());
-            }
-        }
+        window.signaturePad = new SignaturePad(canvas);
+        document.getElementById('clear-signature').addEventListener('click', () => {
+            window.signaturePad.clear();
+        });
     }
-});
+
+    });
 </script>
 </body>
 </html>
